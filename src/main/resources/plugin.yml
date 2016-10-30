@@ -1,0 +1,6 @@
+author: Glitchfinder
+description: A world generator plugin that generates glacial caves.
+main: com.glitchkey.glitteringdepths.GlitteringDepthsPlugin
+name: GlitteringDepths
+version: '1.0'
+depend: [Pandora]

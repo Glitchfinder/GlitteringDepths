@@ -1,0 +1,30 @@
+== Glittering Depths ==
+**[[https://github.com/Glitchfinder/GlitteringDepths/releases|Download]] |
+[[https://github.com/Glitchfinder/GlitteringDepths|Source]] |
+[[https://github.com/Glitchfinder/GlitteringDepths/issues|Issue Tracker]]**
+
+Glittering Depths is a world generation plugin which creates a world covered
+in a thick sheet of ice. Many resources are difficult or impossible to obtain
+here, and the constant darkness under the ice makes exploration and survival a
+difficult task.
+
+This plugin depends on a world generation API I developed, which can be found
+[[https://github.com/Glitchfinder/Pandora|here]].
+
+It is recommended that anyone using this plugin who wants to be able to do
+everything you can in a normal survival world use another plugin to create a
+means of travel between this world and either the normal overworld, or directly
+to the nether and the end.
+
+This world was designed back in early 2012, and very little has changed since.
+As such, newer blocks, resources, mobs, and items may be unbalanced or not
+present at all.
+
+Further, the rendering update in patch 1.7.2 changed the way ice renders.
+Previously, the world appeared as follows:
+
+[[http://i.imgur.com/ZjzvaO4.png|{{http://i.imgur.com/ZjzvaO4m.png}}]]
+
+However, the world currently appears like this instead:
+
+[[http://i.imgur.com/akA6QnQ.png|{{http://i.imgur.com/akA6QnQm.png}}]]
