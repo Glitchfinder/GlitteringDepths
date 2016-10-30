@@ -1,4 +1,4 @@
-== Glittering Depths ==
+= Glittering Depths =
 **[[https://github.com/Glitchfinder/GlitteringDepths/releases|Download]] |
 [[https://github.com/Glitchfinder/GlitteringDepths|Source]] |
 [[https://github.com/Glitchfinder/GlitteringDepths/issues|Issue Tracker]]**
@@ -28,3 +28,14 @@ Previously, the world appeared as follows:
 However, the world currently appears like this instead:
 
 {{http://i.imgur.com/akA6QnQm.png}}
+
+== To Compile ==
+This project is configured for [[https://maven.apache.org/|Maven]]. To compile,
+you must have Maven installed, along with an applicable copy of the Java
+Development Kit (JDK).
+
+This project also requires another Bukkit plugin I developed, linked above.
+That must be downloaded and compiled first, using the "mvn clean build install"
+command to ensure that it gets added to a local library so Maven can compile
+this project. Assuming it is in a local library, this plugin can be compiled
+with the command "mvn clean build".
