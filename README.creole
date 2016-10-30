@@ -23,8 +23,8 @@ present at all.
 Further, the rendering update in patch 1.7.2 changed the way ice renders.
 Previously, the world appeared as follows:
 
-[[http://i.imgur.com/ZjzvaO4.png|{{http://i.imgur.com/ZjzvaO4m.png}}]]
+{{http://i.imgur.com/ZjzvaO4m.png}}
 
 However, the world currently appears like this instead:
 
-[[http://i.imgur.com/akA6QnQ.png|{{http://i.imgur.com/akA6QnQm.png}}]]
+{{http://i.imgur.com/akA6QnQm.png}}
