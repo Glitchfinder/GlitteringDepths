@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2016 Sean Porter <glitchkey@gmail.com>
+ * Copyright (c) 2012-2018 Sean Porter <glitchkey@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,67 +23,192 @@
 package com.glitchkey.glitteringdepths.terrain;
 
 //* IMPORTS: JDK/JRE
+	import java.util.ArrayList;
+	import java.util.HashMap;
+	import java.util.List;
+	import java.util.Map;
 	import java.util.Random;
 //* IMPORTS: BUKKIT
 	import org.bukkit.block.Biome;
+	import org.bukkit.block.Block;
+	import org.bukkit.generator.BlockPopulator;
+	import org.bukkit.generator.ChunkGenerator;
 	import org.bukkit.generator.ChunkGenerator.BiomeGrid;
+	import org.bukkit.Location;
+	import org.bukkit.Material;
+	import org.bukkit.util.noise.SimplexNoiseGenerator;
 	import org.bukkit.World;
-//* IMPORTS: PANDORA
-	import org.pandora.EmptyBiomeGrid;
-	import org.pandora.PandoraGenerator;
-	import org.pandora.PandoraBiome;
 //* IMPORTS: GLITTERING DEPTHS
-	//* NOT NEEDED
+	import com.glitchkey.glitteringdepths.datatypes.Column;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public class GlacierGenerator extends PandoraBiome
+public class GlacierGenerator extends ChunkGenerator
 {
-	public GlacierGenerator()
-	{
-		this.minTemperature = 0.0F;
-		this.maxTemperature = 50.0F;
-		this.minHumidity = 0.0F;
-		this.maxHumidity = 100.0F;
+	private Map<World, SimplexNoiseGenerator> noises;
+	private World world;
+	private List<BlockPopulator> populators;
+	
+
+	public GlacierGenerator() {
+		noises = new HashMap<World, SimplexNoiseGenerator>();
+		populators = new ArrayList<BlockPopulator>();
+		populators.add((BlockPopulator) (new GlacierPopulator()));
 	}
 
-	public short[] generateExtSections(World w, Random random, int xPos,
-		int zPos, BiomeGrid biomes)
+	public List<BlockPopulator> getDefaultPopulators(World world) {
+		return populators;
+	}
+
+	public boolean canSpawn(World world, int x, int z) {
+		if (world == null)
+			return false;
+
+		Block b;
+		boolean spawnable;
+
+		switch (world.getEnvironment()) {
+			case NETHER:
+				return true;
+			case THE_END:
+				b = world.getBlockAt(x, world.getHighestBlockYAt(x, z), z);
+				spawnable = true;
+				spawnable = ((b.getType() != Material.AIR) ? spawnable : false);
+				spawnable = ((b.getType() != Material.WATER) ? spawnable : false);
+				spawnable = ((b.getType() != Material.LAVA) ? spawnable : false);
+				return spawnable;
+			case NORMAL:
+			default:
+				b = world.getBlockAt(x, world.getHighestBlockYAt(x, z), z);
+				spawnable = false;
+				spawnable = ((b.getType() != Material.SAND) ? spawnable : true);
+				spawnable = ((b.getType() != Material.GRAVEL) ? spawnable : true);
+				return spawnable;
+		}
+	}
+
+	@Deprecated
+	public byte[] generate(World world, Random rand, int x, int z) {
+		return null;
+	}
+
+	public byte[][] generateBlockSections(World world, Random rand, int x,
+		int z, BiomeGrid biomes)
 	{
-		short[] result = new short[256];
+		return null;
+	}
 
-		int x = Math.abs(xPos % 16);
-		int z = Math.abs(zPos % 16);
+	public short[][] generateExtBlockSections(World world, Random rand,
+		int x, int z, BiomeGrid biomes)
+	{
+		int height = world.getMaxHeight();
+		short[][] chunk = new short[height / 16][];
+		int xPos = x << 4;
+		int zPos = z << 4;
 
-		int ice = 127;
-		int stone = 63;
-		int bRock = 5;
-
-		ice += (int) getNoise(w, xPos, zPos, 1D, 1D, 2, 16D, 0.015D);
-		stone += (int) getNoise(w, xPos, zPos, 1D, 1D, 2, 8D, 0.03D);
-		bRock += (int) getNoise(w, xPos, zPos, 1D, 1D, 2, 4D, 0.06D);
-
-		biomes.setBiome(x, z, Biome.TAIGA);
-
-		int chunkX = xPos >> 4;
-		int chunkZ = zPos >> 4;
-
-		int baseX = (chunkX << 4) - ((chunkX << 4) % 10);
-		int baseZ = (chunkZ << 4) - ((chunkZ << 4) % 10);
+		int baseX = xPos - (xPos % 10);
+		int baseZ = zPos - (zPos % 10);
 
 		int xMin = baseX - 80;
 		int zMin = baseZ - 80;
 		int xMax = baseX + 100;
 		int ZMax = baseZ + 100;
 
-		double mod = 0D;
+		List<Column> columns = new ArrayList<Column>();
 
 		for(int cx = xMin; cx < xMax; cx += 10)
 		{
 			for(int cz = zMin; cz < ZMax; cz += 10)
 			{
-				mod = generateColumn(mod, cx, cz, xPos, zPos);
+				genColumn(cx, cz, columns);
 			}
+		}
+
+
+		for (int cx = 0; cx < 16; cx++) {
+			int cxPos = cx + xPos;
+
+			for (int cz = 0; cz < 16; cz++) {
+				int czPos = cz + zPos;
+
+				short[] column = generateExtSections(world,
+					rand, cxPos, czPos, biomes, columns);
+
+				for (int cy = 0; cy < height; cy++) {
+					short id = column[cy];
+					setBlock(chunk, cx, cy, cz, id);
+				}
+			}
+		}
+
+		return chunk;
+}
+
+	public short[] generateExtSections(World w, Random random, int xPos,
+		int zPos, BiomeGrid biomes, List<Column> columns)
+	{
+		short[] result = new short[256];
+
+		int x = Math.abs(xPos % 16);
+		int z = Math.abs(zPos % 16);
+		biomes.setBiome(x, z, Biome.TAIGA_COLD);
+
+		int ice = 0;
+		int stone = 63;
+		int bRock = 5;
+
+		ice += (int) getNoise(w, xPos, zPos, 1D, 1D, 2, 16D, 0.03D);
+		stone += ice / 2;
+		ice += 127;
+
+		double a = 50D;
+		double b = 50D;
+
+		a -= getNoiseD(w, xPos, zPos, 100D, 1D, 2, 1D, 0.0011D);
+		b -= getNoiseD(w, zPos, xPos, 100D, 1D, 2, 1D, 0.0011D);
+
+		double perc = 0D;
+		int    type = 0;
+
+		if (a < -4D && b > 4D) {  // PLAINS
+			perc = Math.max(0, Math.max((a + 6D) / 2D, 1D - ((b - 4D) / 2D)));
+			biomes.setBiome(x, z, Biome.ICE_FLATS);
+			type = 1;
+		}
+		else if (a < -4D && b < -4D) { // OCEAN
+			perc = Math.max(0, Math.max((a + 6D) / 2D, (b + 6D) / 2D));
+			biomes.setBiome(x, z, Biome.FROZEN_OCEAN);
+			type = 2;
+		}
+		else if (a > 4D && b < -4D) { // MOUNTAINS
+			perc = Math.max(0, Math.max((b + 6D) / 2D, 1D - ((a - 4D) / 2D)));
+			biomes.setBiome(x, z, Biome.TAIGA_COLD_HILLS);
+			type = 3;
+		}
+
+		double sh = 68D;
+		double d  = 60D;
+		double hm = 1D;
+		double dm = 0D;
+		int    i  = 60;
+
+		if (type == 1) { // PLAINS
+			int hmod = (int) lerp(15D, 0D,  perc);
+			sh       =       lerp(98D, 68D, perc);
+			d        =       lerp(30D, 60D, perc);
+			dm       =       lerp(2D,  0D,  perc);
+			stone   += hmod;
+			ice     -= hmod;
+		}
+
+		if (type == 1 || type == 2) { // PLAINS, OCEAN
+			hm = lerp(6D, 1D, perc);
+		}
+
+		double mod = 0D;
+
+		for(Column c : columns) {
+			mod = generateColumn(mod, xPos, zPos, c);
 		}
 
 		double column;
@@ -100,8 +225,27 @@ public class GlacierGenerator extends PandoraBiome
 
 			short id;
 			id = this.getId(w, bRock, stone, ice, xPos, y, zPos,
-				result, column, mod);
+				result, column, mod, type, sh, d, hm, dm, i, perc);
 
+/*
+			if (a < -4D && b < -4D) {
+				id = (short) 22;
+				if (a > -6D || b > -6D)
+					id = (short) 174;
+			}
+			else if (a < -4D && b > 4D) {
+				id = (short) 41;
+				if (a > -6D || b < 6D)
+					id = (short) 19;
+			}
+			else if (a > 4D && b < -4D) {
+				id = (short) 42;
+				if (a < 6D || b > -6D)
+					id = (short) 82;
+			}
+			else
+				id = (short) 57;
+*/
 			result[y] = id;
 		}
 
@@ -109,7 +253,9 @@ public class GlacierGenerator extends PandoraBiome
 	}
 
 	public short getId(World world, int bedrock, int stone, int ice, int x,
-		int y, int z, short[] result, double column, double modifier)
+		int y, int z, short[] result, double column, double modifier,
+		int type, double sh, double d, double hm, double dm, int iceMod,
+		double perc)
 	{
 		short id = 0;
 
@@ -119,7 +265,7 @@ public class GlacierGenerator extends PandoraBiome
 			short temp;
 			temp = result[y + 1];
 
-			if(temp == 0)
+			if(temp == 0) 
 				id = 2;
 			else if(temp == 2 || temp == 9)
 				id = 3;
@@ -131,40 +277,66 @@ public class GlacierGenerator extends PandoraBiome
 		else if(y <= ice)
 			id = 79;
 
-		if (id == 79 && (y > (stone + 60) || y < (stone + 15)))
+		if (id == 79 && (y > (stone + iceMod) || y < stone + 15))
 			id = checkFissures(world, id, x, y, z);
 
-		id = checkColumn(world, id, x, y, z, column, modifier, ice);
+		id = checkColumn(world, id, x, y, z, column, modifier, ice,
+			type, sh, d, hm, dm, perc);
 
 		if(id == 0 && y <= 38)
 			id = 9;
+
+		if (id == 2 && result[y + 1] == 0)
+			result[y + 1] = 78;
 
 		return id;
 	}
 
 	public short checkColumn(World w, short id, int x, int y, int z,
-		double column, double mod, int ice)
+		double column, double mod, int ice, int type,
+		double startHeight, double depth, double heightMod,
+		double distMod, double perc)
 	{
-		double baseHeight = Math.abs(((double) y) - 68D);
+		double baseHeight = Math.abs(((double) y) - startHeight);
 
-		if(baseHeight >= 60D && (y > 143 || y <= 8))
+		if(baseHeight >= depth && ((y > 158 || y <= 8) || type == 1))
 			return id;
 
-		baseHeight -= 60D;
-		baseHeight = Math.abs(baseHeight);
-		baseHeight /= 60D + baseHeight;
+		baseHeight -= depth;
+		baseHeight  = Math.abs(baseHeight);
+		baseHeight /= depth + baseHeight;
 
-		double noise = getNoise(w, x, y, z, 4, 0.15D, 120D) + 1D;
+		baseHeight *= heightMod;
+		mod        *= heightMod;
+
+		double noise = 0;
+		double height = (baseHeight / column);
+
+		if (type != 3) {
+			noise = getNoise(w, x, y, z, 4, 0.15D, 120D) + 1D;
+		}
+		else if (perc <= 0D) {
+			noise = getNoise(w, x, y, z, 4, 0.3D, 120D) + 1D;
+		}
+		else {
+			double n1 = lerp(1D, getNoise(w, x, y, z, 4, 0.15D, 120D), perc);
+			double n2 = lerp(getNoise(w, x, y, z, 4, 0.3D, 120D), 1D, perc);
+			noise = Math.min(n1, n2) + 1D;
+			//System.out.println("N: " + noise + ", N1: " + n1);
+		}
+
 		double distortion;
 		distortion = (getNoise(w, x, y, z, 2, 0.06D, 10D) / 9D) + 0.5D;
-
+		distortion += distMod;
 		noise = (noise + (noise * distortion)) / 2D;
-		double height = (baseHeight / column);
 
 		if ((noise <= height) && (noise > baseHeight - mod) && y < ice)
 			return 79;
 		if (noise <= height) {
 			return 0;
+		}
+		if (noise >= height + 0.05D && id == 79) {
+			return 174;
 		}
 
 		return id;
@@ -190,27 +362,67 @@ public class GlacierGenerator extends PandoraBiome
 		return new Random(seed);
 	}
 
-	private double generateColumn(double modifier, int x, int z, int xPos,
-		int zPos)
-	{
+	private void genColumn(int x, int z, List<Column> list) {
 		Random random = getRandom(x, z);
 
-		if(random.nextInt(100) > 5 || random.nextInt(100) > 20)
-			return modifier;
+		//int var1 = 5;
+		//int var2 = 20;
+
+		//if (type == 1 || type == 2) {// PLAINS, OCEAN
+		//	var1 = (int) lerp(10D, 5D, perc);
+		//	var2 = (int) lerp(25D, 20D, perc);
+		//}
+
+		if(random.nextInt(100) > 10 || random.nextInt(100) > 25)
+			return;
 
 		double tempModifier = (double) random.nextInt(100);
 		tempModifier = ((tempModifier + 1D) / 150D) + 1D;
 		int cx = (x + random.nextInt(25));
 		int cz = (z + random.nextInt(25));
 
-		double xSq = Math.pow((xPos - cx), 2);
-		double zSq = Math.pow((zPos - cz), 2);
+		list.add(new Column(cx, cz, tempModifier));
+	}
+
+	private double generateColumn(double modifier, int xPos, int zPos,
+		Column c)
+	{
+		double xSq = Math.pow((xPos - c.x), 2);
+		double zSq = Math.pow((zPos - c.z), 2);
 		double distance = Math.sqrt(xSq + zSq);
 
 		if (distance <= 0D)
-			return Math.max(modifier, tempModifier);
+			return Math.max(modifier, c.modifier);
 		else
-			return Math.max(modifier, (tempModifier / distance));
+			return Math.max(modifier, (c.modifier / distance));
+	}
+
+	public Location getFixedSpawnLocation(World world, Random rand) {
+		return null;
+	}
+
+	public final int getNoise(World w, int x, int z, double range,
+		double scale, int octaves, double amp, double frequency)
+	{
+		return (int) getNoiseD(w, x, z, range, scale, octaves, amp, 
+			frequency);
+	}
+
+	public final double getNoiseD(World w, int x, int z, double range,
+		double scale, int octaves, double amp, double frequency)
+	{
+		SimplexNoiseGenerator noise = noises.get(w);
+
+		if (noise == null) {
+			noises.put(w, (new SimplexNoiseGenerator(w.getSeed())));
+			noise = noises.get(w);
+		}
+
+		range /= 2D;
+		int xs = (int) Math.round(((double) x) / scale);
+		int zs = (int) Math.round(((double) z) / scale);
+		double cnoise = noise.getNoise(xs, zs, octaves, frequency, amp);
+		return ((range * cnoise) + range);
 	}
 
 	private double getNoise(World world, double x, double y, double z,
@@ -220,4 +432,14 @@ public class GlacierGenerator extends PandoraBiome
 			frequency, amplitude, true);
 	}
 
+	private void setBlock(short[][] result, int x, int y, int z, short id) {
+		if (result[y >> 4] == null)
+			result[y >> 4] = new short[4096];
+
+		result[y >> 4][((y & 0xF) << 8) | (z << 4) | x] = id;
+	}
+
+	public final SimplexNoiseGenerator getNoiseGenerator(World world) {
+		return noises.get(world);
+	}
 }

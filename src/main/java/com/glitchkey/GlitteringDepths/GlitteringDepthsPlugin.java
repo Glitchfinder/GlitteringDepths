@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2016 Sean Porter <glitchkey@gmail.com>
+ * Copyright (c) 2012-2018 Sean Porter <glitchkey@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,16 +32,10 @@ package com.glitchkey.glitteringdepths;
 	import org.bukkit.World.Environment;
 	import org.bukkit.WorldCreator;
 	import org.bukkit.WorldType;
-//* IMPORTS: PANDORA
-	import org.pandora.PandoraBiome;
-	import org.pandora.PandoraBiomePopulator;
-	import org.pandora.PandoraGenerator;
-	import org.pandora.PandoraPopulator;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.listeners.GlacierListener;
 	import com.glitchkey.glitteringdepths.listeners.GlacierMobListener;
 	import com.glitchkey.glitteringdepths.terrain.GlacierGenerator;
-	import com.glitchkey.glitteringdepths.terrain.GlacierPopulator;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
@@ -72,13 +66,7 @@ public class GlitteringDepthsPlugin extends JavaPlugin
 		WorldCreator worldCreator = new WorldCreator("GlitteringDepths");
 		worldCreator = worldCreator.environment(Environment.NORMAL);
 		worldCreator = worldCreator.type(WorldType.NORMAL);
-		PandoraGenerator generator = new PandoraGenerator();
-		PandoraBiome glaciers = (PandoraBiome) (new GlacierGenerator());
-		generator.setDefaultBiome(glaciers);
-		PandoraPopulator populator = new PandoraPopulator();
-		PandoraBiomePopulator glacierPop = (PandoraBiomePopulator) (new GlacierPopulator(this));
-		populator.setDefaultBiome(glacierPop);
-		generator.addPopulator((BlockPopulator) populator);
+		GlacierGenerator generator = new GlacierGenerator();
 		worldCreator = worldCreator.generator((ChunkGenerator) generator);
 		this.world = worldCreator.createWorld();
 	}

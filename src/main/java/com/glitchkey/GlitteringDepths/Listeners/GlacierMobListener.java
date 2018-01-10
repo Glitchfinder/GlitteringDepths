@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2016 Sean Porter <glitchkey@gmail.com>
+ * Copyright (c) 2013-2018 Sean Porter <glitchkey@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -51,8 +51,6 @@ package com.glitchkey.glitteringdepths.listeners;
 	import org.bukkit.Material;
 	import org.bukkit.material.Tree;
 	import org.bukkit.TreeSpecies;
-//* IMPORTS: PANDORA
-	//* NOT NEEDED
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.datatypes.SpawnedMob;
 	import com.glitchkey.glitteringdepths.GlitteringDepthsPlugin;
@@ -285,15 +283,17 @@ public final class GlacierMobListener implements Listener {
 			}
 
 			if (type == EntityType.ZOMBIE) {
-				((Zombie) entity).setVillager(mob.isVillager);
+				// TODO: Fix when updating mob handling.
+				//((Zombie) entity).setVillager(mob.isVillager);
 				((Zombie) entity).setBaby(mob.isVillager);
 				equipSpawnedMob(entity, mob);
 			}
 			else if (type == EntityType.SKELETON) {
-				if (mob.isWither) {
-					((Skeleton) entity).setSkeletonType(
-					SkeletonType.WITHER);
-				}
+				// TODO: Fix when updating mob handling.
+				//if (mob.isWither) {
+				//	((Skeleton) entity).setSkeletonType(
+				//	SkeletonType.WITHER);
+				//}
 				equipSpawnedMob(entity, mob);
 			}
 		}

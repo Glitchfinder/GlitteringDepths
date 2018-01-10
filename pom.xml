@@ -44,11 +44,6 @@
 		<id>spigot-repo</id>
 		<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 	</repository>
-	<repository>
-		<id>org.pandora</id>
-		<name>Pandora</name>
-		<url>file:${project.basedir}/repo</url>
-	</repository>
 </repositories>
 
 <dependencies>
@@ -57,14 +52,6 @@
 		<artifactId>bukkit</artifactId>
 		<version>1.10.2-R0.1-SNAPSHOT</version>
 		<scope>provided</scope>
-	</dependency>
-	
-	<dependency>
-		<groupId>org.pandora</groupId>
-		<artifactId>pandora</artifactId>
-		<version>LATEST</version>
-		<type>jar</type>
-		<scope>compile</scope>
 	</dependency>
 </dependencies>
 

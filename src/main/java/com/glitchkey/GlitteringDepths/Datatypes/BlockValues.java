@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2018 Sean Porter <glitchkey@gmail.com>
+ * Copyright (c) 2012-2018 Sean Porter <glitchkey@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,22 +25,43 @@ package com.glitchkey.glitteringdepths.datatypes;
 //* IMPORTS: JDK/JRE
 	//* NOT NEEDED
 //* IMPORTS: BUKKIT
-	import org.bukkit.DyeColor;
-	import org.bukkit.entity.EntityType;
-	import org.bukkit.inventory.ItemStack;
+	//* NOT NEEDED
 //* IMPORTS: GLITTERING DEPTHS
 	//* NOT NEEDED
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public final class SpawnedMob {
-	public EntityType type;
-	public DyeColor color;
-	public ItemStack helmet, chestplate, leggings, boots, held;
-	public int x, y, z;
-	public double maxHealth;
-	public String name;
-	public boolean isWither, isVillager, isBaby, isNameShown, canDespawn;
+public class BlockValues {
+	private int id;
+	private byte data;
+
+	public BlockValues(int id) {
+		setId(id);
+		setData(0);
+	}
+
+	public BlockValues(int id, int data) {
+		setId(id);
+		setData(data);
+	}
 	
-	public SpawnedMob() {}
+	public byte getData() {
+		return data;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public BlockValues setData(int data) {
+		this.data = ((byte) data);
+
+		return this;
+	}
+
+	public BlockValues setId(int id) {
+		this.id = id;
+
+		return this;
+	}
 }

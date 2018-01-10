@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2016 Sean Porter <glitchkey@gmail.com>
+ * Copyright (c) 2012-2018 Sean Porter <glitchkey@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,20 +38,17 @@ package com.glitchkey.glitteringdepths.structures;
 	import org.bukkit.material.Dye;
 	import org.bukkit.material.MaterialData;
 	import org.bukkit.material.Sapling;
-	import org.bukkit.plugin.Plugin;
 	import org.bukkit.TreeSpecies;
 	import org.bukkit.World;
-//* IMPORTS: PANDORA
-	import org.pandora.PandoraWorldGenerator;
 //* IMPORTS: GLITTERING DEPTHS
-    //* NOT NEEDED
+	//* NOT NEEDED
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public class GlacierDungeon extends PandoraWorldGenerator
+public class GlacierDungeon extends StructureGenerator
 {
-	public GlacierDungeon(Plugin plugin, boolean notifyOnBlockChanges) {
-		super(plugin, notifyOnBlockChanges, false);
+	public GlacierDungeon(boolean notifyOnBlockChanges) {
+		super(notifyOnBlockChanges, false);
 
 		for (int data = 0; data < 16; data++) {
 			addToBlacklist(22, (byte) data);

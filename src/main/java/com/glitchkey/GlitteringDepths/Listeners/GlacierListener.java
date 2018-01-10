@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2016 Sean Porter <glitchkey@gmail.com>
+ * Copyright (c) 2012-2018 Sean Porter <glitchkey@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -61,8 +61,6 @@ package com.glitchkey.glitteringdepths.listeners;
 	import org.bukkit.inventory.meta.ItemMeta;
 	import org.bukkit.Material;
 	import org.bukkit.World;
-//* IMPORTS: PANDORA
-	//* NOT NEEDED
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.GlitteringDepthsPlugin;
 //* IMPORTS: OTHER
@@ -70,9 +68,6 @@ package com.glitchkey.glitteringdepths.listeners;
 
 public final class GlacierListener implements Listener {
 	private final GlitteringDepthsPlugin plugin;
-	private ItemMeta sheepHide;
-	private ItemMeta raw_lambchop;
-	private ItemMeta lambchop;
 	private Random rand;
 
 	public GlacierListener(final GlitteringDepthsPlugin plugin) {
@@ -82,15 +77,18 @@ public final class GlacierListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onIceMelt(final BlockFadeEvent event) {
+	public void onBlockMelt(final BlockFadeEvent event) {
 		final Block block = event.getBlock();
 
 		if (block == null || block.getWorld() != plugin.world)
 			return;
 
 		Material mat = event.getNewState().getType();
-		if (mat != Material.STATIONARY_WATER)
-			return;
+		if (mat != Material.STATIONARY_WATER) {
+			if (block.getType() != Material.SNOW) {
+				return;
+			}
+		}
 
 		event.setCancelled(true);
 	}

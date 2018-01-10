@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2016 Sean Porter <glitchkey@gmail.com>
+ * Copyright (c) 2012-2018 Sean Porter <glitchkey@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,23 +27,19 @@ package com.glitchkey.glitteringdepths.structures;
 //* IMPORTS: BUKKIT
 	import org.bukkit.block.Block;
 	import org.bukkit.Location;
-	import org.bukkit.plugin.Plugin;
 	import org.bukkit.World;
-//* IMPORTS: PANDORA
-	import org.pandora.PandoraWorldGenerator;
 //* IMPORTS: GLITTERING DEPTHS
 	//* NOT NEEDED
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public class GlacierOre extends PandoraWorldGenerator
+public class GlacierOre extends StructureGenerator
 {
 	private int id;
 	private double minWidth, maxWidth, minD, maxD;
 	private double widthDiff, distanceDiff;
 
 	public GlacierOre(
-		Plugin plugin,
 		boolean notifyOnBlockChanges,
 		int id,
 		double minWidth,
@@ -51,7 +47,7 @@ public class GlacierOre extends PandoraWorldGenerator
 		double minDistance,
 		double maxDistance)
 	{
-		super(plugin, notifyOnBlockChanges, true);
+		super(notifyOnBlockChanges, true);
 
 		this.id = id;
 		this.minWidth = minWidth;

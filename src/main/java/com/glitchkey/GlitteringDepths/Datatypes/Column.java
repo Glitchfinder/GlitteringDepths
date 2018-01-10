@@ -25,22 +25,19 @@ package com.glitchkey.glitteringdepths.datatypes;
 //* IMPORTS: JDK/JRE
 	//* NOT NEEDED
 //* IMPORTS: BUKKIT
-	import org.bukkit.DyeColor;
-	import org.bukkit.entity.EntityType;
-	import org.bukkit.inventory.ItemStack;
+	//* NOT NEEDED
 //* IMPORTS: GLITTERING DEPTHS
 	//* NOT NEEDED
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public final class SpawnedMob {
-	public EntityType type;
-	public DyeColor color;
-	public ItemStack helmet, chestplate, leggings, boots, held;
-	public int x, y, z;
-	public double maxHealth;
-	public String name;
-	public boolean isWither, isVillager, isBaby, isNameShown, canDespawn;
-	
-	public SpawnedMob() {}
+public final class Column {
+	public int x, z;
+	public double modifier;
+
+	public Column(int cx, int cz, double mod) {
+		x = cx;
+		z = cz;
+		modifier = mod;
+	}
 }
