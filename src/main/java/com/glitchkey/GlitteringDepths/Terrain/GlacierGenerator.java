@@ -168,12 +168,23 @@ public class GlacierGenerator extends ChunkGenerator
 		b -= getNoiseD(w, zPos, xPos, 100D, 1D, 2, 1D, 0.0011D);
 
 		double perc = 0D;
+		double perc1 = 0D;
+		double perc2 = 0D;
 		int    type = 0;
+		//int subtype = 0;
 
 		if (a < -4D && b > 4D) {  // PLAINS
-			perc = Math.max(0, Math.max((a + 6D) / 2D, 1D - ((b - 4D) / 2D)));
+			perc1 = Math.max(0, (a + 6D) / 2D);
+			perc2 = Math.max(0, 1D - ((b - 4D) / 2D));
+			perc = Math.max(perc1, perc2);
 			biomes.setBiome(x, z, Biome.ICE_FLATS);
 			type = 1;
+			//subtype = (perc1 == perc) ? 1 : 2;
+		}
+		else if (a > -4D && a < 50D && b > 4D) { // COVERED PLAINS
+			perc = Math.max(0, Math.max((a - 48D) / 2D, 1D - ((b - 4D) / 2D)));
+			biomes.setBiome(x, z, Biome.ICE_MOUNTAINS);
+			type = 4;
 		}
 		else if (a < -4D && b < -4D) { // OCEAN
 			perc = Math.max(0, Math.max((a + 6D) / 2D, (b + 6D) / 2D));
@@ -194,14 +205,24 @@ public class GlacierGenerator extends ChunkGenerator
 
 		if (type == 1) { // PLAINS
 			int hmod = (int) lerp(15D, 0D,  perc);
+			sh       =       lerp(98D, 68D, perc2);
+			d        =       lerp(30D, 60D, perc2);
+			dm       =       lerp(2D,  0D,  perc2);
+			hm       =       lerp(6D, 1D,   perc2);
+			stone   += (int) lerp(15D, 0D,  perc2);
+			ice     -= hmod;
+			i	-= hmod + (int) lerp(15D, 0D, perc2);
+		}
+		else if (type == 4) { // COVERED PLAINS
+			int hmod = (int) lerp(15D, 0D,  perc);
 			sh       =       lerp(98D, 68D, perc);
 			d        =       lerp(30D, 60D, perc);
 			dm       =       lerp(2D,  0D,  perc);
 			stone   += hmod;
-			ice     -= hmod;
+			i	-= hmod;
 		}
 
-		if (type == 1 || type == 2) { // PLAINS, OCEAN
+		if (type == 2 || type == 4) { // COVERED PLAINS, OCEAN
 			hm = lerp(6D, 1D, perc);
 		}
 
@@ -299,7 +320,7 @@ public class GlacierGenerator extends ChunkGenerator
 	{
 		double baseHeight = Math.abs(((double) y) - startHeight);
 
-		if(baseHeight >= depth && ((y > 158 || y <= 8) || type == 1))
+		if(baseHeight >= depth && ((y > 158 || y <= 8) || (type == 1 || type == 4)))
 			return id;
 
 		baseHeight -= depth;

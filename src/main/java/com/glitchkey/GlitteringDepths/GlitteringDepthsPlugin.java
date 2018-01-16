@@ -43,19 +43,19 @@ public class GlitteringDepthsPlugin extends JavaPlugin
 {
 	public static GlitteringDepthsPlugin plugin;
 	public World world = null;
-	public GlacierListener listener;
-	public GlacierMobListener mobListener;
+	//public GlacierListener listener;
+	//public GlacierMobListener mobListener;
 
 	public void onDisable() {
-		this.listener.unregisterEvents();
-		this.mobListener.unregisterEvents();
+	//	this.listener.unregisterEvents();
+	//	this.mobListener.unregisterEvents();
 	}
 
 	public void onEnable()
 	{
 		plugin = this;
-		this.listener = new GlacierListener(this);
-		this.mobListener = new GlacierMobListener(this);
+	//	this.listener = new GlacierListener(this);
+	//	this.mobListener = new GlacierMobListener(this);
 
 		this.createWorld();
 	}

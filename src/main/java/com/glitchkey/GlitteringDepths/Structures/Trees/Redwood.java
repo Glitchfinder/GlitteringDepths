@@ -101,6 +101,9 @@ public class Redwood extends StructureGenerator
 					if (!isInBlacklist(block))
 						continue;
 
+					if (block.getTypeId() == 79)
+						continue;
+
 					if (!isInBlockList(start, block))
 						addBlock(start, block, 78);
 				}

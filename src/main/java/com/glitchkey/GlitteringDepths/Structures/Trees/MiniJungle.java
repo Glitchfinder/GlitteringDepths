@@ -27,15 +27,16 @@ package com.glitchkey.glitteringdepths.structures.trees;
 //* IMPORTS: BUKKIT
 	import org.bukkit.block.Block;
 	import org.bukkit.Location;
+	import org.bukkit.util.Vector;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public class TallRedwood extends StructureGenerator
+public class MiniJungle extends StructureGenerator
 {
-	public TallRedwood(boolean notifyOnBlockChanges) {
+	public MiniJungle(boolean notifyOnBlockChanges) {
 		super(notifyOnBlockChanges, true);
 
 		addToBlacklist(0);
@@ -46,82 +47,55 @@ public class TallRedwood extends StructureGenerator
 	}
 
 	public boolean generate(World world, Random random, int x, int y, int z) {
-		int maxHeight = random.nextInt(5) + 7;
-		int leafHeight = maxHeight - random.nextInt(2) - 3;
-		int baseLeafWidth = maxHeight - leafHeight;
-		int maxLeafWidth = 1 + random.nextInt(baseLeafWidth + 1);
 		Location start = new Location(world, x, y, z);
+		addBlock(start, world, x, y, z, 17, 3);
+		addToWhitelist(start, world.getBlockAt(x, y, z));
 
-		if (y < 1 || (y + maxHeight + 1) > 128)
-			return false;
+		for (int cy = y; cy <= y + 2; cy++) {
+			int yDist = cy - y;
+			int depth = 2 - yDist;
 
-		int baseId = world.getBlockTypeIdAt(x, y - 1, z);
+			for (int cx = x - depth; cx <= x + depth; cx++) {
+				int xDist = cx - x;
 
-		if ((baseId != 2 && baseId != 3) || y >= (128 - maxHeight - 1))
-			return false;
+				for (int cz = z - depth; cz <= z + depth; cz++) {
+					int zDist = cz - z;
 
-		addToWhitelist(start, world.getBlockAt(x, y - 1, z));
-		addBlock(start, world.getBlockAt(x, y - 1, z), 3, 0);
-
-		int leafWidth = 0;
-
-		for (int cy = y + maxHeight; cy >= y + leafHeight; --cy)
-		{
-			for (int cx = x - leafWidth; cx <= x + leafWidth; ++cx)
-			{
-				int width = Math.abs(cx - x);
-
-				for (int cz = z - leafWidth; cz <= z + leafWidth; ++cz)
-				{
-					// Skip if the block is invalid for some reason
-					if (!isChunkValid(world, cx, cz))
-						return false;
-
-					int length = Math.abs(cz - z);
+					boolean cond1 = (Math.abs(xDist) != depth);
+					boolean cond2 = (Math.abs(zDist) != depth);
+					boolean cond3 = (random.nextInt(2) != 0);
 					Block block = world.getBlockAt(cx, cy, cz);
+					boolean cond4 = !(block.getType().isSolid());
 
-					if (!isInBlacklist(block))
+					if ((!cond1 && !cond2 && !cond3) || !cond4)
 						continue;
 
-					if (width == length && width == leafWidth && leafWidth > 0)
-						continue;
-
-					addBlock(start, block, 18, 1);
-
-					block = world.getBlockAt(cx, cy + 1, cz);
-
-					if (!isInBlacklist(block))
-						continue;
-
-					if (block.getTypeId() == 79)
-						continue;
-
-					if (!isInBlockList(start, block))
-						addBlock(start, block, 78);
+					addLeaf(start, world, cx, cy, cz);
 				}
 			}
-
-			if (leafWidth >= 1 && cy == (y + leafHeight + 1))
-			{
-				--leafWidth;
-			}
-			else if (leafWidth < maxLeafWidth)
-			{
-				++leafWidth;
-			}
-		}
-
-		for (int cy = 0; cy < maxHeight - 1; ++cy)
-		{
-			Block block = world.getBlockAt(x, y + cy, z);
-
-			if (!isInBlacklist(block))
-				continue;
-
-			addBlock(start, block, 17, 1);
 		}
 
 		return placeBlocks(start, true);
+	}
+
+	private void addLeaf(Location s, World w, int x, int y, int z) {
+		Block block = w.getBlockAt(x, y, z);
+
+		if (!isInBlacklist(block))
+			return;
+
+		addBlock(s, block, 18, 3);
+
+		block = w.getBlockAt(x, y + 1, z);
+
+		if (!isInBlacklist(block))
+			return;
+
+		if (block.getTypeId() == 79)
+			return;
+
+		if (!isInBlockList(s, block))
+			addBlock(s, block, 78);
 	}
 
 	public boolean isChunkValid(World world, int x, int z) {
@@ -133,5 +107,9 @@ public class TallRedwood extends StructureGenerator
 			return false;
 
 		return true;
+	}
+
+	double lerp(double start, double end, double percent) {
+		return (start + (percent * (end - start)));
 	}
 }

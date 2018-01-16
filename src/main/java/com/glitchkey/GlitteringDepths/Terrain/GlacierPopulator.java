@@ -38,28 +38,42 @@ package com.glitchkey.glitteringdepths.terrain;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.structures.GlacierDungeon;
 	import com.glitchkey.glitteringdepths.structures.GlacierOre;
+	import com.glitchkey.glitteringdepths.structures.trees.MegaRedwood;
+	import com.glitchkey.glitteringdepths.structures.trees.MiniJungle;
 	import com.glitchkey.glitteringdepths.structures.trees.Redwood;
 	import com.glitchkey.glitteringdepths.structures.trees.TallRedwood;
+	import com.glitchkey.glitteringdepths.structures.trees.WeepingBirch;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
 public class GlacierPopulator extends BlockPopulator
 {
 	Redwood redwood;
+	MegaRedwood megaRedwood;
+	MiniJungle miniJungle;
 	TallRedwood tallRedwood;
+	WeepingBirch weepingBirch;
 	GlacierDungeon dungeon;
-	//GlacierLamp lamp;
 	GlacierOre coal, lapis, diamond, redstone, emerald, gold, iron, gravel;
 	GlacierOre sand, lava;
 
 	public GlacierPopulator()
 	{
-		redwood     = new Redwood(false);
-		tallRedwood = new TallRedwood(false);
+		redwood      = new Redwood(false);
+		megaRedwood  = new MegaRedwood(false);
+		miniJungle   = new MiniJungle(false);
+		tallRedwood  = new TallRedwood(false);
+		weepingBirch = new WeepingBirch(false);
 		redwood.addToBlacklist(78);
+		megaRedwood.addToBlacklist(78);
+		miniJungle.addToBlacklist(78);
 		tallRedwood.addToBlacklist(78);
+		weepingBirch.addToBlacklist(78);
 		redwood.addToBlacklist(79);
+		megaRedwood.addToBlacklist(79);
+		miniJungle.addToBlacklist(79);
 		tallRedwood.addToBlacklist(79);
+		weepingBirch.addToBlacklist(79);
 		dungeon  = new GlacierDungeon(false);
 		coal     = new GlacierOre(false, 16, 3D, 5.5D, 1D, 2.3D);
 		lapis    = new GlacierOre(false, 21, 2D, 3D, 1D, 1.5D);
@@ -91,8 +105,9 @@ public class GlacierPopulator extends BlockPopulator
 		int z = zPos;
 		int soil = -1;
 		int id = 0;
+		int trees = rand.nextInt(rand.nextInt(31) + 1) + rand.nextInt(rand.nextInt(31) + 1);
 
-		for(int i = 0; i < 64; i++) {
+		for(int i = 0; i < trees; i++) {
 			if (i % 2 == 0) {
 				x = xPos + 16 - r.nextInt(16);
 				z = zPos + 16 - r.nextInt(16);
@@ -110,6 +125,59 @@ public class GlacierPopulator extends BlockPopulator
 				tallRedwood.place(w, r, x, soil + 1, z);
 			else
 				redwood.place(w, r, x, soil + 1, z);
+		}
+
+		 if (r.nextInt(4) < 1) {
+			x = xPos + 16 - r.nextInt(16);
+			z = zPos + 16 - r.nextInt(16);
+			soil = this.getTopSoilY(w, x, z, chunkX, chunkZ);
+
+			if (soil > 0)
+				megaRedwood.place(w, r, x, soil + 1, z);
+		}
+
+		trees *= 6;
+
+		for (int attempt = 0; attempt < trees; attempt++) {
+			int cx = xPos + r.nextInt(16);
+			int cz = zPos + r.nextInt(16);
+			int cy = r.nextInt(128);
+
+			id = w.getBlockTypeIdAt(cx, cy, cz);
+
+			if (id != 0 && id != 78 && id != 79)
+				continue;
+
+			int id1 = w.getBlockTypeIdAt(cx + 1, cy, cz    );
+			int id2 = w.getBlockTypeIdAt(cx - 1, cy, cz    );
+			int id3 = w.getBlockTypeIdAt(cx    , cy, cz + 1);
+			int id4 = w.getBlockTypeIdAt(cx    , cy, cz - 1);
+
+			if (!checkIce(id1, id2, id3, id4))
+				continue;
+
+			miniJungle.place(w, r, cx, cy, cz);
+		}
+
+		for (int attempt = 0; attempt < trees; attempt++) {
+			int cx = xPos + r.nextInt(16);
+			int cz = zPos + r.nextInt(16);
+			int cy = r.nextInt(128);
+
+			id = w.getBlockTypeIdAt(cx, cy, cz);
+
+			if (id != 0 && id != 78 && id != 79)
+				continue;
+
+			int id1 = w.getBlockTypeIdAt(cx + 1, cy, cz    );
+			int id2 = w.getBlockTypeIdAt(cx - 1, cy, cz    );
+			int id3 = w.getBlockTypeIdAt(cx    , cy, cz + 1);
+			int id4 = w.getBlockTypeIdAt(cx    , cy, cz - 1);
+
+			if (!checkIce(id1, id2, id3, id4))
+				continue;
+
+			weepingBirch.place(w, r, cx, cy, cz);
 		}
 
 		for (int attempt = 0; attempt < 24; attempt++) {
@@ -134,7 +202,7 @@ public class GlacierPopulator extends BlockPopulator
 			int id3 = w.getBlockTypeIdAt(cx    , y, cz + 1);
 			int id4 = w.getBlockTypeIdAt(cx    , y, cz - 1);
 
-			if (checkWater(id1, id2, id3, id4))
+			if (!checkWater(id1, id2, id3, id4))
 				continue;
 
 			Block b = w.getBlockAt(cx, cy, cz);
@@ -254,6 +322,14 @@ public class GlacierPopulator extends BlockPopulator
 				}
 			}
 		}
+	}
+
+	private boolean checkIce(int id1, int id2, int id3, int id4) {
+		if (id1 != 174 && id2 != 174 && id3 != 174 && id4 != 174) {
+				return false;
+		}
+
+		return true;
 	}
 
 	private boolean checkWater(int id1, int id2, int id3, int id4) {
