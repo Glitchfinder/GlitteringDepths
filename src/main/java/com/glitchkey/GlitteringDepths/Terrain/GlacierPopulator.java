@@ -28,16 +28,17 @@ package com.glitchkey.glitteringdepths.terrain;
 	import org.bukkit.block.Block;
 	import org.bukkit.block.BlockFace;
 	import org.bukkit.Chunk;
-	import org.bukkit.DyeColor;
 	import org.bukkit.entity.EntityType;
-	import org.bukkit.entity.LivingEntity;
-	import org.bukkit.entity.Sheep;
 	import org.bukkit.generator.BlockPopulator;
 	import org.bukkit.Location;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
+	import com.glitchkey.glitteringdepths.listeners.GlacierMobListener;
 	import com.glitchkey.glitteringdepths.structures.GlacierDungeon;
 	import com.glitchkey.glitteringdepths.structures.GlacierOre;
+	import com.glitchkey.glitteringdepths.structures.ruins.Circle;
+	import com.glitchkey.glitteringdepths.structures.ruins.Column;
+	import com.glitchkey.glitteringdepths.structures.trees.FallenSpruce;
 	import com.glitchkey.glitteringdepths.structures.trees.MegaRedwood;
 	import com.glitchkey.glitteringdepths.structures.trees.MiniJungle;
 	import com.glitchkey.glitteringdepths.structures.trees.Redwood;
@@ -48,31 +49,45 @@ package com.glitchkey.glitteringdepths.terrain;
 
 public class GlacierPopulator extends BlockPopulator
 {
-	Redwood redwood;
+	GlacierMobListener mobs;
+	Circle circle;
+	Column column;
+	FallenSpruce fallenSpruce;
 	MegaRedwood megaRedwood;
 	MiniJungle miniJungle;
+	Redwood redwood;
 	TallRedwood tallRedwood;
 	WeepingBirch weepingBirch;
 	GlacierDungeon dungeon;
 	GlacierOre coal, lapis, diamond, redstone, emerald, gold, iron, gravel;
 	GlacierOre sand, lava;
 
-	public GlacierPopulator()
+	public GlacierPopulator(GlacierMobListener listener)
 	{
-		redwood      = new Redwood(false);
-		megaRedwood  = new MegaRedwood(false);
-		miniJungle   = new MiniJungle(false);
-		tallRedwood  = new TallRedwood(false);
-		weepingBirch = new WeepingBirch(false);
+		this.mobs     = listener;
+		circle        = new Circle(false);
+		column        = new Column(false);
+		fallenSpruce  = new FallenSpruce(false);
+		redwood       = new Redwood(false);
+		megaRedwood   = new MegaRedwood(false);
+		miniJungle    = new MiniJungle(false);
+		tallRedwood   = new TallRedwood(false);
+		weepingBirch  = new WeepingBirch(false);
+		circle.addToBlacklist(78);
+		circle.addToBlacklist(79);
+		column.addToBlacklist(78);
+		column.addToBlacklist(79);
+		fallenSpruce.addToBlacklist(78);
+		fallenSpruce.addToBlacklist(79);
 		redwood.addToBlacklist(78);
-		megaRedwood.addToBlacklist(78);
-		miniJungle.addToBlacklist(78);
-		tallRedwood.addToBlacklist(78);
-		weepingBirch.addToBlacklist(78);
 		redwood.addToBlacklist(79);
+		megaRedwood.addToBlacklist(78);
 		megaRedwood.addToBlacklist(79);
+		miniJungle.addToBlacklist(78);
 		miniJungle.addToBlacklist(79);
+		tallRedwood.addToBlacklist(78);
 		tallRedwood.addToBlacklist(79);
+		weepingBirch.addToBlacklist(78);
 		weepingBirch.addToBlacklist(79);
 		dungeon  = new GlacierDungeon(false);
 		coal     = new GlacierOre(false, 16, 3D, 5.5D, 1D, 2.3D);
@@ -101,11 +116,29 @@ public class GlacierPopulator extends BlockPopulator
 		if(rand.nextInt(100) < 1)
 			dungeon.place(w, r, xPos, 0, zPos);
 
+		if(rand.nextInt(150) < 1)
+			circle.place(w, r, xPos, 0, zPos);
+
 		int x = xPos;
 		int z = zPos;
 		int soil = -1;
 		int id = 0;
 		int trees = rand.nextInt(rand.nextInt(31) + 1) + rand.nextInt(rand.nextInt(31) + 1);
+
+		if (r.nextInt(8) < 1) {
+			if (rand.nextBoolean()) {
+				x = xPos + 16 - r.nextInt(16);
+				z = zPos + 16 - r.nextInt(16);
+			}
+			else {
+				x = xPos + r.nextInt(16);
+				z = zPos + r.nextInt(16);
+			}
+			soil = this.getTopSoilY(w, x, z, chunkX, chunkZ);
+
+			if (soil > 0)
+				column.place(w, r, x, soil + 1, z);
+		}
 
 		for(int i = 0; i < trees; i++) {
 			if (i % 2 == 0) {
@@ -136,12 +169,27 @@ public class GlacierPopulator extends BlockPopulator
 				megaRedwood.place(w, r, x, soil + 1, z);
 		}
 
+		if (r.nextInt(4) < 1) {
+			if (rand.nextBoolean()) {
+				x = xPos + 16 - r.nextInt(16);
+				z = zPos + 16 - r.nextInt(16);
+			}
+			else {
+				x = xPos + r.nextInt(16);
+				z = zPos + r.nextInt(16);
+			}
+			soil = this.getTopSoilY(w, x, z, chunkX, chunkZ);
+
+			if (soil > 0)
+				fallenSpruce.place(w, r, x, soil + 1, z);
+		}
+
 		trees *= 6;
 
 		for (int attempt = 0; attempt < trees; attempt++) {
 			int cx = xPos + r.nextInt(16);
 			int cz = zPos + r.nextInt(16);
-			int cy = r.nextInt(128);
+			int cy = r.nextInt(140);
 
 			id = w.getBlockTypeIdAt(cx, cy, cz);
 
@@ -162,7 +210,7 @@ public class GlacierPopulator extends BlockPopulator
 		for (int attempt = 0; attempt < trees; attempt++) {
 			int cx = xPos + r.nextInt(16);
 			int cz = zPos + r.nextInt(16);
-			int cy = r.nextInt(128);
+			int cy = r.nextInt(140);
 
 			id = w.getBlockTypeIdAt(cx, cy, cz);
 
@@ -183,7 +231,7 @@ public class GlacierPopulator extends BlockPopulator
 		for (int attempt = 0; attempt < 24; attempt++) {
 			int cx = xPos + r.nextInt(16);
 			int cz = zPos + r.nextInt(16);
-			int cy = 39;
+			int cy = 51;
 
 			id = w.getBlockTypeIdAt(cx, cy, cz);
 
@@ -277,10 +325,24 @@ public class GlacierPopulator extends BlockPopulator
 		}
 
 		if (r.nextInt(3) < 1) {
-			EntityType type = EntityType.SHEEP;
+			EntityType type;
 
-			if (r.nextInt(8) == 0)
+			int dice = r.nextInt(100);
+
+			if (dice < 30)
+				type = EntityType.RABBIT;
+			else if (dice < 55)
+				type = EntityType.SHEEP;
+			else if (dice < 65)
+				type = EntityType.LLAMA;
+			else if (dice < 75)
 				type = EntityType.WOLF;
+			else if (dice < 85)
+				type = EntityType.HORSE;
+			else if (dice < 95)
+				type = EntityType.POLAR_BEAR;
+			else
+				type = EntityType.SNOWMAN;
 
 			int spawned = 0;
 			int pack = ((type == EntityType.WOLF) ? 8 : 4);
@@ -302,26 +364,24 @@ public class GlacierPopulator extends BlockPopulator
 				Location l = new Location(w, cx, cy, cz);
 				l.add(0.5D, 0D, 0.5D);
 
-				LivingEntity entity;
-				entity = (LivingEntity) w.spawnEntity(l, type);
-
-				if(entity == null)
-					continue;
-
+				spawnPassive(l, type);
 				spawned++;
-
-				if (type == EntityType.SHEEP) {
-					handleSheep(r, (Sheep) entity);
-				}
-				else {
-					entity.setCustomName("Winter Wolf");
-					entity.setCustomNameVisible(false);
-					entity.setRemoveWhenFarAway(false);
-					entity.setMaxHealth(16);
-					entity.setHealth(16);
-				}
 			}
 		}
+	}
+
+	private void spawnPassive(Location loc, EntityType type) {
+		try {
+			switch (type) {
+				case RABBIT:     mobs.spawnRabbit(loc); break;
+				case SHEEP:      mobs.spawnSheep(loc);  break;
+				case LLAMA:      mobs.spawnLlama(loc);  break;
+				case WOLF:       mobs.spawnWolf(loc);   break;
+				case HORSE:      mobs.spawnHorse(loc);  break;
+				case POLAR_BEAR: mobs.spawnBear(loc);   break;
+				default:         mobs.spawnGolem(loc);  break;
+			}
+		} catch (Exception e) {}
 	}
 
 	private boolean checkIce(int id1, int id2, int id3, int id4) {
@@ -342,49 +402,30 @@ public class GlacierPopulator extends BlockPopulator
 		return true;
 	}
 
-	private void handleSheep(Random r, Sheep sheep) {
-		sheep.setCustomName("Grey Troender");
-		sheep.setCustomNameVisible(false);
-		sheep.setRemoveWhenFarAway(false);
-		sheep.setMaxHealth(16);
-		sheep.setHealth(16);
-
-		int rand = r.nextInt(100);
-
-		if (rand < 30)
-			sheep.setColor(DyeColor.WHITE);
-		else if (rand < 90)
-			sheep.setColor(DyeColor.SILVER);
-		else if (rand < 97)
-			sheep.setColor(DyeColor.GRAY);
-		else
-			sheep.setColor(DyeColor.BLACK);
-	}
-
 	private void generateOre(World w, Random r, int x, int z) {
-		coal.place(w, r, x + r.nextInt(16), r.nextInt(55) + 10, z + r.nextInt(16));
-		coal.place(w, r, x + r.nextInt(16), r.nextInt(55) + 10, z + r.nextInt(16));
-		lapis.place(w, r, x + r.nextInt(16), r.nextInt(50) + 10, z + r.nextInt(16));
-		lapis.place(w, r, x + r.nextInt(16), r.nextInt(50) + 10, z + r.nextInt(16));
-		redstone.place(w, r, x + r.nextInt(16), r.nextInt(30) + 10, z + r.nextInt(16));
-		diamond.place(w, r, x + r.nextInt(16), r.nextInt(30) + 10, z + r.nextInt(16));
-		iron.place(w, r, x + r.nextInt(16), r.nextInt(30) + 10, z + r.nextInt(16));
-		iron.place(w, r, x + r.nextInt(16), r.nextInt(30) + 10, z + r.nextInt(16));
-		gold.place(w, r, x + r.nextInt(16), r.nextInt(30) + 10, z + r.nextInt(16));
+		coal.place(w, r, x + r.nextInt(16), r.nextInt(67) + 10, z + r.nextInt(16));
+		coal.place(w, r, x + r.nextInt(16), r.nextInt(67) + 10, z + r.nextInt(16));
+		lapis.place(w, r, x + r.nextInt(16), r.nextInt(62) + 10, z + r.nextInt(16));
+		lapis.place(w, r, x + r.nextInt(16), r.nextInt(62) + 10, z + r.nextInt(16));
+		redstone.place(w, r, x + r.nextInt(16), r.nextInt(42) + 10, z + r.nextInt(16));
+		diamond.place(w, r, x + r.nextInt(16), r.nextInt(42) + 10, z + r.nextInt(16));
+		iron.place(w, r, x + r.nextInt(16), r.nextInt(42) + 10, z + r.nextInt(16));
+		iron.place(w, r, x + r.nextInt(16), r.nextInt(42) + 10, z + r.nextInt(16));
+		gold.place(w, r, x + r.nextInt(16), r.nextInt(42) + 10, z + r.nextInt(16));
 
 		if(r.nextBoolean())
-			emerald.place(w, r, x + r.nextInt(16), r.nextInt(25) + 10, z + r.nextInt(16));
+			emerald.place(w, r, x + r.nextInt(16), r.nextInt(37) + 10, z + r.nextInt(16));
 
-		gravel.place(w, r, x + r.nextInt(16), r.nextInt(50) + 10, z + r.nextInt(16));
-		sand.place(w, r, x + r.nextInt(16), r.nextInt(50) + 10, z + r.nextInt(16));
+		gravel.place(w, r, x + r.nextInt(16), r.nextInt(62) + 10, z + r.nextInt(16));
+		sand.place(w, r, x + r.nextInt(16), r.nextInt(62) + 10, z + r.nextInt(16));
 
 		if(r.nextInt(5) < 1) {
-			lava.place(w, r, x + r.nextInt(16), r.nextInt(10) + 10, z + r.nextInt(16));
+			lava.place(w, r, x + r.nextInt(16), r.nextInt(22) + 10, z + r.nextInt(16));
 		}
 	}
 
 	public int getTopSoilY(World w, int x, int z, int chunkX, int chunkZ) {
-		return this.getTopSoilY(w, x, 85, z, chunkX, chunkZ);
+		return this.getTopSoilY(w, x, 97, z, chunkX, chunkZ);
 	}
 
 	public int getTopSoilY(World w, int x, int maxY, int z, int chunkX,

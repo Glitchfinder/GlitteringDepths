@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.glitchkey.glitteringdepths.structures.trees;
+package com.glitchkey.glitteringdepths.structures.ruins;
 
 //* IMPORTS: JDK/JRE
 	import java.util.Random;
@@ -33,9 +33,9 @@ package com.glitchkey.glitteringdepths.structures.trees;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public class WeepingBirch extends StructureGenerator
+public class FallenColumnB extends StructureGenerator
 {
-	public WeepingBirch(boolean notifyOnBlockChanges) {
+	public FallenColumnB(boolean notifyOnBlockChanges) {
 		super(notifyOnBlockChanges, true);
 
 		addToBlacklist(0);
@@ -47,58 +47,63 @@ public class WeepingBirch extends StructureGenerator
 
 	public boolean generate(World world, Random random, int x, int y, int z) {
 		Location start = new Location(world, x, y, z);
-		addBlock(start, world, x, y, z, 17, 2);
+		addPiece(start, world, x, y, z, 1);
 		addToWhitelist(start, world.getBlockAt(x, y, z));
 
-		int rad  = random.nextInt(5) + 2;
-		int diff = random.nextInt(3) + 2;
-		int xDiff = random.nextInt(5);
-		int zDiff = random.nextInt(5);
+		int dir = random.nextInt(4);
 
-		if (random.nextBoolean())
-			xDiff *= -1;
-		if (random.nextBoolean())
-			zDiff *= -1;
+		int xm = 0;
+		int zm = 0;
+		int data = 0;
+		int count = 0;
+		int xl = 1;
+		int zl = 1;
 
-		int x2 = x + xDiff;
-		int z2 = z + zDiff;
+		if (dir < 2) {
+			xm = 1;
+			xl = 4;
+			data = 3;
+		}
+		else {
+			zm = 1;
+			zl = 4;
+			data = 4;
+		}
 
-		int xMin = Math.min(x, x2);
-		int zMin = Math.min(z, z2);
-		int xMax = Math.max(x, x2);
-		int zMax = Math.max(z, z2);
+		if (dir % 2 == 0) {
+			xm *= -1;
+			zm *= -1;
+		}
 
-		double dist = rad;
-		Location b1 = new Location(world, x, y - rad, z);
-		Location b2 = new Location(world, x2, y - (rad + diff), z2);
-		Location c1 = new Location(world, x, y, z);
+		for (int cx = x + (xm * 2); count < xl; cx += xm) {
+			int zcount = 0;
 
-		for (int cy = y; cy >= y - (rad * 2); cy--) {
-			c1.setY(cy);
+			for (int cz = z + (zm * 2); zcount < zl; cz += zm) {
+				int id = world.getBlockTypeIdAt(cx, y - 1, cz);
 
-			for (int cx = xMin; cx <= xMax; cx++) {
+				if (id != 2 && id != 3)
+					return placeBlocks(start, true);
 
-				c1.setX(cx);
-				for (int cz = zMin; cz <= zMax; cz++) {
-					if (!isChunkValid(world, cx, cz))
-						return false;
+				count += 1;
+				zcount += 1;
 
-					c1.setZ(cz);
-
-					if (dist < c1.distance(b1))
-						continue;
-					if (dist > c1.distance(b2))
-						continue;
-
-					addLeaf(start, world, cx, cy, cz);
+				if (count >= xl && zcount >= zl)
+					addPiece(start, world, cx, y, cz, 1);
+				else if (random.nextInt(2) == 0) {
+					addStair(start, world, cx, y, cz, random);
 				}
+				else if (random.nextInt(3) == 0) {
+					addSlab(start, world, cx, y, cz);
+				}
+				else
+					addPiece(start, world, cx, y, cz, data);
 			}
 		}
 
 		return placeBlocks(start, true);
 	}
 
-	private void addLeaf(Location s, World w, int x, int y, int z) {
+	private void addStair(Location s, World w, int x, int y, int z, Random r) {
 		Block block = w.getBlockAt(x, y, z);
 
 		if (!isInBlacklist(block))
@@ -107,7 +112,31 @@ public class WeepingBirch extends StructureGenerator
 		if (!isChunkValid(w, x, z))
 			return;
 
-		addBlock(s, block, 18, 2);
+		addBlock(s, block, 156, r.nextInt(4));
+	}
+
+	private void addSlab(Location s, World w, int x, int y, int z) {
+		Block block = w.getBlockAt(x, y, z);
+
+		if (!isInBlacklist(block))
+			return;
+
+		if (!isChunkValid(w, x, z))
+			return;
+
+		addBlock(s, block, 44, 7);
+	}
+
+	private void addPiece(Location s, World w, int x, int y, int z, int d) {
+		Block block = w.getBlockAt(x, y, z);
+
+		if (!isInBlacklist(block))
+			return;
+
+		if (!isChunkValid(w, x, z))
+			return;
+
+		addBlock(s, block, 155, d);
 
 		block = w.getBlockAt(x, y + 1, z);
 

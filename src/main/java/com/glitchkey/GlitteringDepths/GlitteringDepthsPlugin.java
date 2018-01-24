@@ -25,7 +25,6 @@ package com.glitchkey.glitteringdepths;
 //* IMPORTS: JDK/JRE
 	//* NOT NEEDED
 //* IMPORTS: BUKKIT
-	import org.bukkit.generator.BlockPopulator;
 	import org.bukkit.generator.ChunkGenerator;
 	import org.bukkit.plugin.java.JavaPlugin;
 	import org.bukkit.World;
@@ -43,19 +42,19 @@ public class GlitteringDepthsPlugin extends JavaPlugin
 {
 	public static GlitteringDepthsPlugin plugin;
 	public World world = null;
-	//public GlacierListener listener;
-	//public GlacierMobListener mobListener;
+	public GlacierListener listener;
+	public GlacierMobListener mobListener;
 
 	public void onDisable() {
-	//	this.listener.unregisterEvents();
-	//	this.mobListener.unregisterEvents();
+		this.listener.unregisterEvents();
+		this.mobListener.unregisterEvents();
 	}
 
 	public void onEnable()
 	{
 		plugin = this;
-	//	this.listener = new GlacierListener(this);
-	//	this.mobListener = new GlacierMobListener(this);
+		this.listener = new GlacierListener(this);
+		this.mobListener = new GlacierMobListener(this);
 
 		this.createWorld();
 	}
@@ -66,7 +65,7 @@ public class GlitteringDepthsPlugin extends JavaPlugin
 		WorldCreator worldCreator = new WorldCreator("GlitteringDepths");
 		worldCreator = worldCreator.environment(Environment.NORMAL);
 		worldCreator = worldCreator.type(WorldType.NORMAL);
-		GlacierGenerator generator = new GlacierGenerator();
+		GlacierGenerator generator = new GlacierGenerator(mobListener);
 		worldCreator = worldCreator.generator((ChunkGenerator) generator);
 		this.world = worldCreator.createWorld();
 	}

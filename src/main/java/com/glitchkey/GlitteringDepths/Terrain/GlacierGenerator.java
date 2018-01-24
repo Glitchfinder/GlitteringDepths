@@ -40,6 +40,7 @@ package com.glitchkey.glitteringdepths.terrain;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.datatypes.Column;
+	import com.glitchkey.glitteringdepths.listeners.GlacierMobListener;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
@@ -50,10 +51,10 @@ public class GlacierGenerator extends ChunkGenerator
 	private List<BlockPopulator> populators;
 	
 
-	public GlacierGenerator() {
+	public GlacierGenerator(GlacierMobListener m) {
 		noises = new HashMap<World, SimplexNoiseGenerator>();
 		populators = new ArrayList<BlockPopulator>();
-		populators.add((BlockPopulator) (new GlacierPopulator()));
+		populators.add((BlockPopulator) (new GlacierPopulator(m)));
 	}
 
 	public List<BlockPopulator> getDefaultPopulators(World world) {
@@ -154,12 +155,12 @@ public class GlacierGenerator extends ChunkGenerator
 		biomes.setBiome(x, z, Biome.TAIGA_COLD);
 
 		int ice = 0;
-		int stone = 63;
-		int bRock = 5;
+		int stone = 75;
+		int bRock = 0;
 
 		ice += (int) getNoise(w, xPos, zPos, 1D, 1D, 2, 16D, 0.03D);
 		stone += ice / 2;
-		ice += 127;
+		ice += 139;
 
 		double a = 50D;
 		double b = 50D;
@@ -197,27 +198,27 @@ public class GlacierGenerator extends ChunkGenerator
 			type = 3;
 		}
 
-		double sh = 68D;
+		double sh = 80D;
 		double d  = 60D;
 		double hm = 1D;
 		double dm = 0D;
 		int    i  = 60;
 
 		if (type == 1) { // PLAINS
-			int hmod = (int) lerp(15D, 0D,  perc);
-			sh       =       lerp(98D, 68D, perc2);
-			d        =       lerp(30D, 60D, perc2);
-			dm       =       lerp(2D,  0D,  perc2);
-			hm       =       lerp(6D, 1D,   perc2);
-			stone   += (int) lerp(15D, 0D,  perc2);
+			int hmod = (int) lerp(15D,  0D,  perc);
+			sh       =       lerp(110D, 80D, perc2);
+			d        =       lerp(30D,  60D, perc2);
+			dm       =       lerp(2D,   0D,  perc2);
+			hm       =       lerp(6D,   1D,  perc2);
+			stone   += (int) lerp(15D,  0D,  perc2);
 			ice     -= hmod;
 			i	-= hmod + (int) lerp(15D, 0D, perc2);
 		}
 		else if (type == 4) { // COVERED PLAINS
-			int hmod = (int) lerp(15D, 0D,  perc);
-			sh       =       lerp(98D, 68D, perc);
-			d        =       lerp(30D, 60D, perc);
-			dm       =       lerp(2D,  0D,  perc);
+			int hmod = (int) lerp(15D,  0D,  perc);
+			sh       =       lerp(110D, 80D, perc);
+			d        =       lerp(30D,  60D, perc);
+			dm       =       lerp(2D,   0D,  perc);
 			stone   += hmod;
 			i	-= hmod;
 		}
@@ -238,7 +239,7 @@ public class GlacierGenerator extends ChunkGenerator
 		mod = Math.max(0D, mod);
 		boolean ground = false;
 
-		for(int y = 143; y >= 0; y--) {
+		for(int y = 155; y >= 0; y--) {
 			if (!ground && y <= stone) {
 				column = (column / 1.5D) + 1D;
 				ground = true;
@@ -248,25 +249,6 @@ public class GlacierGenerator extends ChunkGenerator
 			id = this.getId(w, bRock, stone, ice, xPos, y, zPos,
 				result, column, mod, type, sh, d, hm, dm, i, perc);
 
-/*
-			if (a < -4D && b < -4D) {
-				id = (short) 22;
-				if (a > -6D || b > -6D)
-					id = (short) 174;
-			}
-			else if (a < -4D && b > 4D) {
-				id = (short) 41;
-				if (a > -6D || b < 6D)
-					id = (short) 19;
-			}
-			else if (a > 4D && b < -4D) {
-				id = (short) 42;
-				if (a < 6D || b > -6D)
-					id = (short) 82;
-			}
-			else
-				id = (short) 57;
-*/
 			result[y] = id;
 		}
 
@@ -304,7 +286,7 @@ public class GlacierGenerator extends ChunkGenerator
 		id = checkColumn(world, id, x, y, z, column, modifier, ice,
 			type, sh, d, hm, dm, perc);
 
-		if(id == 0 && y <= 38)
+		if(id == 0 && y <= 50)
 			id = 9;
 
 		if (id == 2 && result[y + 1] == 0)
@@ -320,7 +302,7 @@ public class GlacierGenerator extends ChunkGenerator
 	{
 		double baseHeight = Math.abs(((double) y) - startHeight);
 
-		if(baseHeight >= depth && ((y > 158 || y <= 8) || (type == 1 || type == 4)))
+		if(baseHeight >= depth && ((y > 170 || y <= 20) || (type == 1 || type == 4)))
 			return id;
 
 		baseHeight -= depth;
@@ -385,14 +367,6 @@ public class GlacierGenerator extends ChunkGenerator
 
 	private void genColumn(int x, int z, List<Column> list) {
 		Random random = getRandom(x, z);
-
-		//int var1 = 5;
-		//int var2 = 20;
-
-		//if (type == 1 || type == 2) {// PLAINS, OCEAN
-		//	var1 = (int) lerp(10D, 5D, perc);
-		//	var2 = (int) lerp(25D, 20D, perc);
-		//}
 
 		if(random.nextInt(100) > 10 || random.nextInt(100) > 25)
 			return;

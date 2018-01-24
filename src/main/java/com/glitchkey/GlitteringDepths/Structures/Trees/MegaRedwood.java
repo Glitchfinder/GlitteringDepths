@@ -125,6 +125,9 @@ public class MegaRedwood extends StructureGenerator
 		if (!isInBlacklist(block))
 			return;
 
+		if (!isChunkValid(w, x, z))
+			return;
+
 		addBlock(s, block, 18, 1);
 
 		block = w.getBlockAt(x, y + 1, z);
@@ -143,6 +146,9 @@ public class MegaRedwood extends StructureGenerator
 		Block block = w.getBlockAt(x, y, z);
 
 		if (!isInBlacklist(block))
+			return;
+
+		if (!isChunkValid(w, x, z))
 			return;
 
 		addBlock(s, block, 17, 1);

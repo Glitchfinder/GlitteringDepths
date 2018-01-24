@@ -27,7 +27,6 @@ package com.glitchkey.glitteringdepths.structures.trees;
 //* IMPORTS: BUKKIT
 	import org.bukkit.block.Block;
 	import org.bukkit.Location;
-	import org.bukkit.util.Vector;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
@@ -84,6 +83,9 @@ public class MiniJungle extends StructureGenerator
 		if (!isInBlacklist(block))
 			return;
 
+		if (!isChunkValid(w, x, z))
+			return;
+
 		addBlock(s, block, 18, 3);
 
 		block = w.getBlockAt(x, y + 1, z);
@@ -107,9 +109,5 @@ public class MiniJungle extends StructureGenerator
 			return false;
 
 		return true;
-	}
-
-	double lerp(double start, double end, double percent) {
-		return (start + (percent * (end - start)));
 	}
 }

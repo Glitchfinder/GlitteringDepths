@@ -163,7 +163,7 @@ public abstract class StructureGenerator
 
 	public boolean placeBlocks(Location start, boolean fastFail) {
 		if (!modifiedBlocks.containsKey(start))
-			return false;
+			return fail(start);
 
 		Map<Block, BlockValues> modified = modifiedBlocks.get(start);
 		List<BlockState> blocks = new ArrayList<BlockState>();
@@ -175,10 +175,10 @@ public abstract class StructureGenerator
 				blacklisted = invertBlacklist;
 
 			if(fastFail && blacklisted && !invertBlacklist) {
-				return false;
+				return fail(start);
 			}
 			else if(fastFail && !blacklisted && invertBlacklist) {
-				return false;
+				return fail(start);
 			}
 
 			BlockState state = block.getState();
@@ -196,6 +196,11 @@ public abstract class StructureGenerator
 		return true;
 	}
 
+	private boolean fail(Location start) {
+		replaceWhitelist.remove(start);
+		modifiedBlocks.remove(start);
+		return false;
+	}
 
 	public StructureGenerator removeFromBlacklist(BlockValues values) {
 		for(BlockValues listItem : replaceBlacklist) {

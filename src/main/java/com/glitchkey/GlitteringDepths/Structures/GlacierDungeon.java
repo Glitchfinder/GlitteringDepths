@@ -1220,7 +1220,7 @@ public class GlacierDungeon extends StructureGenerator
 	}
 
 	private int getBaseY(World world, int x, int z, boolean ignoreExtras) {
-		for (int y = 85; y > 0; y--) {
+		for (int y = 97; y > 0; y--) {
 			int id = world.getBlockTypeIdAt(x, y, z);
 
 			if (!ignoreExtras && (id == 8 || id == 9))
