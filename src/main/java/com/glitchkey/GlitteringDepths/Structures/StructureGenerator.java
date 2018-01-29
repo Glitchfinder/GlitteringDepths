@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2018 Sean Porter <glitchkey@gmail.com>
+ * Copyright (c) 2018 Sean Porter <glitchkey@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -196,7 +196,7 @@ public abstract class StructureGenerator
 		return true;
 	}
 
-	private boolean fail(Location start) {
+	protected boolean fail(Location start) {
 		replaceWhitelist.remove(start);
 		modifiedBlocks.remove(start);
 		return false;

@@ -37,7 +37,7 @@ package com.glitchkey.glitteringdepths.terrain;
 	import com.glitchkey.glitteringdepths.structures.GlacierDungeon;
 	import com.glitchkey.glitteringdepths.structures.GlacierOre;
 	import com.glitchkey.glitteringdepths.structures.ruins.Circle;
-	import com.glitchkey.glitteringdepths.structures.ruins.Column;
+	import com.glitchkey.glitteringdepths.structures.ruins.RandomColumn;
 	import com.glitchkey.glitteringdepths.structures.trees.FallenSpruce;
 	import com.glitchkey.glitteringdepths.structures.trees.MegaRedwood;
 	import com.glitchkey.glitteringdepths.structures.trees.MiniJungle;
@@ -51,7 +51,7 @@ public class GlacierPopulator extends BlockPopulator
 {
 	GlacierMobListener mobs;
 	Circle circle;
-	Column column;
+	RandomColumn column;
 	FallenSpruce fallenSpruce;
 	MegaRedwood megaRedwood;
 	MiniJungle miniJungle;
@@ -66,7 +66,7 @@ public class GlacierPopulator extends BlockPopulator
 	{
 		this.mobs     = listener;
 		circle        = new Circle(false);
-		column        = new Column(false);
+		column        = new RandomColumn(false);
 		fallenSpruce  = new FallenSpruce(false);
 		redwood       = new Redwood(false);
 		megaRedwood   = new MegaRedwood(false);

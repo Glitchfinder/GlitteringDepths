@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2018 Sean Porter <glitchkey@gmail.com>
+ * Copyright (c) 2018 Sean Porter <glitchkey@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -53,12 +53,12 @@ public class TallRedwood extends StructureGenerator
 		Location start = new Location(world, x, y, z);
 
 		if (y < 1 || (y + maxHeight + 1) > 128)
-			return false;
+			return fail(start);
 
 		int baseId = world.getBlockTypeIdAt(x, y - 1, z);
 
 		if ((baseId != 2 && baseId != 3) || y >= (128 - maxHeight - 1))
-			return false;
+			return fail(start);
 
 		addToWhitelist(start, world.getBlockAt(x, y - 1, z));
 		addBlock(start, world.getBlockAt(x, y - 1, z), 3, 0);
@@ -75,7 +75,7 @@ public class TallRedwood extends StructureGenerator
 				{
 					// Skip if the block is invalid for some reason
 					if (!isChunkValid(world, cx, cz))
-						return false;
+						return fail(start);
 
 					int length = Math.abs(cz - z);
 					Block block = world.getBlockAt(cx, cy, cz);

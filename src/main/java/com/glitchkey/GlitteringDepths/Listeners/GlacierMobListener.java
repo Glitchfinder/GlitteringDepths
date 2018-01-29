@@ -361,7 +361,7 @@ public final class GlacierMobListener implements Listener {
 		int dice = rand.nextInt(100);
 
 		try {
-			if (dice < 50)
+			if (dice < 65)
 				spawnSquid(loc);
 			else if (dice < 95)
 				spawnGuardian(loc);
@@ -394,13 +394,13 @@ public final class GlacierMobListener implements Listener {
 		try {
 			if (dice < 30)
 				spawnRabbit(loc);
-			else if (dice < 55)
+			else if (dice < 60)
 				spawnSheep(loc);
-			else if (dice < 65)
+			else if (dice < 70)
 				spawnLlama(loc);
-			else if (dice < 75)
+			else if (dice < 80)
 				spawnWolf(loc);
-			else if (dice < 85)
+			else if (dice < 90)
 				spawnHorse(loc);
 			else if (dice < 95)
 				spawnBear(loc);

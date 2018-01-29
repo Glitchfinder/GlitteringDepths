@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2018 Sean Porter <glitchkey@gmail.com>
+ * Copyright (c) 2018 Sean Porter <glitchkey@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -47,8 +47,6 @@ public class WeepingBirch extends StructureGenerator
 
 	public boolean generate(World world, Random random, int x, int y, int z) {
 		Location start = new Location(world, x, y, z);
-		addBlock(start, world, x, y, z, 17, 2);
-		addToWhitelist(start, world.getBlockAt(x, y, z));
 
 		int rad  = random.nextInt(5) + 2;
 		int diff = random.nextInt(3) + 2;

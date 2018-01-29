@@ -75,7 +75,7 @@ public class GlacierDungeon extends StructureGenerator
 		int baseY = getBaseY(w, x, z, false) + 11;
 
 		if (baseY <= 10)
-			return false;
+			return fail(start);
 
 		int bottomY = baseY;
 
@@ -85,7 +85,7 @@ public class GlacierDungeon extends StructureGenerator
 				bottomY = Math.min(checkY, bottomY);
 
 				if (bottomY < 0)
-					return false;
+					return fail(start);
 			}
 		}
 

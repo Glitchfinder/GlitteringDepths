@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2018 Sean Porter <glitchkey@gmail.com>
+ * Copyright (c) 2018 Sean Porter <glitchkey@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,9 +35,9 @@ package com.glitchkey.glitteringdepths.structures.ruins;
 
 public class Circle
 {
-	Column column;
+	RandomColumn column;
 	public Circle(boolean notifyOnBlockChanges) {
-		column = new Column(notifyOnBlockChanges);
+		column = new RandomColumn(notifyOnBlockChanges);
 	}
 
 	public Circle addToBlacklist(int id) {

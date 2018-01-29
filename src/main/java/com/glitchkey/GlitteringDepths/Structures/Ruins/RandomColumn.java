@@ -31,21 +31,21 @@ package com.glitchkey.glitteringdepths.structures.ruins;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public class Column
+public class RandomColumn
 {
 	FallenColumn    typeA;
 	FallenColumnB   typeB;
 	StandingColumn  typeC;
 	StandingColumnB typeD;
 
-	public Column(boolean notifyOnBlockChanges) {
+	public RandomColumn(boolean notifyOnBlockChanges) {
 		typeA = new FallenColumn(notifyOnBlockChanges);
 		typeB = new FallenColumnB(notifyOnBlockChanges);
 		typeC = new StandingColumn(notifyOnBlockChanges);
 		typeD = new StandingColumnB(notifyOnBlockChanges);
 	}
 
-	public Column addToBlacklist(int id) {
+	public RandomColumn addToBlacklist(int id) {
 		typeA.addToBlacklist(id);
 		typeB.addToBlacklist(id);
 		typeC.addToBlacklist(id);
