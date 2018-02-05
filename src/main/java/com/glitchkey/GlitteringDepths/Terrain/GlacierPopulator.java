@@ -38,6 +38,7 @@ package com.glitchkey.glitteringdepths.terrain;
 	import com.glitchkey.glitteringdepths.structures.GlacierOre;
 	import com.glitchkey.glitteringdepths.structures.ruins.Circle;
 	import com.glitchkey.glitteringdepths.structures.ruins.RandomColumn;
+	import com.glitchkey.glitteringdepths.structures.ruins.RandomRuin;
 	import com.glitchkey.glitteringdepths.structures.trees.FallenSpruce;
 	import com.glitchkey.glitteringdepths.structures.trees.MegaRedwood;
 	import com.glitchkey.glitteringdepths.structures.trees.MiniJungle;
@@ -52,6 +53,7 @@ public class GlacierPopulator extends BlockPopulator
 	GlacierMobListener mobs;
 	Circle circle;
 	RandomColumn column;
+	RandomRuin ruin;
 	FallenSpruce fallenSpruce;
 	MegaRedwood megaRedwood;
 	MiniJungle miniJungle;
@@ -67,6 +69,7 @@ public class GlacierPopulator extends BlockPopulator
 		this.mobs     = listener;
 		circle        = new Circle(false);
 		column        = new RandomColumn(false);
+		ruin          = new RandomRuin(false);
 		fallenSpruce  = new FallenSpruce(false);
 		redwood       = new Redwood(false);
 		megaRedwood   = new MegaRedwood(false);
@@ -77,6 +80,9 @@ public class GlacierPopulator extends BlockPopulator
 		circle.addToBlacklist(79);
 		column.addToBlacklist(78);
 		column.addToBlacklist(79);
+		ruin.addToBlacklist(78);
+		ruin.addToBlacklist(79);
+		ruin.addToBlacklist(174);
 		fallenSpruce.addToBlacklist(78);
 		fallenSpruce.addToBlacklist(79);
 		redwood.addToBlacklist(78);
@@ -112,6 +118,9 @@ public class GlacierPopulator extends BlockPopulator
 		generateOre(w, r, xPos, zPos);
 
 		Random rand = getRandom(w, xPos, zPos);
+
+		if(rand.nextInt(150) < 1)
+			ruin.place(w, r, xPos, 0, zPos);
 
 		if(rand.nextInt(100) < 1)
 			dungeon.place(w, r, xPos, 0, zPos);
