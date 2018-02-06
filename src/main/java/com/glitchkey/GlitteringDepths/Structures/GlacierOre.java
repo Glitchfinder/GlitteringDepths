@@ -35,7 +35,7 @@ package com.glitchkey.glitteringdepths.structures;
 
 public class GlacierOre extends StructureGenerator
 {
-	private int id;
+	private int id, data;
 	private double minWidth, maxWidth, minD, maxD;
 	private double widthDiff, distanceDiff;
 
@@ -47,9 +47,23 @@ public class GlacierOre extends StructureGenerator
 		double minDistance,
 		double maxDistance)
 	{
+		this(notifyOnBlockChanges, id, 0, minWidth, maxWidth,
+			minDistance, maxDistance);
+	}
+
+	public GlacierOre(
+		boolean notifyOnBlockChanges,
+		int id,
+		int data,
+		double minWidth,
+		double maxWidth,
+		double minDistance,
+		double maxDistance)
+	{
 		super(notifyOnBlockChanges, true);
 
 		this.id = id;
+		this.data = data;
 		this.minWidth = minWidth;
 		this.maxWidth = maxWidth;
 		this.minD = minDistance;
@@ -58,8 +72,8 @@ public class GlacierOre extends StructureGenerator
 		this.widthDiff = maxWidth - minWidth;
 		this.distanceDiff = maxDistance - minDistance;
 
-		for (int data = 0; data < 16; data++) {
-			addToBlacklist(1, (byte) data);
+		for (int d = 0; d < 16; d++) {
+			addToBlacklist(1, (byte) d);
 		}
 	}
 
@@ -148,7 +162,7 @@ public class GlacierOre extends StructureGenerator
 			return;
 
 		// Add this block to the list of blocks to place
-		addBlock(b1, block, id, (byte) 0);
+		addBlock(b1, block, id, data);
 	}
 
 	public boolean isChunkValid(World world, int x, int z) {

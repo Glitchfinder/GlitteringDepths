@@ -289,8 +289,43 @@ public class GlacierGenerator extends ChunkGenerator
 		if(id == 0 && y <= 50)
 			id = 9;
 
-		if (id == 2 && result[y + 1] == 0)
+		if (id == 1 || id == 2 || id == 3)
+			id = checkCave(world, id, x, y, z);
+
+		if (id == 2 && (result[y + 1] == 0 || result[y + 1] == 4))
 			result[y + 1] = 78;
+
+		if (result[y + 1] == 4)
+			if (y >= 50)
+				result[y + 1] = 0;
+			else if (y > 19)
+				result[y + 1] = 9;
+			else if (y > 18)
+				result[y + 1] = 49;
+			else
+				result[y + 1] = 11;
+
+		return id;
+	}
+
+	public short checkCave(World w, short id, int x, int y, int z) {
+		double threshhold = 0.3D;
+
+		if (y > 25)
+			threshhold = lerp(0.3D, 1D, ((double) y - 25) / 40D);
+		else if (y < 8)
+			threshhold = lerp(1D, 0.3D, ((double) y - 1) / 7D);
+
+		if (threshhold >= 1D)
+			return id;
+
+		double cx = ((double) x) * 0.7D;
+		double cz = ((double) z) * 0.7D;
+
+		double noise = getNoise(w, cx, y, cz, 2, 0.06D, 120D);
+
+		if (noise > threshhold)
+			return 4;
 
 		return id;
 	}

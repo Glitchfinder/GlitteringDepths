@@ -62,7 +62,7 @@ public class GlacierPopulator extends BlockPopulator
 	WeepingBirch weepingBirch;
 	GlacierDungeon dungeon;
 	GlacierOre coal, lapis, diamond, redstone, emerald, gold, iron, gravel;
-	GlacierOre sand, lava;
+	GlacierOre sand, granite, diorite, andesite;
 
 	public GlacierPopulator(GlacierMobListener listener)
 	{
@@ -105,7 +105,9 @@ public class GlacierPopulator extends BlockPopulator
 		gold     = new GlacierOre(false, 14, 2D, 3.5D, 1.2D, 2.1D);
 		gravel   = new GlacierOre(false, 13, 3.5D, 6D, 1D, 2.5D);
 		sand     = new GlacierOre(false, 12, 4D, 5.5D, 1D, 2.8D);
-		lava     = new GlacierOre(false, 11, 5D, 8D, 1.2D, 3.1D);
+		granite  = new GlacierOre(false, 1, 1, 4D, 5.5D, 1D, 2.8D);
+		diorite  = new GlacierOre(false, 1, 3, 4D, 5.5D, 1D, 2.8D);
+		andesite = new GlacierOre(false, 1, 5, 4D, 5.5D, 1D, 2.8D);
 	}
 
 	public void populate(World w, Random r, Chunk source) {
@@ -412,25 +414,37 @@ public class GlacierPopulator extends BlockPopulator
 	}
 
 	private void generateOre(World w, Random r, int x, int z) {
-		coal.place(w, r, x + r.nextInt(16), r.nextInt(67) + 10, z + r.nextInt(16));
-		coal.place(w, r, x + r.nextInt(16), r.nextInt(67) + 10, z + r.nextInt(16));
-		lapis.place(w, r, x + r.nextInt(16), r.nextInt(62) + 10, z + r.nextInt(16));
-		lapis.place(w, r, x + r.nextInt(16), r.nextInt(62) + 10, z + r.nextInt(16));
-		redstone.place(w, r, x + r.nextInt(16), r.nextInt(42) + 10, z + r.nextInt(16));
+		granite.place(w, r, x + r.nextInt(16), r.nextInt(80) + 10, z + r.nextInt(16));
+		granite.place(w, r, x + r.nextInt(16), r.nextInt(50) + 40, z + r.nextInt(16));
+		granite.place(w, r, x + r.nextInt(16), r.nextInt(20) + 70, z + r.nextInt(16));
+		diorite.place(w, r, x + r.nextInt(16), r.nextInt(80) + 10, z + r.nextInt(16));
+		diorite.place(w, r, x + r.nextInt(16), r.nextInt(50) + 40, z + r.nextInt(16));
+		diorite.place(w, r, x + r.nextInt(16), r.nextInt(20) + 70, z + r.nextInt(16));
+		andesite.place(w, r, x + r.nextInt(16), r.nextInt(80) + 10, z + r.nextInt(16));
+		andesite.place(w, r, x + r.nextInt(16), r.nextInt(50) + 40, z + r.nextInt(16));
+		andesite.place(w, r, x + r.nextInt(16), r.nextInt(20) + 70, z + r.nextInt(16));
+		coal.place(w, r, x + r.nextInt(16), r.nextInt(80) + 10, z + r.nextInt(16));
+		coal.place(w, r, x + r.nextInt(16), r.nextInt(50) + 40, z + r.nextInt(16));
+		coal.place(w, r, x + r.nextInt(16), r.nextInt(20) + 70, z + r.nextInt(16));
+		lapis.place(w, r, x + r.nextInt(16), r.nextInt(72) + 10, z + r.nextInt(16));
+		lapis.place(w, r, x + r.nextInt(16), r.nextInt(42) + 40, z + r.nextInt(16));
+		lapis.place(w, r, x + r.nextInt(16), r.nextInt(12) + 70, z + r.nextInt(16));
+		redstone.place(w, r, x + r.nextInt(16), r.nextInt(52) + 10, z + r.nextInt(16));
+		redstone.place(w, r, x + r.nextInt(16), r.nextInt(32) + 30, z + r.nextInt(16));
 		diamond.place(w, r, x + r.nextInt(16), r.nextInt(42) + 10, z + r.nextInt(16));
-		iron.place(w, r, x + r.nextInt(16), r.nextInt(42) + 10, z + r.nextInt(16));
-		iron.place(w, r, x + r.nextInt(16), r.nextInt(42) + 10, z + r.nextInt(16));
-		gold.place(w, r, x + r.nextInt(16), r.nextInt(42) + 10, z + r.nextInt(16));
+		diamond.place(w, r, x + r.nextInt(16), r.nextInt(32) + 20, z + r.nextInt(16));
+		iron.place(w, r, x + r.nextInt(16), r.nextInt(62) + 10, z + r.nextInt(16));
+		iron.place(w, r, x + r.nextInt(16), r.nextInt(42) + 30, z + r.nextInt(16));
+		iron.place(w, r, x + r.nextInt(16), r.nextInt(22) + 50, z + r.nextInt(16));
+		gold.place(w, r, x + r.nextInt(16), r.nextInt(52) + 10, z + r.nextInt(16));
+		gold.place(w, r, x + r.nextInt(16), r.nextInt(42) + 20, z + r.nextInt(16));
+		emerald.place(w, r, x + r.nextInt(16), r.nextInt(37) + 10, z + r.nextInt(16));
 
 		if(r.nextBoolean())
-			emerald.place(w, r, x + r.nextInt(16), r.nextInt(37) + 10, z + r.nextInt(16));
+			emerald.place(w, r, x + r.nextInt(16), r.nextInt(37) + 20, z + r.nextInt(16));
 
 		gravel.place(w, r, x + r.nextInt(16), r.nextInt(62) + 10, z + r.nextInt(16));
 		sand.place(w, r, x + r.nextInt(16), r.nextInt(62) + 10, z + r.nextInt(16));
-
-		if(r.nextInt(5) < 1) {
-			lava.place(w, r, x + r.nextInt(16), r.nextInt(22) + 10, z + r.nextInt(16));
-		}
 	}
 
 	public int getTopSoilY(World w, int x, int z, int chunkX, int chunkZ) {
