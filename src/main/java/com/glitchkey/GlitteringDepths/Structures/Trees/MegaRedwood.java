@@ -27,6 +27,7 @@ package com.glitchkey.glitteringdepths.structures.trees;
 //* IMPORTS: BUKKIT
 	import org.bukkit.block.Block;
 	import org.bukkit.Location;
+	import org.bukkit.Material;
 	import org.bukkit.util.Vector;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
@@ -36,51 +37,69 @@ package com.glitchkey.glitteringdepths.structures.trees;
 
 public class MegaRedwood extends StructureGenerator
 {
-	public MegaRedwood(boolean notifyOnBlockChanges) {
-		super(notifyOnBlockChanges, true);
+	Material air     = Material.AIR;
+	Material dirt    = Material.DIRT;
+	Material grass   = Material.GRASS;
+	Material ice     = Material.ICE;
+	Material leaves1 = Material.LEAVES;
+	Material leaves2 = Material.LEAVES_2;
+	Material log     = Material.LOG;
+	Material snow    = Material.SNOW;
 
-		addToBlacklist(0);
+	public MegaRedwood(boolean notifyOnBlockChanges)
+	{
+		super(notifyOnBlockChanges);
 
-		for (int i = 0; i < 16; i++) {
-			addToBlacklist(18, i);
+		addToBlacklist(air);
+		addToBlacklist(ice);
+		addToBlacklist(snow);
+
+		for (int i = 0; i < 16; i++)
+		{
+			addToBlacklist(leaves1, i);
+			addToBlacklist(leaves2, i);
 		}
 	}
 
-	public boolean generate(World world, Random random, int x, int y, int z) {
+	public boolean generate(World world, Random random, int x, int y, int z)
+	{
 		int maxHeight = random.nextInt(25) + 25;
 		Location start = new Location(world, x, y, z);
+
+		if (!isChunkValid(world, x, z))
+			return fail(start);
 
 		if (y < 1 || (y + maxHeight + 1) > 128)
 			return fail(start);
 
-		int baseId = world.getBlockTypeIdAt(x, y - 1, z);
+		Material type = world.getBlockAt(x, y - 1, z).getType();
 
-		if ((baseId != 2 && baseId != 3) || y >= (128 - maxHeight - 1))
+		if ((type != grass && type != dirt) || y >= (255 - maxHeight))
 			return fail(start);
 
-		addToWhitelist(start, world.getBlockAt(x, y - 1, z));
-		addBlock(start, world.getBlockAt(x, y - 1, z), 3, 0);
+		addBlock(start, world.getBlockAt(x, y - 1, z), dirt, 0);
 
 		int branches = (int) (((float) maxHeight) / 1.5);
-		int dir = random.nextInt(360);
-		double ang = 0D;
+		int direction = random.nextInt(360);
+		double angle = 0D;
 		double minL = random.nextInt(3) + 1;
 		double maxL = random.nextInt(3) + 4;
 		double minA = random.nextDouble() + 2D;
 		double maxA = random.nextDouble() + 1D;
 
-		for (int i = 0; i < branches; i++) {
-			dir += random.nextInt(90) + 45;
-			dir %= 360;
+		for (int i = 0; i < branches; i++)
+		{
+			direction += random.nextInt(90) + 45;
+			direction %= 360;
 
-			while (dir % 90 < 20 || dir % 90 > 70) {
-				dir += random.nextInt(20);
+			while (direction % 90 < 20 || direction % 90 > 70) {
+				direction += random.nextInt(20);
 			}
 
-			ang = Math.toRadians(dir);
+			angle = Math.toRadians(direction);
 			double perc = (((double) i) / ((double) branches));
-			double xm = Math.cos(ang);
-			double zm = Math.sin(ang);
+			double xm = Math.cos(angle);
+			double zm = Math.sin(angle);
 			double ym = lerp(-minA, -maxA, perc);
 			double cx = x;
 			double cz = z;
@@ -88,19 +107,18 @@ public class MegaRedwood extends StructureGenerator
 			Vector v = new Vector(xm, ym, zm);
 			Vector mod = new Vector(1D, lerp(0.9D, 0.8D, perc), 1D);
 			v.normalize();
+			int limit = (int) lerp(minL, maxL, perc);
 
-			int length = random.nextInt((int) lerp(minL, maxL, perc)) + (int) lerp(3D, 7D, perc);
+			int length = random.nextInt(limit);
+			length += (int) lerp(3D, 7D, perc);
 			length = Math.min(7, length);
 
-			for (int l = 0; l < length; l++) {
+			for (int l = 0; l < length; l++)
+			{
 				if (i < 4)
-					addLeaf(start, world, (int) cx, (int) cy, (int) cz);
-				else {
-					addLeaf(start, world, (int) Math.floor(cx), (int) cy, (int) Math.floor(cz));
-					addLeaf(start, world, (int) Math.floor(cx), (int) cy, (int) Math.ceil(cz));
-					addLeaf(start, world, (int) Math.ceil(cx), (int) cy, (int) Math.floor(cz));
-					addLeaf(start, world, (int) Math.ceil(cx), (int) cy, (int) Math.ceil(cz));
-				}
+					addLeaf(start, world, cx, cy, cz);
+				else
+					addLeaves(start, world, cx, cy, cz);
 
 				cx += v.getX();
 				cy += v.getY();
@@ -119,53 +137,61 @@ public class MegaRedwood extends StructureGenerator
 		return placeBlocks(start, true);
 	}
 
-	private void addLeaf(Location s, World w, int x, int y, int z) {
+	private void addLeaves(Location s, World w, double x, double y,
+		double z)
+	{
+		addLeaf(s, w, Math.floor(x), y, Math.floor(z));
+		addLeaf(s, w, Math.floor(x), y, Math.ceil(z));
+		addLeaf(s, w, Math.ceil(x),  y, Math.floor(z));
+		addLeaf(s, w, Math.ceil(x),  y, Math.ceil(z));
+	}
+
+	private void addLeaf(Location s, World w, double x, double y, double z)
+	{
+		addLeaf(s, w, (int) x, (int) y, (int) z);
+	}
+
+	private void addLeaf(Location s, World w, int x, int y, int z)
+	{
+		if (!isChunkValid(w, x, z))
+			return;
+
 		Block block = w.getBlockAt(x, y, z);
 
 		if (!isInBlacklist(block))
 			return;
 
-		if (!isChunkValid(w, x, z))
-			return;
-
-		addBlock(s, block, 18, 1);
+		addBlock(s, block, leaves1, 1);
 
 		block = w.getBlockAt(x, y + 1, z);
 
 		if (!isInBlacklist(block))
 			return;
 
-		if (block.getTypeId() == 79)
+		Material type = block.getType();
+
+		if (type == ice || type == leaves1 || type == leaves2)
 			return;
 
 		if (!isInBlockList(s, block))
-			addBlock(s, block, 78);
+			addBlock(s, block, snow);
 	}
 
-	private void addTrunk(Location s, World w, int x, int y, int z) {
+	private void addTrunk(Location s, World w, int x, int y, int z)
+	{
+		if (!isChunkValid(w, x, z))
+			return;
+
 		Block block = w.getBlockAt(x, y, z);
 
 		if (!isInBlacklist(block))
 			return;
 
-		if (!isChunkValid(w, x, z))
-			return;
-
-		addBlock(s, block, 17, 1);
+		addBlock(s, block, log, 1);
 	}
 
-	public boolean isChunkValid(World world, int x, int z) {
-		x = x >> 4; // Chunk X
-		z = z >> 4; // Chunk Z
-
-		// If the chunk is not loaded, and does not exist
-		if (!world.isChunkLoaded(x, z) && !world.loadChunk(x, z, false))
-			return false;
-
-		return true;
-	}
-
-	double lerp(double start, double end, double percent) {
+	double lerp(double start, double end, double percent)
+	{
 		return (start + (percent * (end - start)));
 	}
 }

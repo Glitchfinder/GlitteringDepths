@@ -27,6 +27,7 @@ package com.glitchkey.glitteringdepths.structures.trees;
 //* IMPORTS: BUKKIT
 	import org.bukkit.block.Block;
 	import org.bukkit.Location;
+	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
@@ -35,18 +36,36 @@ package com.glitchkey.glitteringdepths.structures.trees;
 
 public class WeepingBirch extends StructureGenerator
 {
-	public WeepingBirch(boolean notifyOnBlockChanges) {
-		super(notifyOnBlockChanges, true);
+	Material air     = Material.AIR;
+	Material dirt    = Material.DIRT;
+	Material grass   = Material.GRASS;
+	Material ice     = Material.ICE;
+	Material leaves1 = Material.LEAVES;
+	Material leaves2 = Material.LEAVES_2;
+	Material log     = Material.LOG;
+	Material snow    = Material.SNOW;
 
-		addToBlacklist(0);
+	public WeepingBirch(boolean notifyOnBlockChanges)
+	{
+		super(notifyOnBlockChanges);
 
-		for (int i = 0; i < 16; i++) {
-			addToBlacklist(18, i);
+		addToBlacklist(air);
+		addToBlacklist(ice);
+		addToBlacklist(snow);
+
+		for (int i = 0; i < 16; i++)
+		{
+			addToBlacklist(leaves1, i);
+			addToBlacklist(leaves2, i);
 		}
 	}
 
-	public boolean generate(World world, Random random, int x, int y, int z) {
+	public boolean generate(World world, Random random, int x, int y, int z)
+	{
 		Location start = new Location(world, x, y, z);
+
+		if (!isChunkValid(world, x, z))
+			return fail(start);
 
 		int rad  = random.nextInt(5) + 2;
 		int diff = random.nextInt(3) + 2;
@@ -71,15 +90,18 @@ public class WeepingBirch extends StructureGenerator
 		Location b2 = new Location(world, x2, y - (rad + diff), z2);
 		Location c1 = new Location(world, x, y, z);
 
-		for (int cy = y; cy >= y - (rad * 2); cy--) {
+		for (int cy = y; cy >= y - (rad * 2); cy--)
+		{
 			c1.setY(cy);
 
-			for (int cx = xMin; cx <= xMax; cx++) {
+			for (int cx = xMin; cx <= xMax; cx++)
+			{
 
 				c1.setX(cx);
-				for (int cz = zMin; cz <= zMax; cz++) {
+				for (int cz = zMin; cz <= zMax; cz++)
+				{
 					if (!isChunkValid(world, cx, cz))
-						return false;
+						return fail(start);
 
 					c1.setZ(cz);
 
@@ -96,37 +118,29 @@ public class WeepingBirch extends StructureGenerator
 		return placeBlocks(start, true);
 	}
 
-	private void addLeaf(Location s, World w, int x, int y, int z) {
+	private void addLeaf(Location s, World w, int x, int y, int z)
+	{
+		if (!isChunkValid(w, x, z))
+			return;
+
 		Block block = w.getBlockAt(x, y, z);
 
 		if (!isInBlacklist(block))
 			return;
 
-		if (!isChunkValid(w, x, z))
-			return;
-
-		addBlock(s, block, 18, 2);
+		addBlock(s, block, leaves1, 2);
 
 		block = w.getBlockAt(x, y + 1, z);
 
 		if (!isInBlacklist(block))
 			return;
 
-		if (block.getTypeId() == 79)
+		Material type = block.getType();
+
+		if (type == ice || type == leaves1 || type == leaves2)
 			return;
 
 		if (!isInBlockList(s, block))
-			addBlock(s, block, 78);
-	}
-
-	public boolean isChunkValid(World world, int x, int z) {
-		x = x >> 4; // Chunk X
-		z = z >> 4; // Chunk Z
-
-		// If the chunk is not loaded, and does not exist
-		if (!world.isChunkLoaded(x, z) && !world.loadChunk(x, z, false))
-			return false;
-
-		return true;
+			addBlock(s, block, snow);
 	}
 }

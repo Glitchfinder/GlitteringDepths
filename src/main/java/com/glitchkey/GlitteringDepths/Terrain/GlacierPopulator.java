@@ -31,6 +31,7 @@ package com.glitchkey.glitteringdepths.terrain;
 	import org.bukkit.entity.EntityType;
 	import org.bukkit.generator.BlockPopulator;
 	import org.bukkit.Location;
+	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.listeners.GlacierMobListener;
@@ -76,38 +77,19 @@ public class GlacierPopulator extends BlockPopulator
 		miniJungle    = new MiniJungle(false);
 		tallRedwood   = new TallRedwood(false);
 		weepingBirch  = new WeepingBirch(false);
-		circle.addToBlacklist(78);
-		circle.addToBlacklist(79);
-		column.addToBlacklist(78);
-		column.addToBlacklist(79);
-		ruin.addToBlacklist(78);
-		ruin.addToBlacklist(79);
-		ruin.addToBlacklist(174);
-		fallenSpruce.addToBlacklist(78);
-		fallenSpruce.addToBlacklist(79);
-		redwood.addToBlacklist(78);
-		redwood.addToBlacklist(79);
-		megaRedwood.addToBlacklist(78);
-		megaRedwood.addToBlacklist(79);
-		miniJungle.addToBlacklist(78);
-		miniJungle.addToBlacklist(79);
-		tallRedwood.addToBlacklist(78);
-		tallRedwood.addToBlacklist(79);
-		weepingBirch.addToBlacklist(78);
-		weepingBirch.addToBlacklist(79);
 		dungeon  = new GlacierDungeon(false);
-		coal     = new GlacierOre(false, 16, 3D, 5.5D, 1D, 2.3D);
-		lapis    = new GlacierOre(false, 21, 2D, 3D, 1D, 1.5D);
-		diamond  = new GlacierOre(false, 56, 1.5D, 3D, 0.5D, 1.2D);
-		redstone = new GlacierOre(false, 73, 3D, 5D, 1D, 2D);
-		emerald  = new GlacierOre(false, 129, 1.5D, 3.5D, 1D, 2D);
-		iron     = new GlacierOre(false, 15, 3D, 3.5D, 1.2D, 2.5D);
-		gold     = new GlacierOre(false, 14, 2D, 3.5D, 1.2D, 2.1D);
-		gravel   = new GlacierOre(false, 13, 3.5D, 6D, 1D, 2.5D);
-		sand     = new GlacierOre(false, 12, 4D, 5.5D, 1D, 2.8D);
-		granite  = new GlacierOre(false, 1, 1, 4D, 5.5D, 1D, 2.8D);
-		diorite  = new GlacierOre(false, 1, 3, 4D, 5.5D, 1D, 2.8D);
-		andesite = new GlacierOre(false, 1, 5, 4D, 5.5D, 1D, 2.8D);
+		coal     = new GlacierOre(false, Material.COAL_ORE, 3D, 5.5D, 1D, 2.3D);
+		lapis    = new GlacierOre(false, Material.LAPIS_ORE, 2D, 3D, 1D, 1.5D);
+		diamond  = new GlacierOre(false, Material.DIAMOND_ORE, 1.5D, 3D, 0.5D, 1.2D);
+		redstone = new GlacierOre(false, Material.REDSTONE_ORE, 3D, 5D, 1D, 2D);
+		emerald  = new GlacierOre(false, Material.EMERALD_ORE, 1.5D, 3.5D, 1D, 2D);
+		iron     = new GlacierOre(false, Material.IRON_ORE, 3D, 3.5D, 1.2D, 2.5D);
+		gold     = new GlacierOre(false, Material.GOLD_ORE, 2D, 3.5D, 1.2D, 2.1D);
+		gravel   = new GlacierOre(false, Material.GRAVEL, 3.5D, 6D, 1D, 2.5D);
+		sand     = new GlacierOre(false, Material.SAND, 4D, 5.5D, 1D, 2.8D);
+		granite  = new GlacierOre(false, Material.STONE, 1, 4D, 5.5D, 1D, 2.8D);
+		diorite  = new GlacierOre(false, Material.STONE, 3, 4D, 5.5D, 1D, 2.8D);
+		andesite = new GlacierOre(false, Material.STONE, 5, 4D, 5.5D, 1D, 2.8D);
 	}
 
 	public void populate(World w, Random r, Chunk source) {

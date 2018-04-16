@@ -25,23 +25,23 @@ package com.glitchkey.glitteringdepths.datatypes;
 //* IMPORTS: JDK/JRE
 	//* NOT NEEDED
 //* IMPORTS: BUKKIT
-	//* NOT NEEDED
+	import org.bukkit.Material;
 //* IMPORTS: GLITTERING DEPTHS
 	//* NOT NEEDED
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
 public class BlockValues {
-	private int id;
+	private Material material;
 	private byte data;
 
-	public BlockValues(int id) {
-		setId(id);
+	public BlockValues(Material material) {
+		setType(material);
 		setData(0);
 	}
 
-	public BlockValues(int id, int data) {
-		setId(id);
+	public BlockValues(Material material, int data) {
+		setType(material);
 		setData(data);
 	}
 	
@@ -49,8 +49,8 @@ public class BlockValues {
 		return data;
 	}
 
-	public int getId() {
-		return id;
+	public Material getType() {
+		return material;
 	}
 
 	public BlockValues setData(int data) {
@@ -59,8 +59,8 @@ public class BlockValues {
 		return this;
 	}
 
-	public BlockValues setId(int id) {
-		this.id = id;
+	public BlockValues setType(Material material) {
+		this.material = material;
 
 		return this;
 	}

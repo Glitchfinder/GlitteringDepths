@@ -27,6 +27,7 @@ package com.glitchkey.glitteringdepths.structures.trees;
 //* IMPORTS: BUKKIT
 	import org.bukkit.block.Block;
 	import org.bukkit.Location;
+	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
@@ -35,38 +36,67 @@ package com.glitchkey.glitteringdepths.structures.trees;
 
 public class MiniJungle extends StructureGenerator
 {
-	public MiniJungle(boolean notifyOnBlockChanges) {
-		super(notifyOnBlockChanges, true);
+	Material air     = Material.AIR;
+	Material dirt    = Material.DIRT;
+	Material grass   = Material.GRASS;
+	Material ice     = Material.ICE;
+	Material leaves1 = Material.LEAVES;
+	Material leaves2 = Material.LEAVES_2;
+	Material log     = Material.LOG;
+	Material snow    = Material.SNOW;
 
-		addToBlacklist(0);
+	public MiniJungle(boolean notifyOnBlockChanges)
+	{
+		super(notifyOnBlockChanges);
 
-		for (int i = 0; i < 16; i++) {
-			addToBlacklist(18, i);
+		addToBlacklist(air);
+		addToBlacklist(ice);
+		addToBlacklist(snow);
+
+		for (int i = 0; i < 16; i++)
+		{
+			addToBlacklist(leaves1, i);
+			addToBlacklist(leaves2, i);
 		}
 	}
 
-	public boolean generate(World world, Random random, int x, int y, int z) {
+	public boolean generate(World world, Random random, int x, int y, int z)
+	{
 		Location start = new Location(world, x, y, z);
-		addBlock(start, world, x, y, z, 17, 3);
-		addToWhitelist(start, world.getBlockAt(x, y, z));
 
-		for (int cy = y; cy <= y + 2; cy++) {
+		if (!isChunkValid(world, x, z))
+			return fail(start);
+
+		addBlock(start, world, x, y, z, log, 3);
+		boolean c1, c2, c3, c4;
+
+		for (int cy = y; cy <= y + 2; cy++)
+		{
 			int yDist = cy - y;
 			int depth = 2 - yDist;
 
-			for (int cx = x - depth; cx <= x + depth; cx++) {
+			for (int cx = x - depth; cx <= x + depth; cx++)
+			{
 				int xDist = cx - x;
 
-				for (int cz = z - depth; cz <= z + depth; cz++) {
+				for (int cz = z - depth; cz <= z + depth; cz++)
+				{
+					if (!isChunkValid(world, cx, cz))
+						return fail(start);
+
 					int zDist = cz - z;
 
-					boolean cond1 = (Math.abs(xDist) != depth);
-					boolean cond2 = (Math.abs(zDist) != depth);
-					boolean cond3 = (random.nextInt(2) != 0);
-					Block block = world.getBlockAt(cx, cy, cz);
-					boolean cond4 = !(block.getType().isSolid());
+					c1 = (Math.abs(xDist) != depth);
+					c2 = (Math.abs(zDist) != depth);
+					c3 = (random.nextInt(2) != 0);
 
-					if ((!cond1 && !cond2 && !cond3) || !cond4)
+					if (!c1 && !c2 && !c3)
+						continue;
+					
+					Block b = world.getBlockAt(cx, cy, cz);
+					c4 = !(b.getType().isSolid());
+
+					if (!c4)
 						continue;
 
 					addLeaf(start, world, cx, cy, cz);
@@ -77,37 +107,29 @@ public class MiniJungle extends StructureGenerator
 		return placeBlocks(start, true);
 	}
 
-	private void addLeaf(Location s, World w, int x, int y, int z) {
+	private void addLeaf(Location s, World w, int x, int y, int z)
+	{
+		if (!isChunkValid(w, x, z))
+			return;
+
 		Block block = w.getBlockAt(x, y, z);
 
 		if (!isInBlacklist(block))
 			return;
 
-		if (!isChunkValid(w, x, z))
-			return;
-
-		addBlock(s, block, 18, 3);
+		addBlock(s, block, leaves1, 3);
 
 		block = w.getBlockAt(x, y + 1, z);
 
 		if (!isInBlacklist(block))
 			return;
 
-		if (block.getTypeId() == 79)
+		Material type = block.getType();
+
+		if (type == ice || type == leaves1 || type == leaves2)
 			return;
 
 		if (!isInBlockList(s, block))
-			addBlock(s, block, 78);
-	}
-
-	public boolean isChunkValid(World world, int x, int z) {
-		x = x >> 4; // Chunk X
-		z = z >> 4; // Chunk Z
-
-		// If the chunk is not loaded, and does not exist
-		if (!world.isChunkLoaded(x, z) && !world.loadChunk(x, z, false))
-			return false;
-
-		return true;
+			addBlock(s, block, snow);
 	}
 }

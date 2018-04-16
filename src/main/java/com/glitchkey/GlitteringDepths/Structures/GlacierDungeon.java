@@ -48,16 +48,16 @@ package com.glitchkey.glitteringdepths.structures;
 public class GlacierDungeon extends StructureGenerator
 {
 	public GlacierDungeon(boolean notifyOnBlockChanges) {
-		super(notifyOnBlockChanges, false);
+		super(notifyOnBlockChanges);
 
 		for (int data = 0; data < 16; data++) {
-			addToBlacklist(22, (byte) data);
-			addToBlacklist(44, (byte) data);
-			addToBlacklist(52, (byte) data);
-			addToBlacklist(54, (byte) data);
-			addToBlacklist(98, (byte) data);
-			addToBlacklist(155, (byte) data);
-			addToBlacklist(156, (byte) data);
+			addToBlacklist(Material.LAPIS_BLOCK, (byte) data);
+			addToBlacklist(Material.STEP, (byte) data);
+			addToBlacklist(Material.MOB_SPAWNER, (byte) data);
+			addToBlacklist(Material.CHEST, (byte) data);
+			addToBlacklist(Material.SMOOTH_BRICK, (byte) data);
+			addToBlacklist(Material.QUARTZ_BLOCK, (byte) data);
+			addToBlacklist(Material.QUARTZ_STAIRS, (byte) data);
 		}
 
 		
@@ -102,10 +102,10 @@ public class GlacierDungeon extends StructureGenerator
 		Location l3 = new Location(w, baseX + 8, baseY + 2, z + 8);
 		Location l4 = new Location(w, baseX + 8, baseY + 2, z + 7);
 
-		addBlock(start, l1, 52, 0);
-		addBlock(start, l2, 52, 0);
-		addBlock(start, l3, 52, 0);
-		addBlock(start, l4, 52, 0);
+		addBlock(start, l1, Material.MOB_SPAWNER, 0);
+		addBlock(start, l2, Material.MOB_SPAWNER, 0);
+		addBlock(start, l3, Material.MOB_SPAWNER, 0);
+		addBlock(start, l4, Material.MOB_SPAWNER, 0);
 
 		boolean success = placeBlocks(start, true);
 
@@ -567,39 +567,39 @@ public class GlacierDungeon extends StructureGenerator
 			}
 		}
 
-		generateSLineX(w, s, x + 6, y, z + 1 , 4 , 98, 3);
-		generateSLineX(w, s, x + 6, y, z + 14, 4 , 98, 3);
-		generateSLineX(w, s, x + 4, y, z + 2 , 8 , 98, 3);
-		generateSLineX(w, s, x + 4, y, z + 13, 8 , 98, 3);
-		generateSLineX(w, s, x + 3, y, z + 3 , 10, 98, 3);
-		generateSLineX(w, s, x + 3, y, z + 12, 10, 98, 3);
+		generateSLineX(w, s, x + 6, y, z + 1 , 4 , Material.SMOOTH_BRICK, 3);
+		generateSLineX(w, s, x + 6, y, z + 14, 4 , Material.SMOOTH_BRICK, 3);
+		generateSLineX(w, s, x + 4, y, z + 2 , 8 , Material.SMOOTH_BRICK, 3);
+		generateSLineX(w, s, x + 4, y, z + 13, 8 , Material.SMOOTH_BRICK, 3);
+		generateSLineX(w, s, x + 3, y, z + 3 , 10, Material.SMOOTH_BRICK, 3);
+		generateSLineX(w, s, x + 3, y, z + 12, 10, Material.SMOOTH_BRICK, 3);
 
-		generateSLineZ(w, s, x + 1 , y, z + 6, 4, 98, 3);
-		generateSLineZ(w, s, x + 14, y, z + 6, 4, 98, 3);
-		generateSLineZ(w, s, x + 2 , y, z + 4, 8, 98, 3);
-		generateSLineZ(w, s, x + 13, y, z + 4, 8, 98, 3);
+		generateSLineZ(w, s, x + 1 , y, z + 6, 4, Material.SMOOTH_BRICK, 3);
+		generateSLineZ(w, s, x + 14, y, z + 6, 4, Material.SMOOTH_BRICK, 3);
+		generateSLineZ(w, s, x + 2 , y, z + 4, 8, Material.SMOOTH_BRICK, 3);
+		generateSLineZ(w, s, x + 13, y, z + 4, 8, Material.SMOOTH_BRICK, 3);
 
-		generateSLineX(w, s, x + 4, y, z + 3 , 8 , 22, 0);
-		generateSLineX(w, s, x + 4, y, z + 12, 8 , 22, 0);
-		generateSLineX(w, s, x + 3, y, z + 4 , 10, 22, 0);
-		generateSLineX(w, s, x + 3, y, z + 11, 10, 22, 0);
-		generateSLineX(w, s, x + 3, y, z + 5 , 10, 22, 0);
-		generateSLineX(w, s, x + 3, y, z + 10, 10, 22, 0);
+		generateSLineX(w, s, x + 4, y, z + 3 , 8 , Material.LAPIS_BLOCK, 0);
+		generateSLineX(w, s, x + 4, y, z + 12, 8 , Material.LAPIS_BLOCK, 0);
+		generateSLineX(w, s, x + 3, y, z + 4 , 10, Material.LAPIS_BLOCK, 0);
+		generateSLineX(w, s, x + 3, y, z + 11, 10, Material.LAPIS_BLOCK, 0);
+		generateSLineX(w, s, x + 3, y, z + 5 , 10, Material.LAPIS_BLOCK, 0);
+		generateSLineX(w, s, x + 3, y, z + 10, 10, Material.LAPIS_BLOCK, 0);
 
-		generateSLineX(w, s, x + 2, y, z + 6, 12, 98, 3);
-		generateSLineX(w, s, x + 2, y, z + 9, 12, 98, 3);
-		generateSLineZ(w, s, x + 6, y, z + 2, 12, 98, 3);
-		generateSLineZ(w, s, x + 9, y, z + 2, 12, 98, 3);
+		generateSLineX(w, s, x + 2, y, z + 6, 12, Material.SMOOTH_BRICK, 3);
+		generateSLineX(w, s, x + 2, y, z + 9, 12, Material.SMOOTH_BRICK, 3);
+		generateSLineZ(w, s, x + 6, y, z + 2, 12, Material.SMOOTH_BRICK, 3);
+		generateSLineZ(w, s, x + 9, y, z + 2, 12, Material.SMOOTH_BRICK, 3);
 
 		generateLineX(w, s, r, x + 2, y, z + 7, 12);
 		generateLineX(w, s, r, x + 2, y, z + 8, 12);
 		generateLineZ(w, s, r, x + 7, y, z + 2, 12);
 		generateLineZ(w, s, r, x + 8, y, z + 2, 12);
 
-		addBlock(s, w, x + 4 , y, z + 4 , 98, 3);
-		addBlock(s, w, x + 4 , y, z + 11, 98, 3);
-		addBlock(s, w, x + 11, y, z + 4 , 98, 3);
-		addBlock(s, w, x + 11, y, z + 11, 98, 3);
+		addBlock(s, w, x + 4 , y, z + 4 , Material.SMOOTH_BRICK, 3);
+		addBlock(s, w, x + 4 , y, z + 11, Material.SMOOTH_BRICK, 3);
+		addBlock(s, w, x + 11, y, z + 4 , Material.SMOOTH_BRICK, 3);
+		addBlock(s, w, x + 11, y, z + 11, Material.SMOOTH_BRICK, 3);
 	}
 
 	private void generateArches(World world, Location start, int x, int y,
@@ -633,7 +633,7 @@ public class GlacierDungeon extends StructureGenerator
 			int xm = x + xMod;
 			int zm = z + zMod;
 			generateLineY(world, start, xm, y + 2, zm, 2, 2);
-			addBlock(start, world, xm, y + 3, zm, 155, 1);
+			addBlock(start, world, xm, y + 3, zm, Material.QUARTZ_BLOCK, 1);
 
 			xMod = ((i % 2 == 0) ? 4 : 11);
 			zMod = ((i % 2 == 0) ? 1 : 14);
@@ -641,93 +641,93 @@ public class GlacierDungeon extends StructureGenerator
 			xm = x + xMod;
 			zm = z + zMod;
 			generateLineY(world, start, xm, y + 2, zm, 2, 2);
-			addBlock(start, world, xm, y + 3, zm, 155, 1);
+			addBlock(start, world, xm, y + 3, zm, Material.QUARTZ_BLOCK, 1);
 
 			xMod = ((i % 2 == 0) ? 3 : 12);
 			zMod = ((i % 2 == 0) ? 3 : 12);
 			if (i >= 2) {xMod = (15 - xMod);}
 			xm = x + xMod;
 			zm = z + zMod;
-			addBlock(start, world, xm, y + 5, zm, 44, (0x7 | 0x8));
+			addBlock(start, world, xm, y + 5, zm, Material.STEP, (0x7 | 0x8));
 			generateLineY(world, start, xm, y + 7, zm, 2, 2);
-			addBlock(start, world, xm, y + 8, zm, 155, 1);
-			addBlock(start, world, xm, y + 9, zm, 44, 7);
+			addBlock(start, world, xm, y + 8, zm, Material.QUARTZ_BLOCK, 1);
+			addBlock(start, world, xm, y + 9, zm, Material.STEP, 7);
 
 			xMod = ((i % 2 == 0) ? 2 : 13);
 			zMod = ((i % 2 == 0) ? 3 : 12);
 			if (i >= 2) {xMod = (15 - xMod);}
 			xm = x + xMod;
 			zm = z + zMod;
-			addBlock(start, world, xm, y + 5, zm, 44, 7);
+			addBlock(start, world, xm, y + 5, zm, Material.STEP, 7);
 
 			xMod = ((i % 2 == 0) ? 3 : 12);
 			zMod = ((i % 2 == 0) ? 2 : 13);
 			if (i >= 2) {xMod = (15 - xMod);}
 			xm = x + xMod;
 			zm = z + zMod;
-			addBlock(start, world, xm, y + 5, zm, 44, 7);
+			addBlock(start, world, xm, y + 5, zm, Material.STEP, 7);
 
 			xMod = ((i % 2 == 0) ? 3 : 12);
 			zMod = ((i % 2 == 0) ? 4 : 11);
 			if (i >= 2) {xMod = (15 - xMod);}
 			xm = x + xMod;
 			zm = z + zMod;
-			addBlock(start, world, xm, y + 9, zm, 155, 0);
+			addBlock(start, world, xm, y + 9, zm, Material.QUARTZ_BLOCK, 0);
 
 			xMod = ((i % 2 == 0) ? 4 : 11);
 			zMod = ((i % 2 == 0) ? 3 : 12);
 			if (i >= 2) {xMod = (15 - xMod);}
 			xm = x + xMod;
 			zm = z + zMod;
-			addBlock(start, world, xm, y + 9, zm, 155, 0);
+			addBlock(start, world, xm, y + 9, zm, Material.QUARTZ_BLOCK, 0);
 
 			xMod = ((i % 2 == 0) ? 3 : 12);
 			zMod = ((i % 2 == 0) ? 6 : 9 );
 			if (i >= 2) {xMod = (15 - xMod);}
 			xm = x + xMod;
 			zm = z + zMod;
-			addBlock(start, world, xm, y + 12, zm, 155, 0);
-			addBlock(start, world, xm, y + 13, zm, 155, 2);
+			addBlock(start, world, xm, y + 12, zm, Material.QUARTZ_BLOCK, 0);
+			addBlock(start, world, xm, y + 13, zm, Material.QUARTZ_BLOCK, 2);
 
 			xMod = ((i % 2 == 0) ? 6 : 9 );
 			zMod = ((i % 2 == 0) ? 3 : 12);
 			if (i >= 2) {xMod = (15 - xMod);}
 			xm = x + xMod;
 			zm = z + zMod;
-			addBlock(start, world, xm, y + 12, zm, 155, 0);
-			addBlock(start, world, xm, y + 13, zm, 155, 2);
+			addBlock(start, world, xm, y + 12, zm, Material.QUARTZ_BLOCK, 0);
+			addBlock(start, world, xm, y + 13, zm, Material.QUARTZ_BLOCK, 2);
 		}
 	}
 
 	private void generateCap(World world, Location start, int x, int y,
 		int z)
 	{
-		addBlock(start, world, x + 5 , y + 15, z + 6 , 44, 7);
-		addBlock(start, world, x + 6 , y + 15, z + 5 , 44, 7);
-		addBlock(start, world, x + 10, y + 15, z + 6 , 44, 7);
-		addBlock(start, world, x + 9 , y + 15, z + 5 , 44, 7);
-		addBlock(start, world, x + 5 , y + 15, z + 9 , 44, 7);
-		addBlock(start, world, x + 6 , y + 15, z + 10, 44, 7);
-		addBlock(start, world, x + 10, y + 15, z + 9 , 44, 7);
-		addBlock(start, world, x + 9 , y + 15, z + 10, 44, 7);
+		addBlock(start, world, x + 5 , y + 15, z + 6 , Material.STEP, 7);
+		addBlock(start, world, x + 6 , y + 15, z + 5 , Material.STEP, 7);
+		addBlock(start, world, x + 10, y + 15, z + 6 , Material.STEP, 7);
+		addBlock(start, world, x + 9 , y + 15, z + 5 , Material.STEP, 7);
+		addBlock(start, world, x + 5 , y + 15, z + 9 , Material.STEP, 7);
+		addBlock(start, world, x + 6 , y + 15, z + 10, Material.STEP, 7);
+		addBlock(start, world, x + 10, y + 15, z + 9 , Material.STEP, 7);
+		addBlock(start, world, x + 9 , y + 15, z + 10, Material.STEP, 7);
 
-		addBlock(start, world, x + 6, y + 16, z + 7, 44, 0x7);
-		addBlock(start, world, x + 6, y + 16, z + 8, 44, 0x7);
-		addBlock(start, world, x + 9, y + 16, z + 7, 44, 0x7);
-		addBlock(start, world, x + 9, y + 16, z + 8, 44, 0x7);
-		addBlock(start, world, x + 7, y + 16, z + 6, 44, 0x7);
-		addBlock(start, world, x + 7, y + 16, z + 9, 44, 0x7);
-		addBlock(start, world, x + 8, y + 16, z + 9, 44, 0x7);
-		addBlock(start, world, x + 8, y + 16, z + 6, 44, 0x7);
+		addBlock(start, world, x + 6, y + 16, z + 7, Material.STEP, 0x7);
+		addBlock(start, world, x + 6, y + 16, z + 8, Material.STEP, 0x7);
+		addBlock(start, world, x + 9, y + 16, z + 7, Material.STEP, 0x7);
+		addBlock(start, world, x + 9, y + 16, z + 8, Material.STEP, 0x7);
+		addBlock(start, world, x + 7, y + 16, z + 6, Material.STEP, 0x7);
+		addBlock(start, world, x + 7, y + 16, z + 9, Material.STEP, 0x7);
+		addBlock(start, world, x + 8, y + 16, z + 9, Material.STEP, 0x7);
+		addBlock(start, world, x + 8, y + 16, z + 6, Material.STEP, 0x7);
 
-		addBlock(start, world, x + 5 , y + 15, z + 7 , 44, 0x7 | 0x8);
-		addBlock(start, world, x + 5 , y + 15, z + 8 , 44, 0x7 | 0x8);
-		addBlock(start, world, x + 10, y + 15, z + 7 , 44, 0x7 | 0x8);
-		addBlock(start, world, x + 10, y + 15, z + 8 , 44, 0x7 | 0x8);
-		addBlock(start, world, x + 7 , y + 15, z + 5 , 44, 0x7 | 0x8);
-		addBlock(start, world, x + 7 , y + 15, z + 10, 44, 0x7 | 0x8);
-		addBlock(start, world, x + 8 , y + 15, z + 10, 44, 0x7 | 0x8);
-		addBlock(start, world, x + 8 , y + 15, z + 5 , 44, 0x7 | 0x8);
+		addBlock(start, world, x + 5 , y + 15, z + 7 , Material.STEP, 0x7 | 0x8);
+		addBlock(start, world, x + 5 , y + 15, z + 8 , Material.STEP, 0x7 | 0x8);
+		addBlock(start, world, x + 10, y + 15, z + 7 , Material.STEP, 0x7 | 0x8);
+		addBlock(start, world, x + 10, y + 15, z + 8 , Material.STEP, 0x7 | 0x8);
+		addBlock(start, world, x + 7 , y + 15, z + 5 , Material.STEP, 0x7 | 0x8);
+		addBlock(start, world, x + 7 , y + 15, z + 10, Material.STEP, 0x7 | 0x8);
+		addBlock(start, world, x + 8 , y + 15, z + 10, Material.STEP, 0x7 | 0x8);
+		addBlock(start, world, x + 8 , y + 15, z + 5 , Material.STEP, 0x7 | 0x8);
 	}
 
 	private void generateAir(World world, Location start, int x, int y,
@@ -920,72 +920,72 @@ public class GlacierDungeon extends StructureGenerator
 	private void generatePlatform(World world, Location start, int x, int y,
 		int z)
 	{
-		addBlock(start, world, x + 5 , y, z + 7 , 98, 0);
-		addBlock(start, world, x + 5 , y, z + 8 , 98, 0);
-		addBlock(start, world, x + 7 , y, z + 5 , 98, 0);
-		addBlock(start, world, x + 7 , y, z + 10, 98, 0);
-		addBlock(start, world, x + 8 , y, z + 10, 98, 0);
-		addBlock(start, world, x + 8 , y, z + 5 , 98, 0);
-		addBlock(start, world, x + 10, y, z + 8 , 98, 0);
-		addBlock(start, world, x + 10, y, z + 7 , 98, 0);
+		addBlock(start, world, x + 5 , y, z + 7 , Material.SMOOTH_BRICK, 0);
+		addBlock(start, world, x + 5 , y, z + 8 , Material.SMOOTH_BRICK, 0);
+		addBlock(start, world, x + 7 , y, z + 5 , Material.SMOOTH_BRICK, 0);
+		addBlock(start, world, x + 7 , y, z + 10, Material.SMOOTH_BRICK, 0);
+		addBlock(start, world, x + 8 , y, z + 10, Material.SMOOTH_BRICK, 0);
+		addBlock(start, world, x + 8 , y, z + 5 , Material.SMOOTH_BRICK, 0);
+		addBlock(start, world, x + 10, y, z + 8 , Material.SMOOTH_BRICK, 0);
+		addBlock(start, world, x + 10, y, z + 7 , Material.SMOOTH_BRICK, 0);
 
-		addBlock(start, world, x + 4 , y, z + 7 , 44, 5);
-		addBlock(start, world, x + 4 , y, z + 8 , 44, 5);
-		addBlock(start, world, x + 7 , y, z + 4 , 44, 5);
-		addBlock(start, world, x + 7 , y, z + 11, 44, 5);
-		addBlock(start, world, x + 8 , y, z + 11, 44, 5);
-		addBlock(start, world, x + 8 , y, z + 4 , 44, 5);
-		addBlock(start, world, x + 11, y, z + 8 , 44, 5);
-		addBlock(start, world, x + 11, y, z + 7 , 44, 5);
+		addBlock(start, world, x + 4 , y, z + 7 , Material.STEP, 5);
+		addBlock(start, world, x + 4 , y, z + 8 , Material.STEP, 5);
+		addBlock(start, world, x + 7 , y, z + 4 , Material.STEP, 5);
+		addBlock(start, world, x + 7 , y, z + 11, Material.STEP, 5);
+		addBlock(start, world, x + 8 , y, z + 11, Material.STEP, 5);
+		addBlock(start, world, x + 8 , y, z + 4 , Material.STEP, 5);
+		addBlock(start, world, x + 11, y, z + 8 , Material.STEP, 5);
+		addBlock(start, world, x + 11, y, z + 7 , Material.STEP, 5);
 
-		addBlock(start, world, x + 6, y, z + 7, 54, 5);
-		addBlock(start, world, x + 6, y, z + 8, 54, 5);
-		addBlock(start, world, x + 7, y, z + 9, 54, 3);
-		addBlock(start, world, x + 7, y, z + 6, 54, 2);
-		addBlock(start, world, x + 8, y, z + 6, 54, 2);
-		addBlock(start, world, x + 8, y, z + 9, 54, 3);
-		addBlock(start, world, x + 9, y, z + 8, 54, 4);
-		addBlock(start, world, x + 9, y, z + 7, 54, 4);
+		addBlock(start, world, x + 6, y, z + 7, Material.CHEST, 5);
+		addBlock(start, world, x + 6, y, z + 8, Material.CHEST, 5);
+		addBlock(start, world, x + 7, y, z + 9, Material.CHEST, 3);
+		addBlock(start, world, x + 7, y, z + 6, Material.CHEST, 2);
+		addBlock(start, world, x + 8, y, z + 6, Material.CHEST, 2);
+		addBlock(start, world, x + 8, y, z + 9, Material.CHEST, 3);
+		addBlock(start, world, x + 9, y, z + 8, Material.CHEST, 4);
+		addBlock(start, world, x + 9, y, z + 7, Material.CHEST, 4);
 
-		addBlock(start, world, x + 6, y, z + 6, 98, 3);
-		addBlock(start, world, x + 6, y, z + 9, 98, 3);
-		addBlock(start, world, x + 9, y, z + 9, 98, 3);
-		addBlock(start, world, x + 9, y, z + 6, 98, 3);
+		addBlock(start, world, x + 6, y, z + 6, Material.SMOOTH_BRICK, 3);
+		addBlock(start, world, x + 6, y, z + 9, Material.SMOOTH_BRICK, 3);
+		addBlock(start, world, x + 9, y, z + 9, Material.SMOOTH_BRICK, 3);
+		addBlock(start, world, x + 9, y, z + 6, Material.SMOOTH_BRICK, 3);
 
-		addBlock(start, world, x + 7, y, z + 7, 155, 1);
-		addBlock(start, world, x + 7, y, z + 8, 155, 1);
-		addBlock(start, world, x + 8, y, z + 8, 155, 1);
-		addBlock(start, world, x + 8, y, z + 7, 155, 1);
+		addBlock(start, world, x + 7, y, z + 7, Material.QUARTZ_BLOCK, 1);
+		addBlock(start, world, x + 7, y, z + 8, Material.QUARTZ_BLOCK, 1);
+		addBlock(start, world, x + 8, y, z + 8, Material.QUARTZ_BLOCK, 1);
+		addBlock(start, world, x + 8, y, z + 7, Material.QUARTZ_BLOCK, 1);
 
-		addBlock(start, world, x + 6, y + 1, z + 7, 44, 5);
-		addBlock(start, world, x + 6, y + 1, z + 8, 44, 5);
-		addBlock(start, world, x + 7, y + 1, z + 9, 44, 5);
-		addBlock(start, world, x + 7, y + 1, z + 6, 44, 5);
-		addBlock(start, world, x + 8, y + 1, z + 6, 44, 5);
-		addBlock(start, world, x + 8, y + 1, z + 9, 44, 5);
-		addBlock(start, world, x + 9, y + 1, z + 8, 44, 5);
-		addBlock(start, world, x + 9, y + 1, z + 7, 44, 5);
+		addBlock(start, world, x + 6, y + 1, z + 7, Material.STEP, 5);
+		addBlock(start, world, x + 6, y + 1, z + 8, Material.STEP, 5);
+		addBlock(start, world, x + 7, y + 1, z + 9, Material.STEP, 5);
+		addBlock(start, world, x + 7, y + 1, z + 6, Material.STEP, 5);
+		addBlock(start, world, x + 8, y + 1, z + 6, Material.STEP, 5);
+		addBlock(start, world, x + 8, y + 1, z + 9, Material.STEP, 5);
+		addBlock(start, world, x + 9, y + 1, z + 8, Material.STEP, 5);
+		addBlock(start, world, x + 9, y + 1, z + 7, Material.STEP, 5);
 	}
 
 	private void generateBaseColumn(World world, Location start, int x,
 		int y, int z, int maxY)
 	{
-		addBlock(start, world, x, y, z, 155, 1);
+		addBlock(start, world, x, y, z, Material.QUARTZ_BLOCK, 1);
 
 		for (int cy = (y - 1); cy >= maxY; cy -= 3) {
 			generateLineY(world, start, x, cy, z, 2, 2);
-			addBlock(start, world, x, cy - 2, z, 155, 1);
+			addBlock(start, world, x, cy - 2, z, Material.QUARTZ_BLOCK, 1);
 		}
 	}
 
 	private void generateBaseColumnFill(World world, Location start, int x,
 		int y, int z, int maxY, int data)
 	{
-		addBlock(start, world, x, y, z, 155, 0);
+		addBlock(start, world, x, y, z, Material.QUARTZ_BLOCK, 0);
 
 		for (int cy = (y - 1); cy >= maxY; cy -= 3) {
 			generateLineY(world, start, x, cy, z, 2, data);
-			addBlock(start, world, x, cy - 2, z, 155, 0);
+			addBlock(start, world, x, cy - 2, z, Material.QUARTZ_BLOCK, 0);
 		}
 	}
 
@@ -995,12 +995,12 @@ public class GlacierDungeon extends StructureGenerator
 		int data = ((dir >= 2) ? 0 : 2);
 
 		generateLineY(w, s, x, y + (ht - 1), z, ht, 2);
-		addBlock(s, w, x, y + ht, z, 155, 1);
-		addBlock(s, w, x, y + ht + 1, z, 156, data);
+		addBlock(s, w, x, y + ht, z, Material.QUARTZ_BLOCK, 1);
+		addBlock(s, w, x, y + ht + 1, z, Material.QUARTZ_STAIRS, data);
 
 		if (base) {
-			addBlock(s, w, x, y - 1, z, 155, 0);
-			addBlock(s, w, x, y - 2, z, 156, dir | 0x4);
+			addBlock(s, w, x, y - 1, z, Material.QUARTZ_BLOCK, 0);
+			addBlock(s, w, x, y - 2, z, Material.QUARTZ_STAIRS, dir | 0x4);
 		}
 
 		int xMod = ((dir >= 2) ? 3 : 0);
@@ -1010,12 +1010,12 @@ public class GlacierDungeon extends StructureGenerator
 		int zm = z + zMod;
 
 		generateLineY(w, s, xm, y + (ht - 1), zm, ht, 2);
-		addBlock(s, w, xm, y + ht, zm, 155, 1);
-		addBlock(s, w, xm, y + ht + 1, zm, 156, data);
+		addBlock(s, w, xm, y + ht, zm, Material.QUARTZ_BLOCK, 1);
+		addBlock(s, w, xm, y + ht + 1, zm, Material.QUARTZ_STAIRS, data);
 
 		if (base) {
-			addBlock(s, w, xm, y - 1, zm, 155, 0);
-			addBlock(s, w, xm, y - 2, zm, 156, dir | 0x4);
+			addBlock(s, w, xm, y - 1, zm, Material.QUARTZ_BLOCK, 0);
+			addBlock(s, w, xm, y - 2, zm, Material.QUARTZ_STAIRS, dir | 0x4);
 		}
 
 		xMod = ((dir >= 2) ? 1 : 0);
@@ -1024,8 +1024,8 @@ public class GlacierDungeon extends StructureGenerator
 		xm = x + xMod;
 		zm = z + zMod;
 
-		addBlock(s, w, xm, y + ht + 2, zm, 44, 7);
-		addBlock(s, w, xm, y + ht + 1, zm, 156, data | 0x4);
+		addBlock(s, w, xm, y + ht + 2, zm, Material.STEP, 7);
+		addBlock(s, w, xm, y + ht + 1, zm, Material.QUARTZ_STAIRS, data | 0x4);
 
 		xMod = ((dir >= 2) ? 2 : 0);
 		zMod = ((dir <= 1) ? 2 : 0);
@@ -1033,8 +1033,8 @@ public class GlacierDungeon extends StructureGenerator
 		xm = x + xMod;
 		zm = z + zMod;
 
-		addBlock(s, w, xm, y + ht + 2, zm, 44, 7);
-		addBlock(s, w, xm, y + ht + 1, zm, 156, data | 0x4);
+		addBlock(s, w, xm, y + ht + 2, zm, Material.STEP, 7);
+		addBlock(s, w, xm, y + ht + 1, zm, Material.QUARTZ_STAIRS, data | 0x4);
 	}
 
 	private void generateCornerStairs(World w, Location s, int x, int y,
@@ -1046,126 +1046,126 @@ public class GlacierDungeon extends StructureGenerator
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 4, zMod, 156, dir);
+			addBlock(s, w, xMod, y + 4, zMod, Material.QUARTZ_STAIRS, dir);
 
 			xMod = ((dir >= 2) ? 2 : 4);
 			zMod = ((dir >= 2) ? 4 : 2);
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 9, zMod, 156, dir);
+			addBlock(s, w, xMod, y + 9, zMod, Material.QUARTZ_STAIRS, dir);
 
 			xMod = ((dir >= 2) ? 5 : 1);
 			zMod = ((dir >= 2) ? 1 : 5);
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 4, zMod, 156, dir);
+			addBlock(s, w, xMod, y + 4, zMod, Material.QUARTZ_STAIRS, dir);
 
 			xMod = ((dir >= 2) ? 5 : 2);
 			zMod = ((dir >= 2) ? 2 : 5);
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 9, zMod, 156, dir);
+			addBlock(s, w, xMod, y + 9, zMod, Material.QUARTZ_STAIRS, dir);
 
 			xMod = ((dir >= 2) ? 6 : 3);
 			zMod = ((dir >= 2) ? 3 : 6);
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 14, zMod, 156, dir);
+			addBlock(s, w, xMod, y + 14, zMod, Material.QUARTZ_STAIRS, dir);
 
 			xMod = ((dir >= 2) ? 9 : 3);
 			zMod = ((dir >= 2) ? 3 : 9);
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 14, zMod, 156, dir);
+			addBlock(s, w, xMod, y + 14, zMod, Material.QUARTZ_STAIRS, dir);
 
 			xMod = ((dir >= 2) ? 14 : 4 );
 			zMod = ((dir >= 2) ? 4  : 14);
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 4, zMod, 156, dir);
+			addBlock(s, w, xMod, y + 4, zMod, Material.QUARTZ_STAIRS, dir);
 
 			xMod = ((dir >= 2) ? 13 : 4 );
 			zMod = ((dir >= 2) ? 4  : 13);
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 9, zMod, 156, dir);
+			addBlock(s, w, xMod, y + 9, zMod, Material.QUARTZ_STAIRS, dir);
 
 			xMod = ((dir >= 2) ? 10 : 1 );
 			zMod = ((dir >= 2) ? 1  : 10);
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 4, zMod, 156, dir);
+			addBlock(s, w, xMod, y + 4, zMod, Material.QUARTZ_STAIRS, dir);
 
 			xMod = ((dir >= 2) ? 10 : 2 );
 			zMod = ((dir >= 2) ? 2  : 10);
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 9, zMod, 156, dir);
+			addBlock(s, w, xMod, y + 9, zMod, Material.QUARTZ_STAIRS, dir);
 
 			xMod = ((dir >= 2) ? 11 : 13);
 			zMod = ((dir >= 2) ? 13 : 11);
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 4, zMod, 156, dir | 0x4);
+			addBlock(s, w, xMod, y + 4, zMod, Material.QUARTZ_STAIRS, dir | 0x4);
 
 			xMod = ((dir >= 2) ? 4  : 13);
 			zMod = ((dir >= 2) ? 13 : 4 );
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 4, zMod, 156, dir | 0x4);
+			addBlock(s, w, xMod, y + 4, zMod, Material.QUARTZ_STAIRS, dir | 0x4);
 
 			xMod = ((dir >= 2) ? 12 : 11);
 			zMod = ((dir >= 2) ? 11 : 12);
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 8, zMod, 156, dir | 0x4);
+			addBlock(s, w, xMod, y + 8, zMod, Material.QUARTZ_STAIRS, dir | 0x4);
 
 			xMod = ((dir >= 2) ? 3  : 11);
 			zMod = ((dir >= 2) ? 11 : 3 );
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 8, zMod, 156, dir | 0x4);
+			addBlock(s, w, xMod, y + 8, zMod, Material.QUARTZ_STAIRS, dir | 0x4);
 
 			xMod = ((dir >= 2) ? 9  : 12);
 			zMod = ((dir >= 2) ? 12 : 9 );
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 11, zMod, 156, dir | 0x4);
+			addBlock(s, w, xMod, y + 11, zMod, Material.QUARTZ_STAIRS, dir | 0x4);
 
 			xMod = ((dir >= 2) ? 6  : 12);
 			zMod = ((dir >= 2) ? 12 : 6 );
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 11, zMod, 156, dir | 0x4);
+			addBlock(s, w, xMod, y + 11, zMod, Material.QUARTZ_STAIRS, dir | 0x4);
 
 			xMod = ((dir >= 2) ? 9  : 11);
 			zMod = ((dir >= 2) ? 11 : 9 );
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 14, zMod, 156, dir | 0x4);
+			addBlock(s, w, xMod, y + 14, zMod, Material.QUARTZ_STAIRS, dir | 0x4);
 
 			xMod = ((dir >= 2) ? 6  : 11);
 			zMod = ((dir >= 2) ? 11 : 6 );
 			if (type != 0) {xMod = (15 - xMod); zMod = (15 - zMod);}
 			xMod += x;
 			zMod += z;
-			addBlock(s, w, xMod, y + 14, zMod, 156, dir | 0x4);
+			addBlock(s, w, xMod, y + 14, zMod, Material.QUARTZ_STAIRS, dir | 0x4);
 
 			dir = (dir == 2 ? 3 : 1);
 		}
@@ -1175,7 +1175,7 @@ public class GlacierDungeon extends StructureGenerator
 		int x, int y, int z, int length)
 	{
 		for (int cx = x; cx < (x + length); cx++) {
-			addBlock(start, world, cx, y, z, 98, random.nextInt(3));
+			addBlock(start, world, cx, y, z, Material.SMOOTH_BRICK, random.nextInt(3));
 		}
 	}
 
@@ -1183,7 +1183,7 @@ public class GlacierDungeon extends StructureGenerator
 		int z, int length, int data)
 	{
 		for (int cy = y; cy > (y - length); cy--) {
-			addBlock(start, world, x, cy, z, 155, data);
+			addBlock(start, world, x, cy, z, Material.QUARTZ_BLOCK, data);
 		}
 	}
 
@@ -1191,15 +1191,15 @@ public class GlacierDungeon extends StructureGenerator
 		int x, int y, int z, int length)
 	{
 		for (int cz = z; cz < (z + length); cz++) {
-			addBlock(start, world, x, y, cz, 98, random.nextInt(3));
+			addBlock(start, world, x, y, cz, Material.SMOOTH_BRICK, random.nextInt(3));
 		}
 	}
 
 	private void generateSLineX(World world, Location start, int x, int y,
-		int z, int len, int id, int data)
+		int z, int len, Material type, int data)
 	{
 		for (int cx = x; cx < (x + len); cx++) {
-			addBlock(start, world, cx, y, z, id, data);
+			addBlock(start, world, cx, y, z, type, data);
 		}
 	}
 
@@ -1207,15 +1207,15 @@ public class GlacierDungeon extends StructureGenerator
 		int z, int length)
 	{
 		for (int cy = y; cy < (y + length); cy++) {
-			addBlock(start, world, x, cy, z, 0, 0);
+			addBlock(start, world, x, cy, z, Material.AIR, 0);
 		}
 	}
 
 	private void generateSLineZ(World world, Location start, int x, int y,
-		int z, int len, int id, int data)
+		int z, int len, Material type, int data)
 	{
 		for (int cz = z; cz < (z + len); cz++) {
-			addBlock(start, world, x, y, cz, id, data);
+			addBlock(start, world, x, y, cz, type, data);
 		}
 	}
 

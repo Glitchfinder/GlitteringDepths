@@ -27,6 +27,7 @@ package com.glitchkey.glitteringdepths.structures.trees;
 //* IMPORTS: BUKKIT
 	import org.bukkit.block.Block;
 	import org.bukkit.Location;
+	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
@@ -35,57 +36,84 @@ package com.glitchkey.glitteringdepths.structures.trees;
 
 public class FallenSpruce extends StructureGenerator
 {
-	public FallenSpruce(boolean notifyOnBlockChanges) {
-		super(notifyOnBlockChanges, true);
+	Material air     = Material.AIR;
+	Material dirt    = Material.DIRT;
+	Material grass   = Material.GRASS;
+	Material ice     = Material.ICE;
+	Material leaves1 = Material.LEAVES;
+	Material leaves2 = Material.LEAVES_2;
+	Material log     = Material.LOG;
+	Material snow    = Material.SNOW;
 
-		addToBlacklist(0);
+	public FallenSpruce(boolean notifyOnBlockChanges)
+	{
+		super(notifyOnBlockChanges);
 
-		for (int i = 0; i < 16; i++) {
-			addToBlacklist(18, i);
+		addToBlacklist(air);
+		addToBlacklist(ice);
+		addToBlacklist(snow);
+
+		for (int i = 0; i < 16; i++)
+		{
+			addToBlacklist(leaves1, i);
+			addToBlacklist(leaves2, i);
 		}
 	}
 
-	public boolean generate(World world, Random random, int x, int y, int z) {
-		Location start = new Location(world, x, y, z);
-		addTrunk(start, world, x, y, z, 1);
-		addToWhitelist(start, world.getBlockAt(x, y, z));
+	public boolean generate(World w, Random random, int x, int y, int z)
+	{
+		Location start = new Location(w, x, y, z);
 
-		int dir = random.nextInt(4);
+		if (!isChunkValid(w, x, z))
+			return fail(start);
+
+		addTrunk(start, w, x, y, z, 1);
+
+		int direction = random.nextInt(4);
 		int length = random.nextInt(6) + 3;
 
 		int xm = 0;
 		int zm = 0;
 		int data = 0;
 		int count = 0;
-		int xl = 1;
-		int zl = 1;
+		int xMax = 1;
+		int zMax = 1;
+		Material type;
 
-		if (dir < 2) {
+		if (direction < 2)
+		{
 			xm = 1;
-			xl = length;
+			xMax = length;
 			data = 5;
 		}
-		else {
+		else
+		{
 			zm = 1;
-			zl = length;
+			zMax = length;
 			data = 9;
 		}
 
-		if (dir % 2 == 0) {
+		if (direction % 2 == 0)
+		{
 			xm *= -1;
 			zm *= -1;
 		}
 
-		for (int cx = x + (xm * 2); count < xl; cx += xm) {
+		for (int cx = x + (xm * 2); count < xMax; cx += xm)
+		{
 			int zcount = 0;
 
-			for (int cz = z + (zm * 2); zcount < zl; cz += zm) {
-				int id = world.getBlockTypeIdAt(cx, y - 1, cz);
-
-				if (id != 2 && id != 3)
+			for (int cz = z + (zm * 2); zcount < zMax; cz += zm)
+			{
+				if (!isChunkValid(w, cx, cz))
 					return placeBlocks(start, true);
 
-				addTrunk(start, world, cx, y, cz, data);
+				type = w.getBlockAt(cx, y - 1, cz).getType();
+
+				if (type != dirt && type != grass)
+					return placeBlocks(start, true);
+
+				addTrunk(start, w, cx, y, cz, data);
 				count += 1;
 				zcount += 1;
 			}
@@ -94,35 +122,39 @@ public class FallenSpruce extends StructureGenerator
 		return placeBlocks(start, true);
 	}
 
-	private void addTrunk(Location s, World w, int x, int y, int z, int d) {
+	private void addTrunk(Location s, World w, int x, int y, int z, int d)
+	{
+		if (!isChunkValid(w, x, z))
+			return;
+
 		Block block = w.getBlockAt(x, y, z);
 
 		if (!isInBlacklist(block))
 			return;
 
-		if (!isChunkValid(w, x, z))
-			return;
-
-		addBlock(s, block, 17, d);
+		addBlock(s, block, log, d);
 
 		block = w.getBlockAt(x, y + 1, z);
 
 		if (!isInBlacklist(block))
 			return;
 
-		if (block.getTypeId() == 79)
+		Material type = block.getType();
+
+		if (type == ice || type == leaves1 || type == leaves2)
 			return;
 
 		if (!isInBlockList(s, block))
-			addBlock(s, block, 78);
+			addBlock(s, block, snow);
 	}
 
-	public boolean isChunkValid(World world, int x, int z) {
+	public boolean isChunkValid(World w, int x, int z)
+	{
 		x = x >> 4; // Chunk X
 		z = z >> 4; // Chunk Z
 
 		// If the chunk is not loaded, and does not exist
-		if (!world.isChunkLoaded(x, z) && !world.loadChunk(x, z, false))
+		if (!w.isChunkLoaded(x, z) && !w.loadChunk(x, z, false))
 			return false;
 
 		return true;

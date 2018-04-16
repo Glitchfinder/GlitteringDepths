@@ -39,12 +39,23 @@ package com.glitchkey.glitteringdepths.structures.ruins;
 
 public class Ruin4 extends RuinGenerator
 {
-	public Ruin4(boolean notifyOnBlockChanges) {
+	/**
+	 * Constructor
+	 **/
+	public Ruin4(boolean notifyOnBlockChanges)
+	{
+		// Forward settings to the base class
 		super(notifyOnBlockChanges);
 	}
 
-	protected void fillNorth() {
-		Integer[] temp1 = {
+	/**
+	 * Fills in the template data for a north-facing ruin
+	 **/
+	protected void fillNorth()
+	{
+		// Create an array for the floor tiles
+		Integer[] temp1 =
+		{
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 3, 0, 0, 3, 0, 0,
@@ -63,9 +74,10 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 		};
 
-		floorN = Arrays.asList(temp1);
-
-		Integer[] temp2 = {
+		// Create an array for the wall tiles
+		Integer[] temp2 =
+		{
+			// One block above the floor
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 3, 0, 0, 3, 0, 0,
@@ -83,6 +95,7 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 
+			// Two blocks above the floor
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 7, 0, 0, 7, 0, 0, 7, 0, 0, 7, 0, 0,
@@ -100,6 +113,7 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 
+			// Three blocks above the floor
 			0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 7, 0, 0,  7, 0, 0, 7, 0, 0, 7, 0, 0,
@@ -117,6 +131,7 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
 
+			// Four blocks above the floor
 			0, 0, 0, 0,  0, 0, 0, 0, 0,  0,  0, 0, 0,  0, 0, 0,
 			0, 0, 0, 0,  0, 0, 0, 0, 0,  0,  0, 0, 0,  0, 0, 0,
 			0, 0, 0, 0,  7, 0, 0, 7, 0,  0,  7, 0, 0,  7, 0, 0,
@@ -135,11 +150,19 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0,  0, 0, 0, 0, 0,  0,  0, 0, 0,  0, 0, 0
 		};
 
+		// Convert the arrays to lists and add them to the template data
+		floorN = Arrays.asList(temp1);
 		wallN = Arrays.asList(temp2);
 	}
 
-	protected void fillSouth() {
-		Integer[] temp1 = {
+	/**
+	 * Fills in the template data for a south-facing ruin
+	 **/
+	protected void fillSouth()
+	{
+		// Create an array for the floor tiles
+		Integer[] temp1 =
+		{
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0,
@@ -158,9 +181,10 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 		};
 
-		floorS = Arrays.asList(temp1);
-
-		Integer[] temp2 = {
+		// Create an array for the wall tiles
+		Integer[] temp2 =
+		{
+			// One block above the floor
 			0, 0, 0, 0, 0, 0, 0,  0,  0, 0, 0, 0, 0,  0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0,  0,  0, 0, 0, 0, 0,  0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0,  3,  0, 0, 0, 3, 0,  0, 0, 0,
@@ -178,6 +202,7 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0,  0,  0, 0, 0, 0, 0,  0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0,  0,  0, 0, 0, 0, 0,  0, 0, 0,
 
+			// Two blocks above the floor
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0,
@@ -195,6 +220,7 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 
+			// Three blocks above the floor
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 7, 0, 0,  0, 7, 0, 0, 0, 0,
@@ -212,6 +238,7 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,
 
+			// Four blocks above the floor
 			0, 0, 0, 0,  0, 0, 0,  0,  0, 0, 0, 0, 0,  0, 0, 0,
 			0, 0, 0, 0,  0, 0, 0,  0,  0, 0, 0, 0, 0,  0, 0, 0,
 			0, 0, 0, 0,  0, 0, 0,  7,  0, 0, 0, 7, 0,  0, 0, 0,
@@ -230,11 +257,19 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0,  0, 0, 0,  0,  0, 0, 0, 0, 0,  0, 0, 0
 		};
 
+		// Convert the arrays to lists and add them to the template data
+		floorS = Arrays.asList(temp1);
 		wallS = Arrays.asList(temp2);
 	}
 
-	protected void fillEast() {
-		Integer[] temp1 = {
+	/**
+	 * Fills in the template data for an east-facing ruin
+	 **/
+	protected void fillEast()
+	{
+		// Create an array for the floor tiles
+		Integer[] temp1 =
+		{
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 3, 0, 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
@@ -253,9 +288,10 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 		};
 
-		floorE = Arrays.asList(temp1);
-
-		Integer[] temp2 = {
+		// Create an array for the wall tiles
+		Integer[] temp2 =
+		{
+			// One block above the floor
 			0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 3, 0, 0, 3, 0,  0, 3, 0, 0, 0, 0, 0, 0, 0,
@@ -273,6 +309,7 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
 
+			// Two blocks above the floor
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 7, 0, 0, 7, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0,
@@ -290,6 +327,7 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 
+			// Three blocks above the floor
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
 			0, 0, 7, 0, 0, 7, 0, 0, 7, 0, 0, 0, 0,  0, 0, 0,
@@ -307,6 +345,7 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
 
+			// Four blocks above the floor
 			0, 0, 0, 0,  0,  0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0,  0,  0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 7, 0,  0,  7, 0,  0, 7, 0, 0, 0, 0, 0, 0, 0,
@@ -325,11 +364,19 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0,  0,  0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0
 		};
 
+		// Convert the arrays to lists and add them to the template data
+		floorE = Arrays.asList(temp1);
 		wallE = Arrays.asList(temp2);
 	}
 
-	protected void fillWest() {
-		Integer[] temp1 = {
+	/**
+	 * Fills in the template data for a west-facing ruin
+	 **/
+	protected void fillWest()
+	{
+		// Create an array for the floor tiles
+		Integer[] temp1 =
+		{
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 3, 0, 0, 0, 0,
@@ -348,9 +395,10 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 		};
 
-		floorW = Arrays.asList(temp1);
-
-		Integer[] temp2 = {
+		// Create an array for the wall tiles
+		Integer[] temp2 =
+		{
+			// One block above the floor
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
 			0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 3, 0,  0, 0, 0,
@@ -368,6 +416,7 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
 
+			// Two blocks above the floor
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 7, 0, 0, 7, 0, 0, 7, 0, 0, 0, 0,
@@ -385,6 +434,7 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 
+			// Three blocks above the floor
 			0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0,  0, 7, 0, 0, 7, 0, 0, 7, 0, 0, 0, 0,
@@ -402,6 +452,7 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 
+			// Four blocks above the floor
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0,  0,  0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0,  0,  0, 0, 0,
 			0, 0, 0, 0, 0, 7, 0, 0, 7, 0,  0, 7,  0,  0, 0, 0,
@@ -420,6 +471,8 @@ public class Ruin4 extends RuinGenerator
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0,  0,  0, 0, 0
 		};
 
+		// Convert the arrays to lists and add them to the template data
+		floorW = Arrays.asList(temp1);
 		wallW = Arrays.asList(temp2);
 	}
 }

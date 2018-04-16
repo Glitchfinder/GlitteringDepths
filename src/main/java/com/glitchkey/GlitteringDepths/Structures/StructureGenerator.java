@@ -32,6 +32,7 @@ package com.glitchkey.glitteringdepths.structures;
 	import org.bukkit.block.Block;
 	import org.bukkit.block.BlockState;
 	import org.bukkit.Location;
+	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.datatypes.BlockValues;
@@ -40,26 +41,22 @@ package com.glitchkey.glitteringdepths.structures;
 
 public abstract class StructureGenerator
 {
-	private Map<Location, Map<Block, BlockValues>> modifiedBlocks = new HashMap<Location, Map<Block, BlockValues>>();
-	private List<BlockValues> replaceBlacklist = new ArrayList<BlockValues>();
-	private Map<Location, List<Block>> replaceWhitelist = new HashMap<Location, List<Block>>();
+	private Map<Location, Map<Block, BlockValues>> modifiedBlocks =
+		new HashMap<Location, Map<Block, BlockValues>>();
+
+	private List<BlockValues> replaceBlacklist =
+		new ArrayList<BlockValues>();
 
 	private final boolean notifyOnBlockChanges;
-	private boolean invertBlacklist = false;
 
-	public StructureGenerator() {
-		this (false, false);
+	public StructureGenerator()
+	{
+		this (false);
 	}
 
-	public StructureGenerator(boolean notifyOnBlockChanges) {
-		this (notifyOnBlockChanges, false);
-	}
-
-	public StructureGenerator(boolean notifyOnBlockChanges,
-		boolean invertBlacklist)
+	public StructureGenerator(boolean notifyOnBlockChanges)
 	{
 		this.notifyOnBlockChanges = notifyOnBlockChanges;
-		this.invertBlacklist = invertBlacklist;
 	}
 
 	public boolean addBlock(Location start, Block block, BlockValues values) {
@@ -77,61 +74,49 @@ public abstract class StructureGenerator
 		return true;
 	}
 
-	public boolean addBlock(Location start, Block block, int id) {
-		return addBlock(start, block, new BlockValues(id));
+	public boolean addBlock(Location start, Block block, Material material) {
+		return addBlock(start, block, new BlockValues(material));
 	}
 
-	public boolean addBlock(Location start, Location location, int id) {
-		return addBlock(start, location.getBlock(), new BlockValues(id));
+	public boolean addBlock(Location start, Location location, Material material) {
+		return addBlock(start, location.getBlock(), new BlockValues(material));
 	}
 
-	public boolean addBlock(Location start, Block block, int id, int data) {
-		return addBlock(start, block, new BlockValues(id, data));
+	public boolean addBlock(Location start, Block block, Material material, int data) {
+		return addBlock(start, block, new BlockValues(material, data));
 	}
 
-	public boolean addBlock(Location start, Location location, int id, int data) {
-		return addBlock(start, location.getBlock(), new BlockValues(id, data));
+	public boolean addBlock(Location start, Location location, Material material, int data) {
+		return addBlock(start, location.getBlock(), new BlockValues(material, data));
 	}
 
-	public boolean addBlock(Location start, World world, int x, int y, int z, int id) {
+	public boolean addBlock(Location start, World world, int x, int y, int z, Material material) {
 		Location block = new Location(world, x, y, z);
-		return addBlock(start, block.getBlock(), new BlockValues(id));
+		return addBlock(start, block.getBlock(), new BlockValues(material));
 	}
 
-	public boolean addBlock(Location start, World world, int x, int y, int z, int id,
+	public boolean addBlock(Location start, World world, int x, int y, int z, Material material,
 		int data)
 	{
 		Location block = new Location(world, x, y, z);
-		return addBlock(start, block.getBlock(), new BlockValues(id, data));
+		return addBlock(start, block.getBlock(), new BlockValues(material, data));
 	}
 
-	public StructureGenerator addToBlacklist(int id) {
-		replaceBlacklist.add(new BlockValues(id));
+	public StructureGenerator addToBlacklist(Material material) {
+		replaceBlacklist.add(new BlockValues(material));
 		return this;
 	}
 
-	public StructureGenerator addToBlacklist(int id, int data) {
-		replaceBlacklist.add(new BlockValues(id, data));
-		return this;
-	}
-
-	public StructureGenerator addToWhitelist(Location start, Block block) {
-		if (!replaceWhitelist.containsKey(start))
-			replaceWhitelist.put(start, new ArrayList<Block>());
-
-		replaceWhitelist.get(start).add(block);
+	public StructureGenerator addToBlacklist(Material material, int data) {
+		replaceBlacklist.add(new BlockValues(material, data));
 		return this;
 	}
 
 	protected abstract boolean generate(World world, Random random, int x, int y, int z);
 
-	public void invertBlacklist() {
-		invertBlacklist = (invertBlacklist ? false : true);
-	}
-
 	public boolean isInBlacklist(Block block) {
 		for (BlockValues listItem : replaceBlacklist) {
-			if (listItem.getId() != block.getTypeId())
+			if (listItem.getType() != block.getType())
 				continue;
 
 			if (listItem.getData() != block.getData())
@@ -150,13 +135,6 @@ public abstract class StructureGenerator
 		return modifiedBlocks.get(start).containsKey(block);
 	}
 
-	public boolean isInWhitelist(Location start, Block block) {
-		if (!replaceWhitelist.containsKey(start))
-			return false;
-
-		return replaceWhitelist.get(start).contains(block);
-	}
-
 	public boolean place(World world, Random random, int x, int y, int z) {
 		return generate(world, random, x, y, z);
 	}
@@ -166,45 +144,23 @@ public abstract class StructureGenerator
 			return fail(start);
 
 		Map<Block, BlockValues> modified = modifiedBlocks.get(start);
-		List<BlockState> blocks = new ArrayList<BlockState>();
-
-		for(Block block : modified.keySet()) {
-			boolean blacklisted = isInBlacklist(block);
-
-			if (isInWhitelist(start, block))
-				blacklisted = invertBlacklist;
-
-			if(fastFail && blacklisted && !invertBlacklist) {
-				return fail(start);
-			}
-			else if(fastFail && !blacklisted && invertBlacklist) {
-				return fail(start);
-			}
-
-			BlockState state = block.getState();
-			state.setTypeId(modified.get(block).getId());
-			state.setRawData(modified.get(block).getData());
-			blocks.add(state);
-		}
 
 		for(Block block : modified.keySet()) {
 			setBlock(block, modified.get(block));
 		}
 
-		replaceWhitelist.remove(start);
 		modifiedBlocks.remove(start);
 		return true;
 	}
 
 	protected boolean fail(Location start) {
-		replaceWhitelist.remove(start);
 		modifiedBlocks.remove(start);
 		return false;
 	}
 
 	public StructureGenerator removeFromBlacklist(BlockValues values) {
 		for(BlockValues listItem : replaceBlacklist) {
-			if(listItem.getId() != values.getId())
+			if(listItem.getType() != values.getType())
 				continue;
 
 			if(listItem.getData() != values.getData())
@@ -220,13 +176,13 @@ public abstract class StructureGenerator
 
 
 
-	public StructureGenerator removeFromBlacklist(int id) {
-		return removeFromBlacklist(id, 0);
+	public StructureGenerator removeFromBlacklist(Material material) {
+		return removeFromBlacklist(material, 0);
 	}
 
-	public StructureGenerator removeFromBlacklist(int id, int data) {
+	public StructureGenerator removeFromBlacklist(Material material, int data) {
 		for(BlockValues listItem : replaceBlacklist) {
-			if(listItem.getId() != id)
+			if(listItem.getType() != material)
 				continue;
 
 			if(listItem.getData() != (byte) data)
@@ -240,18 +196,31 @@ public abstract class StructureGenerator
 	}
 
 	private void setBlock(Block block, BlockValues values) {
-		setBlock(block, values.getId(), values.getData());
+		setBlock(block, values.getType(), values.getData());
 	}
 
-	private void setBlock(Block block, int id) {
-		setBlock(block, id, (byte) 0);
+	private void setBlock(Block block, Material material) {
+		setBlock(block, material, (byte) 0);
 	}
 
-	private void setBlock(Block block, int id, byte data) {
-		block.setTypeIdAndData(id, data, notifyOnBlockChanges);
+	private void setBlock(Block block, Material material, byte data) {
+		block.setType(material, notifyOnBlockChanges);
+		block.setData(data, notifyOnBlockChanges);
 	}
 
-	private void setBlock(Block block, int id, int data) {
-		setBlock(block, id, (byte) data);
+	private void setBlock(Block block, Material material, int data) {
+		setBlock(block, material, (byte) data);
+	}
+
+	public boolean isChunkValid(World world, int x, int z)
+	{
+		x = x >> 4; // Chunk X
+		z = z >> 4; // Chunk Z
+
+		// If the chunk is not loaded, and does not exist
+		if (!world.isChunkLoaded(x, z) && !world.loadChunk(x, z, false))
+			return false;
+
+		return true;
 	}
 }

@@ -27,6 +27,7 @@ package com.glitchkey.glitteringdepths.structures.trees;
 //* IMPORTS: BUKKIT
 	import org.bukkit.block.Block;
 	import org.bukkit.Location;
+	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
@@ -35,34 +36,51 @@ package com.glitchkey.glitteringdepths.structures.trees;
 
 public class Redwood extends StructureGenerator
 {
-	public Redwood(boolean notifyOnBlockChanges) {
-		super(notifyOnBlockChanges, true);
+	Material air     = Material.AIR;
+	Material dirt    = Material.DIRT;
+	Material grass   = Material.GRASS;
+	Material ice     = Material.ICE;
+	Material leaves1 = Material.LEAVES;
+	Material leaves2 = Material.LEAVES_2;
+	Material log     = Material.LOG;
+	Material snow    = Material.SNOW;
 
-		addToBlacklist(0);
+	public Redwood(boolean notifyOnBlockChanges)
+	{
+		super(notifyOnBlockChanges);
 
-		for (int i = 0; i < 16; i++) {
-			addToBlacklist(18, i);
+		addToBlacklist(air);
+		addToBlacklist(ice);
+		addToBlacklist(snow);
+
+		for (int i = 0; i < 16; i++)
+		{
+			addToBlacklist(leaves1, i);
+			addToBlacklist(leaves2, i);
 		}
 	}
 
-	public boolean generate(World world, Random random, int x, int y, int z) {
+	public boolean generate(World world, Random random, int x, int y, int z)
+	{
 		int maxHeight = random.nextInt(4) + 7;
 		int leafHeight = maxHeight - (2 + random.nextInt(2));
 		int leafWidth = 2 + random.nextInt(2);
 		Location start = new Location(world, x, y, z);
 
+		if (!isChunkValid(world, x, z))
+			return fail(start);
+
 		if ((y < 1) || (y + maxHeight + 1 > 256))
 			return fail(start);
 
-		int baseId = world.getBlockTypeIdAt(x, y - 1, z);
+		Material type = world.getBlockAt(x, y - 1, z).getType();
 
-		if (((baseId != 2) && (baseId != 3)) || (y >= 256 - maxHeight - 1))
+		if ((type != grass && type != dirt) || y >= (255 - maxHeight))
 			return fail(start);
 
-		addToWhitelist(start, world.getBlockAt(x, y - 1, z));
-		addBlock(start, world.getBlockAt(x, y - 1, z), 3, 0);
+		addBlock(start, world.getBlockAt(x, y - 1, z), dirt, 0);
 
-		int radius = random.nextInt(2);
+		int rad = random.nextInt(2);
 		int width = 1;
 		int canopySpawned = 0;
 
@@ -70,79 +88,73 @@ public class Redwood extends StructureGenerator
 		{
 			int cy = y + maxHeight - depth;
 
-			for (int cx = x - radius; cx <= x + radius; cx++)
+			for (int cx = x - rad; cx <= x + rad; cx++)
 			{
-				int xRadius = cx - x;
+				int xRad = cx - x;
 
-				for (int cz = z - radius; cz <= z + radius; cz++)
+				for (int cz = z - rad; cz <= z + rad; cz++)
 				{
-					// Cancel if the block is invalid for some reason
 					if (!isChunkValid(world, cx, cz))
 						return fail(start);
 
-					int zRadius = cz - z;
+					int zRad = cz - z;
 
-					Block block = world.getBlockAt(cx, cy, cz);
+					Block b = world.getBlockAt(cx, cy, cz);
 
-					if (!isInBlacklist(block))
+					if (!isInBlacklist(b))
 						continue;
 
-					boolean cond1 = (Math.abs(xRadius) != radius);
-					boolean cond2 = (Math.abs(zRadius) != radius);
-					boolean cond3 = (cond1 || cond2 || (radius <= 0));
+					boolean c1 = (Math.abs(xRad) != rad);
+					boolean c2 = (Math.abs(zRad) != rad);
+					boolean c3 = (c1 || c2 || (rad <= 0));
 
-					if (!cond3)
+					if (!c3)
 						continue;
 
-					addBlock(start, block, 18, 1);
+					addBlock(start, b, leaves1, 1);
 
-					block = world.getBlockAt(cx, cy + 1, cz);
+					b = world.getBlockAt(cx, cy + 1, cz);
 
-					if (!isInBlacklist(block))
+					if (!isInBlacklist(b))
 						continue;
 
-					if (block.getTypeId() == 79)
+					Material t = b.getType();
+
+					if (t == ice)
+						continue;
+					else if (t == leaves1 || t == leaves2)
 						continue;
 
-					if (!isInBlockList(start, block))
-						addBlock(start, block, 78);
+					if (!isInBlockList(start, b))
+						addBlock(start, b, snow);
 				}
 			}
 
-			if (radius >= width) {
-				radius = canopySpawned;
+			if (rad >= width)
+			{
+				rad = canopySpawned;
 				canopySpawned = 1;
 				width++;
 				if (width > leafWidth)
 					width = leafWidth;
 			}
 			else {
-				radius++;
+				rad++;
 			}
 		}
 
 		int depth = random.nextInt(3);
 
-		for (int cDepth = 0; cDepth < maxHeight - depth; cDepth++) {
+		for (int cDepth = 0; cDepth < maxHeight - depth; cDepth++)
+		{
 			Block block = world.getBlockAt(x, y + cDepth, z);
 
 			if (!isInBlacklist(block))
 				continue;
 
-			addBlock(start, block, 17, 1);
+			addBlock(start, block, log, 1);
 		}
 
 		return placeBlocks(start, true);
-	}
-
-	public boolean isChunkValid(World world, int x, int z) {
-		x = x >> 4; // Chunk X
-		z = z >> 4; // Chunk Z
-
-		// If the chunk is not loaded, and does not exist
-		if (!world.isChunkLoaded(x, z) && !world.loadChunk(x, z, false))
-			return false;
-
-		return true;
 	}
 }

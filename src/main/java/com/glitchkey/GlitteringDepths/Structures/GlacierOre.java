@@ -27,6 +27,7 @@ package com.glitchkey.glitteringdepths.structures;
 //* IMPORTS: BUKKIT
 	import org.bukkit.block.Block;
 	import org.bukkit.Location;
+	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	//* NOT NEEDED
@@ -35,34 +36,27 @@ package com.glitchkey.glitteringdepths.structures;
 
 public class GlacierOre extends StructureGenerator
 {
-	private int id, data;
+	private int data;
 	private double minWidth, maxWidth, minD, maxD;
 	private double widthDiff, distanceDiff;
+	Material type;
 
 	public GlacierOre(
-		boolean notifyOnBlockChanges,
-		int id,
-		double minWidth,
-		double maxWidth,
-		double minDistance,
-		double maxDistance)
+		boolean notifyOnBlockChanges, Material type, double minWidth,
+		double maxWidth, double minDistance, double maxDistance)
 	{
-		this(notifyOnBlockChanges, id, 0, minWidth, maxWidth,
+		this(notifyOnBlockChanges, type, 0, minWidth, maxWidth,
 			minDistance, maxDistance);
 	}
 
 	public GlacierOre(
-		boolean notifyOnBlockChanges,
-		int id,
-		int data,
-		double minWidth,
-		double maxWidth,
-		double minDistance,
+		boolean notifyOnBlockChanges, Material type, int data,
+		double minWidth, double maxWidth, double minDistance,
 		double maxDistance)
 	{
-		super(notifyOnBlockChanges, true);
+		super(notifyOnBlockChanges);
 
-		this.id = id;
+		this.type = type;
 		this.data = data;
 		this.minWidth = minWidth;
 		this.maxWidth = maxWidth;
@@ -72,8 +66,9 @@ public class GlacierOre extends StructureGenerator
 		this.widthDiff = maxWidth - minWidth;
 		this.distanceDiff = maxDistance - minDistance;
 
-		for (int d = 0; d < 16; d++) {
-			addToBlacklist(1, (byte) d);
+		for (int d = 0; d < 16; d++)
+		{
+			addToBlacklist(Material.STONE, (byte) d);
 		}
 	}
 
@@ -124,13 +119,16 @@ public class GlacierOre extends StructureGenerator
 		int maxZ = highZ + width;
 
 		// Loop through the entire region
-		for (int cx = minX; cx <= maxX; cx++) {
-			for (int cz = minZ; cz <= maxZ; cz++) {
+		for (int cx = minX; cx <= maxX; cx++)
+		{
+			for (int cz = minZ; cz <= maxZ; cz++)
+			{
 				// Skip if the block is invalid for some reason
 				if (!isChunkValid(world, cx, cz))
-					continue;
+					return fail(b1);
 
-				for (int cy = minY; cy <= maxY; cy++) {
+				for (int cy = minY; cy <= maxY; cy++)
+				{
 					// Get the location of the current block
 					c1 = new Location(world, cx, cy, cz);
 
@@ -162,17 +160,6 @@ public class GlacierOre extends StructureGenerator
 			return;
 
 		// Add this block to the list of blocks to place
-		addBlock(b1, block, id, data);
-	}
-
-	public boolean isChunkValid(World world, int x, int z) {
-		x = x >> 4; // Chunk X
-		z = z >> 4; // Chunk Z
-
-		// If the chunk is not loaded, and does not exist
-		if (!world.isChunkLoaded(x, z) && !world.loadChunk(x, z, false))
-			return false;
-
-		return true;
+		addBlock(b1, block, type, data);
 	}
 }

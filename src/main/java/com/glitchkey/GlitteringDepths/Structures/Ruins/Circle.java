@@ -27,73 +27,110 @@ package com.glitchkey.glitteringdepths.structures.ruins;
 //* IMPORTS: BUKKIT
 	import org.bukkit.block.Block;
 	import org.bukkit.block.BlockFace;
+	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	//* NOT NEEDED
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public class Circle
+public final class Circle
 {
-	RandomColumn column;
-	public Circle(boolean notifyOnBlockChanges) {
+	// Random quartz column selector
+	private RandomColumn column;
+
+	// Materials used in this class
+	private Material dirt   = Material.DIRT;
+	private Material grass  = Material.GRASS;
+	private Material water1 = Material.WATER;
+	private Material water2 = Material.STATIONARY_WATER;
+
+	/**
+	 * Constructor
+	 **/
+	public Circle(boolean notifyOnBlockChanges)
+	{
+		// Instanciate the random column selector
 		column = new RandomColumn(notifyOnBlockChanges);
 	}
 
-	public Circle addToBlacklist(int id) {
-		column.addToBlacklist(id);
+	/**
+	 * Adds materials to the blacklist (actually a material whitelist)
+	 **/
+	public Circle addToBlacklist(Material type)
+	{
+		// Forward the material and return this class for chaining
+		column.addToBlacklist(type);
 		return this;
 	}
 
-	public boolean place(World world, Random random, int x, int y, int z) {
+	/**
+	 * Wrapper for the generate function
+	 **/
+	public boolean place(World world, Random random, int x, int y, int z)
+	{
+		// Forward arguments to the generate function
 		return generate(world, random, x, y, z);
 	}
 
-	public boolean generate(World w, Random r, int x, int y, int z) {
-		column.place(w, r, x, getTopSoilY(w, x, z + 6), z + 6);
-		column.place(w, r, x, getTopSoilY(w, x, z + 9), z + 9);
-		column.place(w, r, x + 1, getTopSoilY(w, x + 1, z + 4), z + 4);
-		column.place(w, r, x + 1, getTopSoilY(w, x + 1, z + 11), z + 11);
-		column.place(w, r, x + 4, getTopSoilY(w, x + 4, z + 1), z + 1);
-		column.place(w, r, x + 4, getTopSoilY(w, x + 4, z + 14), z + 14);
-		column.place(w, r, x + 6, getTopSoilY(w, x + 6, z), z);
-		column.place(w, r, x + 6, getTopSoilY(w, x + 6, z + 15), z + 15);
-		column.place(w, r, x + 9, getTopSoilY(w, x + 9, z), z);
-		column.place(w, r, x + 9, getTopSoilY(w, x + 9, z + 15), z + 15);
-		column.place(w, r, x + 11, getTopSoilY(w, x + 11, z + 1), z + 1);
-		column.place(w, r, x + 11, getTopSoilY(w, x + 11, z + 14), z + 14);
-		column.place(w, r, x + 14, getTopSoilY(w, x + 14, z + 4), z + 4);
-		column.place(w, r, x + 14, getTopSoilY(w, x + 14, z + 11), z + 11);
-		column.place(w, r, x + 15, getTopSoilY(w, x + 15, z + 6), z + 6);
-		column.place(w, r, x + 15, getTopSoilY(w, x + 15, z + 9), z + 9);
+	/**
+	 * Generates a ring of random columns
+	 **/
+	public boolean generate(World w, Random r, int x, int y, int z)
+	{
+		// Zero coordinates to the lowest value chunk edge
+		x = (x >> 4) << 4;
+		z = (z >> 4) << 4;
 
+		// Attempt to place a ring of 16 columns in preset positions
+		column.place(w, r, x     , getY(w, x     , z + 6 ), z + 6 );
+		column.place(w, r, x     , getY(w, x     , z + 9 ), z + 9 );
+		column.place(w, r, x + 1 , getY(w, x + 1 , z + 4 ), z + 4 );
+		column.place(w, r, x + 1 , getY(w, x + 1 , z + 11), z + 11);
+		column.place(w, r, x + 4 , getY(w, x + 4 , z + 1 ), z + 1 );
+		column.place(w, r, x + 4 , getY(w, x + 4 , z + 14), z + 14);
+		column.place(w, r, x + 6 , getY(w, x + 6 , z     ), z     );
+		column.place(w, r, x + 6 , getY(w, x + 6 , z + 15), z + 15);
+		column.place(w, r, x + 9 , getY(w, x + 9 , z     ), z     );
+		column.place(w, r, x + 9 , getY(w, x + 9 , z + 15), z + 15);
+		column.place(w, r, x + 11, getY(w, x + 11, z + 1 ), z + 1 );
+		column.place(w, r, x + 11, getY(w, x + 11, z + 14), z + 14);
+		column.place(w, r, x + 14, getY(w, x + 14, z + 4 ), z + 4 );
+		column.place(w, r, x + 14, getY(w, x + 14, z + 11), z + 11);
+		column.place(w, r, x + 15, getY(w, x + 15, z + 6 ), z + 6 );
+		column.place(w, r, x + 15, getY(w, x + 15, z + 9 ), z + 9 );
+
+		// Return requires a boolean
 		return true;
 	}
 
-	public int getTopSoilY(World w, int x, int z)
+	/**
+	 * Calculates the Y elevation of the top layer of ground
+	 *  --
+	 * Returns -1 if placement is invalid
+	 **/
+	private int getY(World w, int x, int z)
 	{
-		int chunkX = x >> 4;
-		int chunkZ = z >> 4;
-
-		if (!w.isChunkLoaded(chunkX, chunkZ)) {
-			if (!w.loadChunk(chunkX, chunkZ, false)) {
-				return -1;
-			}
-		}
-
-		for (int y = 97; y >= 0; y--) {
+		// Check elevation, starting at height 97 and descending
+		for (int y = 97; y >= 0; y--)
+		{
+			// Get the material at the current coordinates
 			Block b = w.getBlockAt(x, y, z);
-			int id = b.getTypeId();
+			Material material = b.getType();
 
-			if (id == 8 || id == 9)
+			// Return if the material is water
+			if (material == water1 || material == water2)
 				return -1;
 
+			// Return the current elevation if a grass or dirt block
+			// is found and the block above is non-solid
 			boolean solid;
 			solid = b.getRelative(BlockFace.UP).getType().isSolid();
-			if ((id == 2 || id == 3) && !solid)
+			if ((material == dirt || material == grass) && !solid)
 				return y + 1;
 		}
 
+		// No valid elevation found
 		return -1;
 	}
 }

@@ -27,6 +27,7 @@ package com.glitchkey.glitteringdepths.structures.ruins;
 //* IMPORTS: BUKKIT
 	import org.bukkit.block.Block;
 	import org.bukkit.Location;
+	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
@@ -35,62 +36,79 @@ package com.glitchkey.glitteringdepths.structures.ruins;
 
 public class StandingColumn extends StructureGenerator
 {
-	public StandingColumn(boolean notifyOnBlockChanges) {
-		super(notifyOnBlockChanges, true);
+	// Materials used in this class
+	Material ice     = Material.ICE;
+	Material leaves1 = Material.LEAVES;
+	Material leaves2 = Material.LEAVES_2;
+	Material quartz  = Material.QUARTZ_BLOCK;
+	Material snow    = Material.SNOW;
 
-		addToBlacklist(0);
-
-		for (int i = 0; i < 16; i++) {
-			addToBlacklist(18, i);
-		}
+	/**
+	 * Constructor
+	 **/
+	public StandingColumn(boolean notifyOnBlockChanges)
+	{
+		// Forward settings to the base class
+		super(notifyOnBlockChanges);
 	}
 
-	public boolean generate(World world, Random random, int x, int y, int z) {
+	/**
+	 * Generate an intact standing column
+	 **/
+	public boolean generate(World world, Random random, int x, int y, int z)
+	{
+		// Get the base location of the column for tracking
 		Location start = new Location(world, x, y, z);
-		addPiece(start, world, x, y, z, 1);
-		addToWhitelist(start, world.getBlockAt(x, y, z));
 
-		for (int cy = y + 1; cy < y + 5; cy++) {
+		// Add the column base
+		addPiece(start, world, x, y, z, 1);
+
+		// Iterate through the column's height
+		for (int cy = y + 4; cy > y; cy--)
+		{
+			// Place chiseled quartz as the top block
 			if (cy == y + 4)
 				addPiece(start, world, x, cy, z, 1);
+			// Place vertical quartz columns as the middle blocks
 			else
 				addPiece(start, world, x, cy, z, 2);
 		}
 
+		// Place the column
 		return placeBlocks(start, true);
 	}
 
-	private void addPiece(Location s, World w, int x, int y, int z, int d) {
+	/**
+	 * Add a piece to the column
+	 **/
+	private void addPiece(Location s, World w, int x, int y, int z, int d)
+	{
+		// Get the current block
 		Block block = w.getBlockAt(x, y, z);
 
+		// Skip if the block isn't whitelisted
 		if (!isInBlacklist(block))
 			return;
 
-		if (!isChunkValid(w, x, z))
-			return;
+		// Add the block to the column
+		addBlock(s, block, quartz, d);
 
-		addBlock(s, block, 155, d);
-
+		// Get the block above the current block
 		block = w.getBlockAt(x, y + 1, z);
 
+		// Skip if the block isn't whitelisted
 		if (!isInBlacklist(block))
 			return;
 
-		if (block.getTypeId() == 79)
+		// Get the block's material
+		Material type = block.getType();
+
+		// Skip if the block is ice or leaves
+		if (type == ice || type == leaves1 || type == leaves2)
 			return;
 
+		// Add a snow block if another block isn't already queued
 		if (!isInBlockList(s, block))
-			addBlock(s, block, 78);
-	}
-
-	public boolean isChunkValid(World world, int x, int z) {
-		x = x >> 4; // Chunk X
-		z = z >> 4; // Chunk Z
-
-		// If the chunk is not loaded, and does not exist
-		if (!world.isChunkLoaded(x, z) && !world.loadChunk(x, z, false))
-			return false;
-
-		return true;
+			addBlock(s, block, snow);
 	}
 }

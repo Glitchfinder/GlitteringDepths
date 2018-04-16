@@ -27,107 +27,147 @@ package com.glitchkey.glitteringdepths.structures.ruins;
 //* IMPORTS: BUKKIT
 	import org.bukkit.block.Block;
 	import org.bukkit.Location;
+	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public class FallenColumn extends StructureGenerator
+public final class FallenColumn extends StructureGenerator
 {
-	public FallenColumn(boolean notifyOnBlockChanges) {
-		super(notifyOnBlockChanges, true);
+	// Materials used in this class
+	private Material dirt    = Material.DIRT;
+	private Material grass   = Material.GRASS;
+	private Material ice     = Material.ICE;
+	private Material leaves1 = Material.LEAVES;
+	private Material leaves2 = Material.LEAVES_2;
+	private Material quartz  = Material.QUARTZ_BLOCK;
+	private Material snow    = Material.SNOW;
 
-		addToBlacklist(0);
-
-		for (int i = 0; i < 16; i++) {
-			addToBlacklist(18, i);
-		}
+	/**
+	 * Constructor
+	 **/
+	public FallenColumn(boolean notifyOnBlockChanges)
+	{
+		// Forward settings to the base class
+		super(notifyOnBlockChanges);
 	}
 
-	public boolean generate(World world, Random random, int x, int y, int z) {
-		Location start = new Location(world, x, y, z);
-		addPiece(start, world, x, y, z, 1);
-		addToWhitelist(start, world.getBlockAt(x, y, z));
+	/** 
+	 * Generate a fallen column
+	 **/
+	public boolean generate(World w, Random random, int x, int y, int z)
+	{
+		// Get the base location of the column for tracking
+		Location start = new Location(w, x, y, z);
 
+		// Add the column base
+		addPiece(start, w, x, y, z, 1);
+
+		// Choose a direction at random
 		int dir = random.nextInt(4);
 
+		// Default the coordinate variables
 		int xm = 0;
 		int zm = 0;
 		int data = 0;
 		int count = 0;
 		int xl = 1;
 		int zl = 1;
+		// Preallocate a material variable
+		Material type;
 
-		if (dir < 2) {
+		// If the column is east/west
+		if (dir < 2)
+		{
+			// Set the x-based coordinate variables
 			xm = 1;
 			xl = 4;
+			// Set the column to face east/west
 			data = 3;
 		}
-		else {
+		// If the column is north/south
+		else
+		{
+			// Set the z-based coordinate variables
 			zm = 1;
 			zl = 4;
+			// Set the column to face north/south
 			data = 4;
 		}
 
-		if (dir % 2 == 0) {
+		// If the column is north/west
+		if (dir % 2 == 0)
+		{
+			// Flip the directional coordinates
 			xm *= -1;
 			zm *= -1;
 		}
 
-		for (int cx = x + (xm * 2); count < xl; cx += xm) {
+		// Iterate through the length in the x direction
+		for (int cx = x + (xm * 2); count < xl; cx += xm)
+		{
+			// Preset the z counter
 			int zcount = 0;
 
-			for (int cz = z + (zm * 2); zcount < zl; cz += zm) {
-				int id = world.getBlockTypeIdAt(cx, y - 1, cz);
+			// Iterate through the length in the z direction
+			for (int cz = z + (zm * 2); zcount < zl; cz += zm)
+			{
+				// Get the type of block below the current one
+				type = w.getBlockAt(cx, y - 1, cz).getType();
 
-				if (id != 2 && id != 3)
+				// Cut placement short if not grass or dirt
+				if (type != dirt && type != grass)
 					return placeBlocks(start, true);
 
+				// Update relative counts
 				count += 1;
 				zcount += 1;
 
+				// If an end piece, add a chiseled quartz
 				if (count >= xl && zcount >= zl)
-					addPiece(start, world, cx, y, cz, 1);
+					addPiece(start, w, cx, y, cz, 1);
+				// If not an end piece, add a normal column
 				else
-					addPiece(start, world, cx, y, cz, data);
+					addPiece(start, w, cx, y, cz, data);
 			}
 		}
 
+		// Place the column
 		return placeBlocks(start, true);
 	}
 
-	private void addPiece(Location s, World w, int x, int y, int z, int d) {
+	/**
+	 * Add a piece to the column
+	 **/
+	private void addPiece(Location s, World w, int x, int y, int z, int d)
+	{
+		// Get the current block
 		Block block = w.getBlockAt(x, y, z);
 
+		// Skip if the block isn't whitelisted
 		if (!isInBlacklist(block))
 			return;
 
-		if (!isChunkValid(w, x, z))
-			return;
+		// Add the block to the column
+		addBlock(s, block, quartz, d);
 
-		addBlock(s, block, 155, d);
-
+		// Get the block above the current block
 		block = w.getBlockAt(x, y + 1, z);
 
+		// Skip if the block isn't whitelisted
 		if (!isInBlacklist(block))
 			return;
 
-		if (block.getTypeId() == 79)
+		// Get the block's material
+		Material type = block.getType();
+
+		// Skip if the block is ice or leaves
+		if (type == ice || type == leaves1 || type == leaves2)
 			return;
 
-		if (!isInBlockList(s, block))
-			addBlock(s, block, 78);
-	}
-
-	public boolean isChunkValid(World world, int x, int z) {
-		x = x >> 4; // Chunk X
-		z = z >> 4; // Chunk Z
-
-		// If the chunk is not loaded, and does not exist
-		if (!world.isChunkLoaded(x, z) && !world.loadChunk(x, z, false))
-			return false;
-
-		return true;
+		// Add a snow block on top of the column
+		addBlock(s, block, snow);
 	}
 }

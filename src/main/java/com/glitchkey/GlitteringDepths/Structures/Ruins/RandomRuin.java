@@ -25,6 +25,7 @@ package com.glitchkey.glitteringdepths.structures.ruins;
 //* IMPORTS: JDK/JRE
 	import java.util.Random;
 //* IMPORTS: BUKKIT
+	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	//* NOT NEEDED
@@ -33,13 +34,19 @@ package com.glitchkey.glitteringdepths.structures.ruins;
 
 public class RandomRuin
 {
-	Ruin1 type1;
-	Ruin2 type2;
-	Ruin3 type3;
-	Ruin4 type4;
-	Ruin5 type5;
+	// Ruin patterns
+	private Ruin1 type1;
+	private Ruin2 type2;
+	private Ruin3 type3;
+	private Ruin4 type4;
+	private Ruin5 type5;
 
-	public RandomRuin(boolean notifyOnBlockChanges) {
+	/**
+	 * Constructor
+	 **/
+	public RandomRuin(boolean notifyOnBlockChanges)
+	{
+		// Instanciate the five types of ruin
 		type1 = new Ruin1(notifyOnBlockChanges);
 		type2 = new Ruin2(notifyOnBlockChanges);
 		type3 = new Ruin3(notifyOnBlockChanges);
@@ -47,24 +54,41 @@ public class RandomRuin
 		type5 = new Ruin5(notifyOnBlockChanges);
 	}
 
-	public RandomRuin addToBlacklist(int id) {
-		type1.addToBlacklist(id);
-		type2.addToBlacklist(id);
-		type3.addToBlacklist(id);
-		type4.addToBlacklist(id);
-		type5.addToBlacklist(id);
+	/**
+	 * Adds materials to the blacklist (actually a material whitelist)
+	 **/
+	public RandomRuin addToBlacklist(Material type)
+	{
+		// Forward settings to the ruin classes
+		type1.addToBlacklist(type);
+		type2.addToBlacklist(type);
+		type3.addToBlacklist(type);
+		type4.addToBlacklist(type);
+		type5.addToBlacklist(type);
 
+		// Return this class for chaining
 		return this;
 	}
 
-	public boolean place(World world, Random random, int x, int y, int z) {
+	/**
+	 * Wrapper for the generate function
+	 **/
+	public boolean place(World world, Random random, int x, int y, int z)
+	{
 		return generate(world, random, x, y, z);
 	}
 
-	public boolean generate(World world, Random random, int x, int y, int z) {
+	/**
+	 * Generates a random ruin
+	 **/
+	public boolean generate(World world, Random random, int x, int y, int z)
+	{
+		// Pick a ruin type at random
 		int type = random.nextInt(5);
 
-		switch (type) {
+		// Generate the selected ruin type and return the result
+		switch (type)
+		{
 			case  1: return type1.place(world, random, x, y, z);
 			case  2: return type2.place(world, random, x, y, z);
 			case  3: return type3.place(world, random, x, y, z);

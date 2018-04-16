@@ -27,6 +27,7 @@ package com.glitchkey.glitteringdepths.structures.trees;
 //* IMPORTS: BUKKIT
 	import org.bukkit.block.Block;
 	import org.bukkit.Location;
+	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
@@ -35,79 +36,99 @@ package com.glitchkey.glitteringdepths.structures.trees;
 
 public class TallRedwood extends StructureGenerator
 {
-	public TallRedwood(boolean notifyOnBlockChanges) {
-		super(notifyOnBlockChanges, true);
+	Material air     = Material.AIR;
+	Material dirt    = Material.DIRT;
+	Material grass   = Material.GRASS;
+	Material ice     = Material.ICE;
+	Material leaves1 = Material.LEAVES;
+	Material leaves2 = Material.LEAVES_2;
+	Material log     = Material.LOG;
+	Material snow    = Material.SNOW;
 
-		addToBlacklist(0);
+	public TallRedwood(boolean notifyOnBlockChanges)
+	{
+		super(notifyOnBlockChanges);
 
-		for (int i = 0; i < 16; i++) {
-			addToBlacklist(18, i);
+		addToBlacklist(air);
+		addToBlacklist(ice);
+		addToBlacklist(snow);
+
+		for (int i = 0; i < 16; i++)
+		{
+			addToBlacklist(leaves1, i);
+			addToBlacklist(leaves2, i);
 		}
 	}
 
-	public boolean generate(World world, Random random, int x, int y, int z) {
+	public boolean generate(World world, Random random, int x, int y, int z)
+	{
 		int maxHeight = random.nextInt(5) + 7;
 		int leafHeight = maxHeight - random.nextInt(2) - 3;
 		int baseLeafWidth = maxHeight - leafHeight;
 		int maxLeafWidth = 1 + random.nextInt(baseLeafWidth + 1);
 		Location start = new Location(world, x, y, z);
 
-		if (y < 1 || (y + maxHeight + 1) > 128)
+		if (!isChunkValid(world, x, z))
 			return fail(start);
 
-		int baseId = world.getBlockTypeIdAt(x, y - 1, z);
-
-		if ((baseId != 2 && baseId != 3) || y >= (128 - maxHeight - 1))
+		if (y < 1 || (y + maxHeight + 1) > 256)
 			return fail(start);
 
-		addToWhitelist(start, world.getBlockAt(x, y - 1, z));
-		addBlock(start, world.getBlockAt(x, y - 1, z), 3, 0);
+		Material type = world.getBlockAt(x, y - 1, z).getType();
 
-		int leafWidth = 0;
+		if ((type != grass && type != dirt) || y >= (255 - maxHeight))
+			return fail(start);
+
+		addBlock(start, world.getBlockAt(x, y - 1, z), dirt, 0);
+
+		int width = 0;
 
 		for (int cy = y + maxHeight; cy >= y + leafHeight; --cy)
 		{
-			for (int cx = x - leafWidth; cx <= x + leafWidth; ++cx)
+			for (int cx = x - width; cx <= x + width; ++cx)
 			{
-				int width = Math.abs(cx - x);
+				int cw = Math.abs(cx - x);
 
-				for (int cz = z - leafWidth; cz <= z + leafWidth; ++cz)
+				for (int cz = z - width; cz <= z + width; ++cz)
 				{
-					// Skip if the block is invalid for some reason
 					if (!isChunkValid(world, cx, cz))
 						return fail(start);
 
-					int length = Math.abs(cz - z);
-					Block block = world.getBlockAt(cx, cy, cz);
+					int l = Math.abs(cz - z);
+					Block b = world.getBlockAt(cx, cy, cz);
 
-					if (!isInBlacklist(block))
+					if (!isInBlacklist(b))
 						continue;
 
-					if (width == length && width == leafWidth && leafWidth > 0)
+					if (cw == l && cw == width && width > 0)
 						continue;
 
-					addBlock(start, block, 18, 1);
+					addBlock(start, b, leaves1, 1);
 
-					block = world.getBlockAt(cx, cy + 1, cz);
+					b = world.getBlockAt(cx, cy + 1, cz);
 
-					if (!isInBlacklist(block))
+					if (!isInBlacklist(b))
 						continue;
 
-					if (block.getTypeId() == 79)
+					Material t = b.getType();
+
+					if (t == ice)
+						continue;
+					else if (t == leaves1 || t == leaves2)
 						continue;
 
-					if (!isInBlockList(start, block))
-						addBlock(start, block, 78);
+					if (!isInBlockList(start, b))
+						addBlock(start, b, snow);
 				}
 			}
 
-			if (leafWidth >= 1 && cy == (y + leafHeight + 1))
+			if (width >= 1 && cy == (y + leafHeight + 1))
 			{
-				--leafWidth;
+				--width;
 			}
-			else if (leafWidth < maxLeafWidth)
+			else if (width < maxLeafWidth)
 			{
-				++leafWidth;
+				++width;
 			}
 		}
 
@@ -118,20 +139,9 @@ public class TallRedwood extends StructureGenerator
 			if (!isInBlacklist(block))
 				continue;
 
-			addBlock(start, block, 17, 1);
+			addBlock(start, block, log, 1);
 		}
 
 		return placeBlocks(start, true);
-	}
-
-	public boolean isChunkValid(World world, int x, int z) {
-		x = x >> 4; // Chunk X
-		z = z >> 4; // Chunk Z
-
-		// If the chunk is not loaded, and does not exist
-		if (!world.isChunkLoaded(x, z) && !world.loadChunk(x, z, false))
-			return false;
-
-		return true;
 	}
 }

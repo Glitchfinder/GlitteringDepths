@@ -25,46 +25,99 @@ package com.glitchkey.glitteringdepths.structures.ruins;
 //* IMPORTS: JDK/JRE
 	import java.util.Random;
 //* IMPORTS: BUKKIT
+	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	//* NOT NEEDED
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public class RandomColumn
+public final class RandomColumn
 {
-	FallenColumn    typeA;
-	FallenColumnB   typeB;
-	StandingColumn  typeC;
-	StandingColumnB typeD;
+	// Column types
+	private FallenColumn    typeA; // Fallen, whole
+	private FallenColumnB   typeB; // Fallen, broken
+	private StandingColumn  typeC; // Standing, whole
+	private StandingColumnB typeD; // Standing, broken
 
-	public RandomColumn(boolean notifyOnBlockChanges) {
+	// Materials used in this class
+	private Material air     = Material.AIR;
+	private Material ice     = Material.ICE;
+	private Material leaves1 = Material.LEAVES;
+	private Material leaves2 = Material.LEAVES_2;
+	private Material snow    = Material.SNOW;
+
+	/**
+	 * Constructor
+	 **/
+	public RandomColumn(boolean notifyOnBlockChanges)
+	{
+		// Instanciate the four types of column
 		typeA = new FallenColumn(notifyOnBlockChanges);
 		typeB = new FallenColumnB(notifyOnBlockChanges);
 		typeC = new StandingColumn(notifyOnBlockChanges);
 		typeD = new StandingColumnB(notifyOnBlockChanges);
+
+		// Add air, ice, and snow to the whitelist
+		addToBlacklist(air);
+		addToBlacklist(ice);
+		addToBlacklist(snow);
+
+		// Add all leaves to the whitelist
+		for (int i = 0; i < 16; i++)
+		{
+			addToBlacklist(leaves1, i);
+			addToBlacklist(leaves2, i);
+		}
 	}
 
-	public RandomColumn addToBlacklist(int id) {
-		typeA.addToBlacklist(id);
-		typeB.addToBlacklist(id);
-		typeC.addToBlacklist(id);
-		typeD.addToBlacklist(id);
+	/**
+	 * Adds materials to the blacklist (actually a material whitelist)
+	 **/
+	public RandomColumn addToBlacklist(Material type)
+	{
+		// Forward settings through the data-based method
+		return addToBlacklist(type, 0);
+	}
 
+	/**
+	 * Adds materials to the blacklist (actually a material whitelist)
+	 **/
+	public RandomColumn addToBlacklist(Material type, int data)
+	{
+		// Forward settings to the column classes
+		typeA.addToBlacklist(type, data);
+		typeB.addToBlacklist(type, data);
+		typeC.addToBlacklist(type, data);
+		typeD.addToBlacklist(type, data);
+
+		// Return this class for chaining
 		return this;
 	}
 
-	public boolean place(World world, Random random, int x, int y, int z) {
-		if (y < 2)
-			return false;
-
+	/**
+	 * Wrapper for the generate function
+	 **/
+	public boolean place(World world, Random random, int x, int y, int z)
+	{
 		return generate(world, random, x, y, z);
 	}
 
-	public boolean generate(World world, Random random, int x, int y, int z) {
+	/**
+	 * Generates a random column
+	 **/
+	public boolean generate(World world, Random random, int x, int y, int z)
+	{
+		// Prevent placement on bedrock
+		if (y < 2)
+			return false;
+
+		// Pick a column type at random
 		int type = random.nextInt(4);
 
-		switch (type) {
+		// Generate the selected column type and return the result
+		switch (type)
+		{
 			case  1: return typeA.place(world, random, x, y, z);
 			case  2: return typeB.place(world, random, x, y, z);
 			case  3: return typeC.place(world, random, x, y, z);
