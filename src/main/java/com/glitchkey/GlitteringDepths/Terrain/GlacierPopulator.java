@@ -184,15 +184,15 @@ public class GlacierPopulator extends BlockPopulator
 			int cz = zPos + r.nextInt(16);
 			int cy = r.nextInt(140);
 
-			id = w.getBlockTypeIdAt(cx, cy, cz);
+			id = getTypeAt(w, cx, cy, cz);
 
 			if (id != 0 && id != 78 && id != 79)
 				continue;
 
-			int id1 = w.getBlockTypeIdAt(cx + 1, cy, cz    );
-			int id2 = w.getBlockTypeIdAt(cx - 1, cy, cz    );
-			int id3 = w.getBlockTypeIdAt(cx    , cy, cz + 1);
-			int id4 = w.getBlockTypeIdAt(cx    , cy, cz - 1);
+			int id1 = getTypeAt(w, cx + 1, cy, cz    );
+			int id2 = getTypeAt(w, cx - 1, cy, cz    );
+			int id3 = getTypeAt(w, cx    , cy, cz + 1);
+			int id4 = getTypeAt(w, cx    , cy, cz - 1);
 
 			if (!checkIce(id1, id2, id3, id4))
 				continue;
@@ -205,15 +205,15 @@ public class GlacierPopulator extends BlockPopulator
 			int cz = zPos + r.nextInt(16);
 			int cy = r.nextInt(140);
 
-			id = w.getBlockTypeIdAt(cx, cy, cz);
+			id = getTypeAt(w, cx, cy, cz);
 
 			if (id != 0 && id != 78 && id != 79)
 				continue;
 
-			int id1 = w.getBlockTypeIdAt(cx + 1, cy, cz    );
-			int id2 = w.getBlockTypeIdAt(cx - 1, cy, cz    );
-			int id3 = w.getBlockTypeIdAt(cx    , cy, cz + 1);
-			int id4 = w.getBlockTypeIdAt(cx    , cy, cz - 1);
+			int id1 = getTypeAt(w, cx + 1, cy, cz    );
+			int id2 = getTypeAt(w, cx - 1, cy, cz    );
+			int id3 = getTypeAt(w, cx    , cy, cz + 1);
+			int id4 = getTypeAt(w, cx    , cy, cz - 1);
 
 			if (!checkIce(id1, id2, id3, id4))
 				continue;
@@ -226,22 +226,22 @@ public class GlacierPopulator extends BlockPopulator
 			int cz = zPos + r.nextInt(16);
 			int cy = 51;
 
-			id = w.getBlockTypeIdAt(cx, cy, cz);
+			id = getTypeAt(w, cx, cy, cz);
 
 			if (id != 0 && id != 78)
 				continue;
 
-			id = w.getBlockTypeIdAt(cx, cy - 1, cz);
+			id = getTypeAt(w, cx, cy - 1, cz);
 
 			if (id != 3 && id != 2 && id != 12)
 				continue;
 				
 			int y = cy - 1;
 
-			int id1 = w.getBlockTypeIdAt(cx + 1, y, cz    );
-			int id2 = w.getBlockTypeIdAt(cx - 1, y, cz    );
-			int id3 = w.getBlockTypeIdAt(cx    , y, cz + 1);
-			int id4 = w.getBlockTypeIdAt(cx    , y, cz - 1);
+			int id1 = getTypeAt(w, cx + 1, y, cz    );
+			int id2 = getTypeAt(w, cx - 1, y, cz    );
+			int id3 = getTypeAt(w, cx    , y, cz + 1);
+			int id4 = getTypeAt(w, cx    , y, cz - 1);
 
 			if (!checkWater(id1, id2, id3, id4))
 				continue;
@@ -267,12 +267,12 @@ public class GlacierPopulator extends BlockPopulator
 				if (cy <= 0)
 					continue;
 
-				id = w.getBlockTypeIdAt(cx, cy, cz);
+				id = getTypeAt(w, cx, cy, cz);
 
 				if (id != 0 && id != 78)
 					continue;
 
-				id = w.getBlockTypeIdAt(cx, cy - 1, cz);
+				id = getTypeAt(w, cx, cy - 1, cz);
 
 				if (id != 3 && id != 2)
 					continue;
@@ -297,12 +297,12 @@ public class GlacierPopulator extends BlockPopulator
 				if (cy <= 0)
 					continue;
 
-				id = w.getBlockTypeIdAt(cx, cy, cz);
+				id = getTypeAt(w, cx, cy, cz);
 
 				if (id != 0 && id != 78)
 					continue;
 
-				id = w.getBlockTypeIdAt(cx, cy - 1, cz);
+				id = getTypeAt(w, cx, cy - 1, cz);
 
 				if (id != 3 && id != 2)
 					continue;
@@ -349,7 +349,7 @@ public class GlacierPopulator extends BlockPopulator
 				if (cy <= 0)
 					continue;
 
-				id = w.getBlockTypeIdAt(cx, cy, cz);
+				id = getTypeAt(w, cx, cy, cz);
 
 				if(id == 8 || id == 9)
 					continue;
@@ -375,6 +375,25 @@ public class GlacierPopulator extends BlockPopulator
 				default:         mobs.spawnGolem(loc);  break;
 			}
 		} catch (Exception e) {}
+	}
+
+	public int getTypeAt(World world, int x, int y, int z) {
+		if (!isChunkValid(world, x, z))
+			return -1;
+
+		return world.getBlockTypeIdAt(x, y, z);
+	}
+
+	public boolean isChunkValid(World world, int x, int z)
+	{
+		x = x >> 4; // Chunk X
+		z = z >> 4; // Chunk Z
+
+		// If the chunk is not loaded, and does not exist
+		if (!world.isChunkLoaded(x, z) && !world.loadChunk(x, z, false))
+			return false;
+
+		return true;
 	}
 
 	private boolean checkIce(int id1, int id2, int id3, int id4) {

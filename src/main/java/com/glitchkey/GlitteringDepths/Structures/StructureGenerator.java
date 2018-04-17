@@ -204,8 +204,10 @@ public abstract class StructureGenerator
 	}
 
 	private void setBlock(Block block, Material material, byte data) {
-		block.setType(material, notifyOnBlockChanges);
-		block.setData(data, notifyOnBlockChanges);
+		BlockState state = block.getState();
+		state.setType(material);
+		state.setRawData(data);
+		state.update(true, false);
 	}
 
 	private void setBlock(Block block, Material material, int data) {

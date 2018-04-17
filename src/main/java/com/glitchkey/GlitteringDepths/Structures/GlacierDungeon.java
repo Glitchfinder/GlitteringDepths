@@ -160,11 +160,21 @@ public class GlacierDungeon extends StructureGenerator
 		}
 
 		BlockState b = location.getBlock().getState();
+
+		if (!(b instanceof CreatureSpawner))
+			return;
+
 		((CreatureSpawner) b).setSpawnedType(type);
+		b.update(true, false);
 	}
 
 	private void setLoot(Location location, Random r) {
-		Chest c = (Chest) location.getBlock().getState();
+		BlockState b = location.getBlock().getState();
+
+		if (!(b instanceof Chest))
+			return;
+
+		Chest c = (Chest) b;
 
 		addTreasure(c.getBlockInventory(), r);
 		addPlants(c.getBlockInventory(), r);
