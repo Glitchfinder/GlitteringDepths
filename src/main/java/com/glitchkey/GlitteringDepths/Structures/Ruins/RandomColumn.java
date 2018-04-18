@@ -50,13 +50,13 @@ public final class RandomColumn
 	/**
 	 * Constructor
 	 **/
-	public RandomColumn(boolean notifyOnBlockChanges)
+	public RandomColumn()
 	{
 		// Instanciate the four types of column
-		typeA = new FallenColumn(notifyOnBlockChanges);
-		typeB = new FallenColumnB(notifyOnBlockChanges);
-		typeC = new StandingColumn(notifyOnBlockChanges);
-		typeD = new StandingColumnB(notifyOnBlockChanges);
+		typeA = new FallenColumn();
+		typeB = new FallenColumnB();
+		typeC = new StandingColumn();
+		typeD = new StandingColumnB();
 
 		// Add air, ice, and snow to the whitelist
 		addToBlacklist(air);

@@ -47,18 +47,6 @@ public abstract class StructureGenerator
 	private List<BlockValues> replaceBlacklist =
 		new ArrayList<BlockValues>();
 
-	private final boolean notifyOnBlockChanges;
-
-	public StructureGenerator()
-	{
-		this (false);
-	}
-
-	public StructureGenerator(boolean notifyOnBlockChanges)
-	{
-		this.notifyOnBlockChanges = notifyOnBlockChanges;
-	}
-
 	public boolean addBlock(Location start, Block block, BlockValues values) {
 		if (modifiedBlocks == null)
 			modifiedBlocks = new HashMap<Location, Map<Block, BlockValues>>();

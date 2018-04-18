@@ -53,11 +53,11 @@ public class WhiteDungeon
 	/**
 	 * Constructor
 	 **/
-	public WhiteDungeon(boolean notifyOnBlockChanges)
+	public WhiteDungeon()
 	{
 		// Instanciate dungeon parts
-		base1 = new Base1(notifyOnBlockChanges);
-		cap1 = new Cap1(notifyOnBlockChanges);
+		base1 = new Base1();
+		cap1 = new Cap1();
 	}
 
 	/**
@@ -528,5 +528,5 @@ public class WhiteDungeon
 		}
 
 		return -1;
-}
+	}
 }

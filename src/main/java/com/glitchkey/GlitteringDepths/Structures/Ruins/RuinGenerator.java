@@ -62,11 +62,8 @@ public abstract class RuinGenerator extends StructureGenerator
 	/**
 	 * Constructor
 	 **/
-	public RuinGenerator(boolean notifyOnBlockChanges)
+	public RuinGenerator()
 	{
-		// Forward settings to the base class
-		super(notifyOnBlockChanges);
-
 		// Add air, ice, packed ice, and snow to the whitelist
 		addToBlacklist(air);
 		addToBlacklist(ice);

@@ -40,15 +40,6 @@ package com.glitchkey.glitteringdepths.structures.ruins;
 public class Ruin4 extends RuinGenerator
 {
 	/**
-	 * Constructor
-	 **/
-	public Ruin4(boolean notifyOnBlockChanges)
-	{
-		// Forward settings to the base class
-		super(notifyOnBlockChanges);
-	}
-
-	/**
 	 * Fills in the template data for a north-facing ruin
 	 **/
 	protected void fillNorth()

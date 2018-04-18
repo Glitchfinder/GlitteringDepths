@@ -44,15 +44,6 @@ public class StandingColumn extends StructureGenerator
 	Material snow    = Material.SNOW;
 
 	/**
-	 * Constructor
-	 **/
-	public StandingColumn(boolean notifyOnBlockChanges)
-	{
-		// Forward settings to the base class
-		super(notifyOnBlockChanges);
-	}
-
-	/**
 	 * Generate an intact standing column
 	 **/
 	public boolean generate(World world, Random random, int x, int y, int z)

@@ -48,10 +48,10 @@ public final class Circle
 	/**
 	 * Constructor
 	 **/
-	public Circle(boolean notifyOnBlockChanges)
+	public Circle()
 	{
 		// Instanciate the random column selector
-		column = new RandomColumn(notifyOnBlockChanges);
+		column = new RandomColumn();
 	}
 
 	/**

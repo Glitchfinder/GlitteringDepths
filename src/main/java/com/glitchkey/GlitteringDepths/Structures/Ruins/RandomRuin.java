@@ -44,14 +44,14 @@ public class RandomRuin
 	/**
 	 * Constructor
 	 **/
-	public RandomRuin(boolean notifyOnBlockChanges)
+	public RandomRuin()
 	{
 		// Instanciate the five types of ruin
-		type1 = new Ruin1(notifyOnBlockChanges);
-		type2 = new Ruin2(notifyOnBlockChanges);
-		type3 = new Ruin3(notifyOnBlockChanges);
-		type4 = new Ruin4(notifyOnBlockChanges);
-		type5 = new Ruin5(notifyOnBlockChanges);
+		type1 = new Ruin1();
+		type2 = new Ruin2();
+		type3 = new Ruin3();
+		type4 = new Ruin4();
+		type5 = new Ruin5();
 	}
 
 	/**

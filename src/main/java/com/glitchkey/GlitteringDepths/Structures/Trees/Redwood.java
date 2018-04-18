@@ -45,10 +45,8 @@ public class Redwood extends StructureGenerator
 	Material log     = Material.LOG;
 	Material snow    = Material.SNOW;
 
-	public Redwood(boolean notifyOnBlockChanges)
+	public Redwood()
 	{
-		super(notifyOnBlockChanges);
-
 		addToBlacklist(air);
 		addToBlacklist(ice);
 		addToBlacklist(snow);

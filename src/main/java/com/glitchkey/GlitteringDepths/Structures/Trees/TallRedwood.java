@@ -45,9 +45,8 @@ public class TallRedwood extends StructureGenerator
 	Material log     = Material.LOG;
 	Material snow    = Material.SNOW;
 
-	public TallRedwood(boolean notifyOnBlockChanges)
+	public TallRedwood()
 	{
-		super(notifyOnBlockChanges);
 
 		addToBlacklist(air);
 		addToBlacklist(ice);

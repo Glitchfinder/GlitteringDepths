@@ -45,15 +45,6 @@ public final class FallenColumn extends StructureGenerator
 	private Material quartz  = Material.QUARTZ_BLOCK;
 	private Material snow    = Material.SNOW;
 
-	/**
-	 * Constructor
-	 **/
-	public FallenColumn(boolean notifyOnBlockChanges)
-	{
-		// Forward settings to the base class
-		super(notifyOnBlockChanges);
-	}
-
 	/** 
 	 * Generate a fallen column
 	 **/

@@ -46,10 +46,8 @@ public class MegaRedwood extends StructureGenerator
 	Material log     = Material.LOG;
 	Material snow    = Material.SNOW;
 
-	public MegaRedwood(boolean notifyOnBlockChanges)
+	public MegaRedwood()
 	{
-		super(notifyOnBlockChanges);
-
 		addToBlacklist(air);
 		addToBlacklist(ice);
 		addToBlacklist(snow);

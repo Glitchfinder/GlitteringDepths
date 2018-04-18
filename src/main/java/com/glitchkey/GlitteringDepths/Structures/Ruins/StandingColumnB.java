@@ -50,15 +50,6 @@ public class StandingColumnB extends StructureGenerator
 	Material water1        = Material.WATER;
 	Material water2        = Material.STATIONARY_WATER;
 
-	/**
-	 * Constructor
-	 **/
-	public StandingColumnB(boolean notifyOnBlockChanges)
-	{
-		// Forward settings to the base class
-		super(notifyOnBlockChanges);
-	}
-
 	/** 
 	 * Generate a broken standing column
 	 **/

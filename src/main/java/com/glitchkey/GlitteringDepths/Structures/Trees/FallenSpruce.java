@@ -45,10 +45,8 @@ public class FallenSpruce extends StructureGenerator
 	Material log     = Material.LOG;
 	Material snow    = Material.SNOW;
 
-	public FallenSpruce(boolean notifyOnBlockChanges)
+	public FallenSpruce()
 	{
-		super(notifyOnBlockChanges);
-
 		addToBlacklist(air);
 		addToBlacklist(ice);
 		addToBlacklist(snow);

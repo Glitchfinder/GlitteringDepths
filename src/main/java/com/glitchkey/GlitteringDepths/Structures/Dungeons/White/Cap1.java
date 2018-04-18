@@ -53,11 +53,8 @@ public class Cap1 extends DungeonPart
 	/**
 	 * Constructor
 	 **/
-	public Cap1(boolean notifyOnBlockChanges)
+	public Cap1()
 	{
-		// Forward settings to the base class
-		super(notifyOnBlockChanges);
-
 		// Set the height of this dungeon piece
 		height = 17;
 	}

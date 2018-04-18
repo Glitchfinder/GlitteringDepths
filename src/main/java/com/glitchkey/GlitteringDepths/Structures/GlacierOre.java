@@ -41,21 +41,15 @@ public class GlacierOre extends StructureGenerator
 	private double widthDiff, distanceDiff;
 	Material type;
 
-	public GlacierOre(
-		boolean notifyOnBlockChanges, Material type, double minWidth,
-		double maxWidth, double minDistance, double maxDistance)
+	public GlacierOre(Material type, double minWidth, double maxWidth,
+		double minDistance, double maxDistance)
 	{
-		this(notifyOnBlockChanges, type, 0, minWidth, maxWidth,
-			minDistance, maxDistance);
+		this(type, 0, minWidth, maxWidth, minDistance, maxDistance);
 	}
 
-	public GlacierOre(
-		boolean notifyOnBlockChanges, Material type, int data,
-		double minWidth, double maxWidth, double minDistance,
-		double maxDistance)
+	public GlacierOre(Material type, int data, double minWidth,
+		double maxWidth, double minDistance, double maxDistance)
 	{
-		super(notifyOnBlockChanges);
-
 		this.type = type;
 		this.data = data;
 		this.minWidth = minWidth;

@@ -45,10 +45,8 @@ public class MiniJungle extends StructureGenerator
 	Material log     = Material.LOG;
 	Material snow    = Material.SNOW;
 
-	public MiniJungle(boolean notifyOnBlockChanges)
+	public MiniJungle()
 	{
-		super(notifyOnBlockChanges);
-
 		addToBlacklist(air);
 		addToBlacklist(ice);
 		addToBlacklist(snow);

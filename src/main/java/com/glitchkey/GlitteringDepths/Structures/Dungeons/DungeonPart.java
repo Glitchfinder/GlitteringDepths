@@ -40,10 +40,8 @@ public abstract class DungeonPart extends StructureGenerator
 	protected List<Integer> blocksN, blocksS, blocksE, blocksW;
 	protected int height = 0;
 
-	public DungeonPart(boolean notifyOnBlockChanges)
+	public DungeonPart()
 	{
-		super(notifyOnBlockChanges);
-
 		fillNorth();
 		fillSouth();
 		fillEast();

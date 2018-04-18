@@ -45,10 +45,8 @@ public class WeepingBirch extends StructureGenerator
 	Material log     = Material.LOG;
 	Material snow    = Material.SNOW;
 
-	public WeepingBirch(boolean notifyOnBlockChanges)
+	public WeepingBirch()
 	{
-		super(notifyOnBlockChanges);
-
 		addToBlacklist(air);
 		addToBlacklist(ice);
 		addToBlacklist(snow);

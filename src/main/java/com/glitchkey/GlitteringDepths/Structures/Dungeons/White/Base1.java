@@ -47,11 +47,8 @@ public class Base1 extends DungeonPart
 	/**
 	 * Constructor
 	 **/
-	public Base1(boolean notifyOnBlockChanges)
+	public Base1()
 	{
-		// Forward settings to the base class
-		super(notifyOnBlockChanges);
-
 		// Set the height of this dungeon piece
 		height = 3;
 	}
