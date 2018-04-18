@@ -35,7 +35,7 @@ package com.glitchkey.glitteringdepths.terrain;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.listeners.GlacierMobListener;
-	import com.glitchkey.glitteringdepths.structures.GlacierDungeon;
+	import com.glitchkey.glitteringdepths.structures.dungeons.white.WhiteDungeon;
 	import com.glitchkey.glitteringdepths.structures.GlacierOre;
 	import com.glitchkey.glitteringdepths.structures.ruins.Circle;
 	import com.glitchkey.glitteringdepths.structures.ruins.RandomColumn;
@@ -61,9 +61,9 @@ public class GlacierPopulator extends BlockPopulator
 	Redwood redwood;
 	TallRedwood tallRedwood;
 	WeepingBirch weepingBirch;
-	GlacierDungeon dungeon;
 	GlacierOre coal, lapis, diamond, redstone, emerald, gold, iron, gravel;
 	GlacierOre sand, granite, diorite, andesite;
+	WhiteDungeon dungeon;
 
 	public GlacierPopulator(GlacierMobListener listener)
 	{
@@ -77,7 +77,7 @@ public class GlacierPopulator extends BlockPopulator
 		miniJungle    = new MiniJungle(false);
 		tallRedwood   = new TallRedwood(false);
 		weepingBirch  = new WeepingBirch(false);
-		dungeon  = new GlacierDungeon(false);
+		dungeon  = new WhiteDungeon(false);
 		coal     = new GlacierOre(false, Material.COAL_ORE, 3D, 5.5D, 1D, 2.3D);
 		lapis    = new GlacierOre(false, Material.LAPIS_ORE, 2D, 3D, 1D, 1.5D);
 		diamond  = new GlacierOre(false, Material.DIAMOND_ORE, 1.5D, 3D, 0.5D, 1.2D);
