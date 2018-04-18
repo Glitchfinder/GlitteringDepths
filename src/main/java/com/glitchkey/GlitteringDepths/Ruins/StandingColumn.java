@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.glitchkey.glitteringdepths.structures.ruins;
+package com.glitchkey.glitteringdepths.ruins;
 
 //* IMPORTS: JDK/JRE
 	import java.util.Random;
@@ -30,99 +30,39 @@ package com.glitchkey.glitteringdepths.structures.ruins;
 	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
-	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
+	import com.glitchkey.glitteringdepths.StructureGenerator;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public final class FallenColumn extends StructureGenerator
+public class StandingColumn extends StructureGenerator
 {
 	// Materials used in this class
-	private Material dirt    = Material.DIRT;
-	private Material grass   = Material.GRASS;
-	private Material ice     = Material.ICE;
-	private Material leaves1 = Material.LEAVES;
-	private Material leaves2 = Material.LEAVES_2;
-	private Material quartz  = Material.QUARTZ_BLOCK;
-	private Material snow    = Material.SNOW;
+	Material ice     = Material.ICE;
+	Material leaves1 = Material.LEAVES;
+	Material leaves2 = Material.LEAVES_2;
+	Material quartz  = Material.QUARTZ_BLOCK;
+	Material snow    = Material.SNOW;
 
-	/** 
-	 * Generate a fallen column
+	/**
+	 * Generate an intact standing column
 	 **/
-	public boolean generate(World w, Random random, int x, int y, int z)
+	public boolean generate(World world, Random random, int x, int y, int z)
 	{
 		// Get the base location of the column for tracking
-		Location start = new Location(w, x, y, z);
+		Location start = new Location(world, x, y, z);
 
 		// Add the column base
-		addPiece(start, w, x, y, z, 1);
+		addPiece(start, world, x, y, z, 1);
 
-		// Choose a direction at random
-		int dir = random.nextInt(4);
-
-		// Default the coordinate variables
-		int xm = 0;
-		int zm = 0;
-		int data = 0;
-		int count = 0;
-		int xl = 1;
-		int zl = 1;
-		// Preallocate a material variable
-		Material type;
-
-		// If the column is east/west
-		if (dir < 2)
+		// Iterate through the column's height
+		for (int cy = y + 4; cy > y; cy--)
 		{
-			// Set the x-based coordinate variables
-			xm = 1;
-			xl = 4;
-			// Set the column to face east/west
-			data = 3;
-		}
-		// If the column is north/south
-		else
-		{
-			// Set the z-based coordinate variables
-			zm = 1;
-			zl = 4;
-			// Set the column to face north/south
-			data = 4;
-		}
-
-		// If the column is north/west
-		if (dir % 2 == 0)
-		{
-			// Flip the directional coordinates
-			xm *= -1;
-			zm *= -1;
-		}
-
-		// Iterate through the length in the x direction
-		for (int cx = x + (xm * 2); count < xl; cx += xm)
-		{
-			// Preset the z counter
-			int zcount = 0;
-
-			// Iterate through the length in the z direction
-			for (int cz = z + (zm * 2); zcount < zl; cz += zm)
-			{
-				// Get the type of block below the current one
-				type = w.getBlockAt(cx, y - 1, cz).getType();
-
-				// Cut placement short if not grass or dirt
-				if (type != dirt && type != grass)
-					return placeBlocks(start, true);
-
-				// Update relative counts
-				count += 1;
-				zcount += 1;
-
-				// If an end piece, add a chiseled quartz
-				if (count >= xl && zcount >= zl)
-					addPiece(start, w, cx, y, cz, 1);
-				// If not an end piece, add a normal column
-				else
-					addPiece(start, w, cx, y, cz, data);
-			}
+			// Place chiseled quartz as the top block
+			if (cy == y + 4)
+				addPiece(start, world, x, cy, z, 1);
+			// Place vertical quartz columns as the middle blocks
+			else
+				addPiece(start, world, x, cy, z, 2);
 		}
 
 		// Place the column
@@ -158,7 +98,8 @@ public final class FallenColumn extends StructureGenerator
 		if (type == ice || type == leaves1 || type == leaves2)
 			return;
 
-		// Add a snow block on top of the column
-		addBlock(s, block, snow);
+		// Add a snow block if another block isn't already queued
+		if (!isInBlockList(s, block))
+			addBlock(s, block, snow);
 	}
 }

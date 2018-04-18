@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.glitchkey.glitteringdepths.structures.trees;
+package com.glitchkey.glitteringdepths.trees;
 
 //* IMPORTS: JDK/JRE
 	import java.util.Random;
@@ -30,11 +30,11 @@ package com.glitchkey.glitteringdepths.structures.trees;
 	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
-	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
+	import com.glitchkey.glitteringdepths.StructureGenerator;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public class TallRedwood extends StructureGenerator
+public class Redwood extends StructureGenerator
 {
 	Material air     = Material.AIR;
 	Material dirt    = Material.DIRT;
@@ -45,9 +45,8 @@ public class TallRedwood extends StructureGenerator
 	Material log     = Material.LOG;
 	Material snow    = Material.SNOW;
 
-	public TallRedwood()
+	public Redwood()
 	{
-
 		addToBlacklist(air);
 		addToBlacklist(ice);
 		addToBlacklist(snow);
@@ -61,16 +60,15 @@ public class TallRedwood extends StructureGenerator
 
 	public boolean generate(World world, Random random, int x, int y, int z)
 	{
-		int maxHeight = random.nextInt(5) + 7;
-		int leafHeight = maxHeight - random.nextInt(2) - 3;
-		int baseLeafWidth = maxHeight - leafHeight;
-		int maxLeafWidth = 1 + random.nextInt(baseLeafWidth + 1);
+		int maxHeight = random.nextInt(4) + 7;
+		int leafHeight = maxHeight - (2 + random.nextInt(2));
+		int leafWidth = 2 + random.nextInt(2);
 		Location start = new Location(world, x, y, z);
 
 		if (!isChunkValid(world, x, z))
 			return fail(start);
 
-		if (y < 1 || (y + maxHeight + 1) > 256)
+		if ((y < 1) || (y + maxHeight + 1 > 256))
 			return fail(start);
 
 		Material type = world.getBlockAt(x, y - 1, z).getType();
@@ -80,26 +78,35 @@ public class TallRedwood extends StructureGenerator
 
 		addBlock(start, world.getBlockAt(x, y - 1, z), dirt, 0);
 
-		int width = 0;
+		int rad = random.nextInt(2);
+		int width = 1;
+		int canopySpawned = 0;
 
-		for (int cy = y + maxHeight; cy >= y + leafHeight; --cy)
+		for (int depth = 0; depth <= leafHeight; depth++)
 		{
-			for (int cx = x - width; cx <= x + width; ++cx)
-			{
-				int cw = Math.abs(cx - x);
+			int cy = y + maxHeight - depth;
 
-				for (int cz = z - width; cz <= z + width; ++cz)
+			for (int cx = x - rad; cx <= x + rad; cx++)
+			{
+				int xRad = cx - x;
+
+				for (int cz = z - rad; cz <= z + rad; cz++)
 				{
 					if (!isChunkValid(world, cx, cz))
 						return fail(start);
 
-					int l = Math.abs(cz - z);
+					int zRad = cz - z;
+
 					Block b = world.getBlockAt(cx, cy, cz);
 
 					if (!isInBlacklist(b))
 						continue;
 
-					if (cw == l && cw == width && width > 0)
+					boolean c1 = (Math.abs(xRad) != rad);
+					boolean c2 = (Math.abs(zRad) != rad);
+					boolean c3 = (c1 || c2 || (rad <= 0));
+
+					if (!c3)
 						continue;
 
 					addBlock(start, b, leaves1, 1);
@@ -121,19 +128,24 @@ public class TallRedwood extends StructureGenerator
 				}
 			}
 
-			if (width >= 1 && cy == (y + leafHeight + 1))
+			if (rad >= width)
 			{
-				--width;
+				rad = canopySpawned;
+				canopySpawned = 1;
+				width++;
+				if (width > leafWidth)
+					width = leafWidth;
 			}
-			else if (width < maxLeafWidth)
-			{
-				++width;
+			else {
+				rad++;
 			}
 		}
 
-		for (int cy = 0; cy < maxHeight - 1; ++cy)
+		int depth = random.nextInt(3);
+
+		for (int cDepth = 0; cDepth < maxHeight - depth; cDepth++)
 		{
-			Block block = world.getBlockAt(x, y + cy, z);
+			Block block = world.getBlockAt(x, y + cDepth, z);
 
 			if (!isInBlacklist(block))
 				continue;

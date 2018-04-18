@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.glitchkey.glitteringdepths.structures;
+package com.glitchkey.glitteringdepths;
 
 //* IMPORTS: JDK/JRE
 	import java.util.ArrayList;

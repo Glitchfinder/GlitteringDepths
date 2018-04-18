@@ -35,17 +35,17 @@ package com.glitchkey.glitteringdepths.terrain;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
 	import com.glitchkey.glitteringdepths.listeners.GlacierMobListener;
-	import com.glitchkey.glitteringdepths.structures.dungeons.white.WhiteDungeon;
-	import com.glitchkey.glitteringdepths.structures.GlacierOre;
-	import com.glitchkey.glitteringdepths.structures.ruins.Circle;
-	import com.glitchkey.glitteringdepths.structures.ruins.RandomColumn;
-	import com.glitchkey.glitteringdepths.structures.ruins.RandomRuin;
-	import com.glitchkey.glitteringdepths.structures.trees.FallenSpruce;
-	import com.glitchkey.glitteringdepths.structures.trees.MegaRedwood;
-	import com.glitchkey.glitteringdepths.structures.trees.MiniJungle;
-	import com.glitchkey.glitteringdepths.structures.trees.Redwood;
-	import com.glitchkey.glitteringdepths.structures.trees.TallRedwood;
-	import com.glitchkey.glitteringdepths.structures.trees.WeepingBirch;
+	import com.glitchkey.glitteringdepths.dungeons.white.WhiteDungeon;
+	import com.glitchkey.glitteringdepths.GlacierOre;
+	import com.glitchkey.glitteringdepths.ruins.Circle;
+	import com.glitchkey.glitteringdepths.ruins.RandomColumn;
+	import com.glitchkey.glitteringdepths.ruins.RandomRuin;
+	import com.glitchkey.glitteringdepths.trees.FallenSpruce;
+	import com.glitchkey.glitteringdepths.trees.MegaRedwood;
+	import com.glitchkey.glitteringdepths.trees.MiniJungle;
+	import com.glitchkey.glitteringdepths.trees.Redwood;
+	import com.glitchkey.glitteringdepths.trees.TallRedwood;
+	import com.glitchkey.glitteringdepths.trees.WeepingBirch;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 

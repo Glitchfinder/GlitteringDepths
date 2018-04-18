@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.glitchkey.glitteringdepths.structures.trees;
+package com.glitchkey.glitteringdepths.trees;
 
 //* IMPORTS: JDK/JRE
 	import java.util.Random;
@@ -31,7 +31,7 @@ package com.glitchkey.glitteringdepths.structures.trees;
 	import org.bukkit.util.Vector;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
-	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
+	import com.glitchkey.glitteringdepths.StructureGenerator;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 

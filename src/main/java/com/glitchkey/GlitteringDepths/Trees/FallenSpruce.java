@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.glitchkey.glitteringdepths.structures.trees;
+package com.glitchkey.glitteringdepths.trees;
 
 //* IMPORTS: JDK/JRE
 	import java.util.Random;
@@ -30,11 +30,11 @@ package com.glitchkey.glitteringdepths.structures.trees;
 	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
-	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
+	import com.glitchkey.glitteringdepths.StructureGenerator;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public class MiniJungle extends StructureGenerator
+public class FallenSpruce extends StructureGenerator
 {
 	Material air     = Material.AIR;
 	Material dirt    = Material.DIRT;
@@ -45,7 +45,7 @@ public class MiniJungle extends StructureGenerator
 	Material log     = Material.LOG;
 	Material snow    = Material.SNOW;
 
-	public MiniJungle()
+	public FallenSpruce()
 	{
 		addToBlacklist(air);
 		addToBlacklist(ice);
@@ -58,54 +58,69 @@ public class MiniJungle extends StructureGenerator
 		}
 	}
 
-	public boolean generate(World world, Random random, int x, int y, int z)
+	public boolean generate(World w, Random random, int x, int y, int z)
 	{
-		Location start = new Location(world, x, y, z);
+		Location start = new Location(w, x, y, z);
 
-		if (!isChunkValid(world, x, z))
+		if (!isChunkValid(w, x, z))
 			return fail(start);
 
-		addBlock(start, world, x, y, z, log, 3);
-		boolean c1, c2, c3, c4;
+		addTrunk(start, w, x, y, z, 1);
 
-		for (int cy = y; cy <= y + 2; cy++)
+		int direction = random.nextInt(4);
+		int length = random.nextInt(6) + 3;
+
+		int xm = 0;
+		int zm = 0;
+		int data = 0;
+		int count = 0;
+		int xMax = 1;
+		int zMax = 1;
+		Material type;
+
+		if (direction < 2)
 		{
-			int yDist = cy - y;
-			int depth = 2 - yDist;
+			xm = 1;
+			xMax = length;
+			data = 5;
+		}
+		else
+		{
+			zm = 1;
+			zMax = length;
+			data = 9;
+		}
 
-			for (int cx = x - depth; cx <= x + depth; cx++)
+		if (direction % 2 == 0)
+		{
+			xm *= -1;
+			zm *= -1;
+		}
+
+		for (int cx = x + (xm * 2); count < xMax; cx += xm)
+		{
+			int zcount = 0;
+
+			for (int cz = z + (zm * 2); zcount < zMax; cz += zm)
 			{
-				int xDist = cx - x;
+				if (!isChunkValid(w, cx, cz))
+					return placeBlocks(start, true);
 
-				for (int cz = z - depth; cz <= z + depth; cz++)
-				{
-					if (!isChunkValid(world, cx, cz))
-						return fail(start);
+				type = w.getBlockAt(cx, y - 1, cz).getType();
 
-					int zDist = cz - z;
+				if (type != dirt && type != grass)
+					return placeBlocks(start, true);
 
-					c1 = (Math.abs(xDist) != depth);
-					c2 = (Math.abs(zDist) != depth);
-					c3 = (random.nextInt(2) != 0);
-
-					if (!c1 && !c2 && !c3)
-						continue;
-					
-					Block b = world.getBlockAt(cx, cy, cz);
-					c4 = !(b.getType().isSolid());
-
-					if (!c4)
-						continue;
-
-					addLeaf(start, world, cx, cy, cz);
-				}
+				addTrunk(start, w, cx, y, cz, data);
+				count += 1;
+				zcount += 1;
 			}
 		}
 
 		return placeBlocks(start, true);
 	}
 
-	private void addLeaf(Location s, World w, int x, int y, int z)
+	private void addTrunk(Location s, World w, int x, int y, int z, int d)
 	{
 		if (!isChunkValid(w, x, z))
 			return;
@@ -115,7 +130,7 @@ public class MiniJungle extends StructureGenerator
 		if (!isInBlacklist(block))
 			return;
 
-		addBlock(s, block, leaves1, 3);
+		addBlock(s, block, log, d);
 
 		block = w.getBlockAt(x, y + 1, z);
 
@@ -129,5 +144,17 @@ public class MiniJungle extends StructureGenerator
 
 		if (!isInBlockList(s, block))
 			addBlock(s, block, snow);
+	}
+
+	public boolean isChunkValid(World w, int x, int z)
+	{
+		x = x >> 4; // Chunk X
+		z = z >> 4; // Chunk Z
+
+		// If the chunk is not loaded, and does not exist
+		if (!w.isChunkLoaded(x, z) && !w.loadChunk(x, z, false))
+			return false;
+
+		return true;
 	}
 }

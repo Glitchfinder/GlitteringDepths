@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.glitchkey.glitteringdepths.structures.trees;
+package com.glitchkey.glitteringdepths.trees;
 
 //* IMPORTS: JDK/JRE
 	import java.util.Random;
@@ -30,11 +30,11 @@ package com.glitchkey.glitteringdepths.structures.trees;
 	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
-	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
+	import com.glitchkey.glitteringdepths.StructureGenerator;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public class WeepingBirch extends StructureGenerator
+public class TallRedwood extends StructureGenerator
 {
 	Material air     = Material.AIR;
 	Material dirt    = Material.DIRT;
@@ -45,8 +45,9 @@ public class WeepingBirch extends StructureGenerator
 	Material log     = Material.LOG;
 	Material snow    = Material.SNOW;
 
-	public WeepingBirch()
+	public TallRedwood()
 	{
+
 		addToBlacklist(air);
 		addToBlacklist(ice);
 		addToBlacklist(snow);
@@ -60,85 +61,86 @@ public class WeepingBirch extends StructureGenerator
 
 	public boolean generate(World world, Random random, int x, int y, int z)
 	{
+		int maxHeight = random.nextInt(5) + 7;
+		int leafHeight = maxHeight - random.nextInt(2) - 3;
+		int baseLeafWidth = maxHeight - leafHeight;
+		int maxLeafWidth = 1 + random.nextInt(baseLeafWidth + 1);
 		Location start = new Location(world, x, y, z);
 
 		if (!isChunkValid(world, x, z))
 			return fail(start);
 
-		int rad  = random.nextInt(5) + 2;
-		int diff = random.nextInt(3) + 2;
-		int xDiff = random.nextInt(5);
-		int zDiff = random.nextInt(5);
+		if (y < 1 || (y + maxHeight + 1) > 256)
+			return fail(start);
 
-		if (random.nextBoolean())
-			xDiff *= -1;
-		if (random.nextBoolean())
-			zDiff *= -1;
+		Material type = world.getBlockAt(x, y - 1, z).getType();
 
-		int x2 = x + xDiff;
-		int z2 = z + zDiff;
+		if ((type != grass && type != dirt) || y >= (255 - maxHeight))
+			return fail(start);
 
-		int xMin = Math.min(x, x2);
-		int zMin = Math.min(z, z2);
-		int xMax = Math.max(x, x2);
-		int zMax = Math.max(z, z2);
+		addBlock(start, world.getBlockAt(x, y - 1, z), dirt, 0);
 
-		double dist = rad;
-		Location b1 = new Location(world, x, y - rad, z);
-		Location b2 = new Location(world, x2, y - (rad + diff), z2);
-		Location c1 = new Location(world, x, y, z);
+		int width = 0;
 
-		for (int cy = y; cy >= y - (rad * 2); cy--)
+		for (int cy = y + maxHeight; cy >= y + leafHeight; --cy)
 		{
-			c1.setY(cy);
-
-			for (int cx = xMin; cx <= xMax; cx++)
+			for (int cx = x - width; cx <= x + width; ++cx)
 			{
+				int cw = Math.abs(cx - x);
 
-				c1.setX(cx);
-				for (int cz = zMin; cz <= zMax; cz++)
+				for (int cz = z - width; cz <= z + width; ++cz)
 				{
 					if (!isChunkValid(world, cx, cz))
 						return fail(start);
 
-					c1.setZ(cz);
+					int l = Math.abs(cz - z);
+					Block b = world.getBlockAt(cx, cy, cz);
 
-					if (dist < c1.distance(b1))
-						continue;
-					if (dist > c1.distance(b2))
+					if (!isInBlacklist(b))
 						continue;
 
-					addLeaf(start, world, cx, cy, cz);
+					if (cw == l && cw == width && width > 0)
+						continue;
+
+					addBlock(start, b, leaves1, 1);
+
+					b = world.getBlockAt(cx, cy + 1, cz);
+
+					if (!isInBlacklist(b))
+						continue;
+
+					Material t = b.getType();
+
+					if (t == ice)
+						continue;
+					else if (t == leaves1 || t == leaves2)
+						continue;
+
+					if (!isInBlockList(start, b))
+						addBlock(start, b, snow);
 				}
+			}
+
+			if (width >= 1 && cy == (y + leafHeight + 1))
+			{
+				--width;
+			}
+			else if (width < maxLeafWidth)
+			{
+				++width;
 			}
 		}
 
+		for (int cy = 0; cy < maxHeight - 1; ++cy)
+		{
+			Block block = world.getBlockAt(x, y + cy, z);
+
+			if (!isInBlacklist(block))
+				continue;
+
+			addBlock(start, block, log, 1);
+		}
+
 		return placeBlocks(start, true);
-	}
-
-	private void addLeaf(Location s, World w, int x, int y, int z)
-	{
-		if (!isChunkValid(w, x, z))
-			return;
-
-		Block block = w.getBlockAt(x, y, z);
-
-		if (!isInBlacklist(block))
-			return;
-
-		addBlock(s, block, leaves1, 2);
-
-		block = w.getBlockAt(x, y + 1, z);
-
-		if (!isInBlacklist(block))
-			return;
-
-		Material type = block.getType();
-
-		if (type == ice || type == leaves1 || type == leaves2)
-			return;
-
-		if (!isInBlockList(s, block))
-			addBlock(s, block, snow);
 	}
 }

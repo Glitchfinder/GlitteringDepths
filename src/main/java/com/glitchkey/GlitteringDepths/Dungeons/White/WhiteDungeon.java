@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.glitchkey.glitteringdepths.structures.dungeons.white;
+package com.glitchkey.glitteringdepths.dungeons.white;
 
 //* IMPORTS: JDK/JRE
 	import java.util.Random;

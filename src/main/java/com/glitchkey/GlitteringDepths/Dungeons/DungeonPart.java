@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.glitchkey.glitteringdepths.structures.dungeons;
+package com.glitchkey.glitteringdepths.dungeons;
 
 //* IMPORTS: JDK/JRE
 	import java.util.List;
@@ -31,7 +31,7 @@ package com.glitchkey.glitteringdepths.structures.dungeons;
 	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
-	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
+	import com.glitchkey.glitteringdepths.StructureGenerator;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 

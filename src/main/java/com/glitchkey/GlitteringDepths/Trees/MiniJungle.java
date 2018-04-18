@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.glitchkey.glitteringdepths.structures.ruins;
+package com.glitchkey.glitteringdepths.trees;
 
 //* IMPORTS: JDK/JRE
 	import java.util.Random;
@@ -30,75 +30,103 @@ package com.glitchkey.glitteringdepths.structures.ruins;
 	import org.bukkit.Material;
 	import org.bukkit.World;
 //* IMPORTS: GLITTERING DEPTHS
-	import com.glitchkey.glitteringdepths.structures.StructureGenerator;
+	import com.glitchkey.glitteringdepths.StructureGenerator;
 //* IMPORTS: OTHER
 	//* NOT NEEDED
 
-public class StandingColumn extends StructureGenerator
+public class MiniJungle extends StructureGenerator
 {
-	// Materials used in this class
+	Material air     = Material.AIR;
+	Material dirt    = Material.DIRT;
+	Material grass   = Material.GRASS;
 	Material ice     = Material.ICE;
 	Material leaves1 = Material.LEAVES;
 	Material leaves2 = Material.LEAVES_2;
-	Material quartz  = Material.QUARTZ_BLOCK;
+	Material log     = Material.LOG;
 	Material snow    = Material.SNOW;
 
-	/**
-	 * Generate an intact standing column
-	 **/
+	public MiniJungle()
+	{
+		addToBlacklist(air);
+		addToBlacklist(ice);
+		addToBlacklist(snow);
+
+		for (int i = 0; i < 16; i++)
+		{
+			addToBlacklist(leaves1, i);
+			addToBlacklist(leaves2, i);
+		}
+	}
+
 	public boolean generate(World world, Random random, int x, int y, int z)
 	{
-		// Get the base location of the column for tracking
 		Location start = new Location(world, x, y, z);
 
-		// Add the column base
-		addPiece(start, world, x, y, z, 1);
+		if (!isChunkValid(world, x, z))
+			return fail(start);
 
-		// Iterate through the column's height
-		for (int cy = y + 4; cy > y; cy--)
+		addBlock(start, world, x, y, z, log, 3);
+		boolean c1, c2, c3, c4;
+
+		for (int cy = y; cy <= y + 2; cy++)
 		{
-			// Place chiseled quartz as the top block
-			if (cy == y + 4)
-				addPiece(start, world, x, cy, z, 1);
-			// Place vertical quartz columns as the middle blocks
-			else
-				addPiece(start, world, x, cy, z, 2);
+			int yDist = cy - y;
+			int depth = 2 - yDist;
+
+			for (int cx = x - depth; cx <= x + depth; cx++)
+			{
+				int xDist = cx - x;
+
+				for (int cz = z - depth; cz <= z + depth; cz++)
+				{
+					if (!isChunkValid(world, cx, cz))
+						return fail(start);
+
+					int zDist = cz - z;
+
+					c1 = (Math.abs(xDist) != depth);
+					c2 = (Math.abs(zDist) != depth);
+					c3 = (random.nextInt(2) != 0);
+
+					if (!c1 && !c2 && !c3)
+						continue;
+					
+					Block b = world.getBlockAt(cx, cy, cz);
+					c4 = !(b.getType().isSolid());
+
+					if (!c4)
+						continue;
+
+					addLeaf(start, world, cx, cy, cz);
+				}
+			}
 		}
 
-		// Place the column
 		return placeBlocks(start, true);
 	}
 
-	/**
-	 * Add a piece to the column
-	 **/
-	private void addPiece(Location s, World w, int x, int y, int z, int d)
+	private void addLeaf(Location s, World w, int x, int y, int z)
 	{
-		// Get the current block
+		if (!isChunkValid(w, x, z))
+			return;
+
 		Block block = w.getBlockAt(x, y, z);
 
-		// Skip if the block isn't whitelisted
 		if (!isInBlacklist(block))
 			return;
 
-		// Add the block to the column
-		addBlock(s, block, quartz, d);
+		addBlock(s, block, leaves1, 3);
 
-		// Get the block above the current block
 		block = w.getBlockAt(x, y + 1, z);
 
-		// Skip if the block isn't whitelisted
 		if (!isInBlacklist(block))
 			return;
 
-		// Get the block's material
 		Material type = block.getType();
 
-		// Skip if the block is ice or leaves
 		if (type == ice || type == leaves1 || type == leaves2)
 			return;
 
-		// Add a snow block if another block isn't already queued
 		if (!isInBlockList(s, block))
 			addBlock(s, block, snow);
 	}
