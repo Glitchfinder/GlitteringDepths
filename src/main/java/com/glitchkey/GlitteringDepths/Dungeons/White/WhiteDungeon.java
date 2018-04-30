@@ -47,8 +47,8 @@ package com.glitchkey.glitteringdepths.dungeons.white;
 public class WhiteDungeon
 {
 	// Dungeon Parts
-	private Base1 base1;
-	private Cap1  cap1;
+	private RandomBase base;
+	private RandomCap  cap;
 
 	/**
 	 * Constructor
@@ -56,8 +56,8 @@ public class WhiteDungeon
 	public WhiteDungeon()
 	{
 		// Instanciate dungeon parts
-		base1 = new Base1();
-		cap1 = new Cap1();
+		base = new RandomBase();
+		cap  = new RandomCap();
 	}
 
 	/**
@@ -66,8 +66,8 @@ public class WhiteDungeon
 	public WhiteDungeon addToBlacklist(Material type)
 	{
 		// Forward settings to the dungeon classes
-		base1.addToBlacklist(type);
-		cap1.addToBlacklist(type);
+		base.addToBlacklist(type);
+		cap.addToBlacklist(type);
 
 		// Return this class for chaining
 		return this;
@@ -109,10 +109,10 @@ public class WhiteDungeon
 
 		for (int cy = (baseY - 1); cy > bottomY; cy -= 3)
 		{
-			base1.place(world, random, x, cy - 2, z);
+			base.place(world, random, x, cy - 2, z);
 		}
 
-		cap1.place(world, random, x, baseY, z);
+		cap.place(world, random, x, baseY, z);
 
 		Location l1 = new Location(world, x + 7, baseY + 3, z + 7);
 		Location l2 = new Location(world, x + 7, baseY + 3, z + 8);

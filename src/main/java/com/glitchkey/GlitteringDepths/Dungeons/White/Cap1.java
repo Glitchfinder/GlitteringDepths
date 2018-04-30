@@ -41,14 +41,15 @@ package com.glitchkey.glitteringdepths.dungeons.white;
 public class Cap1 extends DungeonPart
 {
 	// Materials used in this class
-	private Material air     = Material.AIR;
-	private Material brick   = Material.SMOOTH_BRICK;
-	private Material chest   = Material.CHEST;
-	private Material lapis   = Material.LAPIS_BLOCK;
-	private Material quartz  = Material.QUARTZ_BLOCK;
-	private Material spawner = Material.MOB_SPAWNER;
-	private Material slab    = Material.STEP;
-	private Material stairs  = Material.QUARTZ_STAIRS;
+	private Material air        = Material.AIR;
+	private Material brick      = Material.SMOOTH_BRICK;
+	private Material chest      = Material.CHEST;
+	private Material prismarine = Material.PRISMARINE;
+	private Material quartz     = Material.QUARTZ_BLOCK;
+	private Material spawner    = Material.MOB_SPAWNER;
+	private Material slab       = Material.STEP;
+	private Material stone      = Material.STONE;
+	private Material stairs     = Material.QUARTZ_STAIRS;
 
 	/**
 	 * Constructor
@@ -68,22 +69,22 @@ public class Cap1 extends DungeonPart
 		Integer[] temp =
 		{
 			// Base level
-			0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 1, 2, 4, 4, 4, 4, 2, 1, 0, 0, 0, 0,
-			0, 0, 0, 2, 4, 4, 4, 3, 3, 4, 4, 4, 2, 0, 0, 0,
-			0, 0, 2, 4, 5, 5, 4, 3, 3, 4, 5, 5, 4, 2, 0, 0,
-			0, 1, 4, 5, 4, 5, 4, 3, 3, 4, 5, 4, 5, 4, 1, 0,
-			0, 2, 4, 5, 5, 5, 4, 3, 3, 4, 5, 5, 5, 4, 2, 0,
-			1, 4, 4, 4, 4, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4, 1,
-			2, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 2,
-			2, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 2,
-			1, 4, 4, 4, 4, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4, 1,
-			0, 2, 4, 5, 5, 5, 4, 3, 3, 4, 5, 5, 5, 4, 2, 0,
-			0, 1, 4, 5, 4, 5, 4, 3, 3, 4, 5, 4, 5, 4, 1, 0,
-			0, 0, 2, 4, 5, 5, 4, 3, 3, 4, 5, 5, 4, 2, 0, 0,
-			0, 0, 0, 2, 4, 4, 4, 3, 3, 4, 4, 4, 2, 0, 0, 0,
-			0, 0, 0, 0, 1, 2, 4, 4, 4, 4, 2, 1, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0,
+			0, 0, 0,  0,  0,  0,  1,  2,  2,  1,  0,  0,  0,  0, 0, 0,
+			0, 0, 0,  0,  1,  2,  4,  4,  4,  4,  2,  1,  0,  0, 0, 0,
+			0, 0, 0,  2,  4,  4,  4,  21, 3,  4,  4,  4,  2,  0, 0, 0,
+			0, 0, 2,  4,  5,  5,  4,  3,  21, 4,  5,  5,  4,  2, 0, 0,
+			0, 1, 4,  5,  4,  5,  4,  21, 3,  4,  5,  4,  5,  4, 1, 0,
+			0, 2, 4,  5,  5,  5,  4,  3,  21, 4,  5,  5,  5,  4, 2, 0,
+			1, 4, 4,  4,  4,  4,  4,  21, 3,  4,  4,  4,  4,  4, 4, 1,
+			2, 4, 21, 3,  21, 3,  21, 3,  21, 3,  21, 3,  21, 3, 4, 2,
+			2, 4, 3,  21, 3,  21, 3,  21, 3,  21, 3,  21, 3, 21, 4, 2,
+			1, 4, 4,  4,  4,  4,  4,  3,  21, 4,  4,  4,  4,  4, 4, 1,
+			0, 2, 4,  5,  5,  5,  4,  21, 3,  4,  5,  5,  5,  4, 2, 0,
+			0, 1, 4,  5,  4,  5,  4,  3,  21, 4,  5,  4,  5,  4, 1, 0,
+			0, 0, 2,  4,  5,  5,  4,  21, 3,  4,  5,  5,  4,  2, 0, 0,
+			0, 0, 0,  2,  4,  4,  4,  3,  21, 4,  4,  4,  2,  0, 0, 0,
+			0, 0, 0,  0,  1,  2,  4,  4,  4,  4,  2,  1,  0,  0, 0, 0,
+			0, 0, 0,  0,  0,  0,  1,  2,  2,  1,  0,  0,  0,  0, 0, 0,
 
 			//
 			0, 0, 0, 0, 0, 0, 6, 0, 0, 6, 0, 0, 0, 0, 0, 0,
@@ -356,7 +357,7 @@ public class Cap1 extends DungeonPart
 			0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0, 0, 0, 0, 0, 0
 		};
 
 		// Convert the arrays to lists and add them to the template data
@@ -403,7 +404,7 @@ public class Cap1 extends DungeonPart
 			case  3:
 			case  4:
 			case  7: return brick;
-			case  5: return lapis;
+			case  5: return prismarine;
 			case  8:
 			case 19: 
 			case 20: return slab;
@@ -417,6 +418,7 @@ public class Cap1 extends DungeonPart
 			case 16:
 			case 17:
 			case 18: return stairs;
+			case 21: return stone;
 			default: return air;
 		}
 	}
@@ -428,9 +430,9 @@ public class Cap1 extends DungeonPart
 	{
 		switch (index)
 		{
-			case  3: return random.nextInt(3);
 			case  1:
 			case 14: return 1;
+			case  5:
 			case  6:
 			case 11: return 2;
 			case  4:
@@ -438,7 +440,8 @@ public class Cap1 extends DungeonPart
 			case 17: return 4;
 			case  8:
 			case 18: return 5;
-			case 15: return 6;
+			case 15:
+			case 21: return 6;
 			case 19:
 			case 16: return 7;
 			case 20: return 15;
