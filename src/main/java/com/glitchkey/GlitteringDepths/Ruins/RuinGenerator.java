@@ -685,12 +685,10 @@ public abstract class RuinGenerator extends StructureGenerator
 				case GLOWING_REDSTONE_ORE:
 				case GOLD_ORE:
 				case GRASS:
-				case ICE:
 				case IRON_ORE:
 				case LAPIS_ORE:
-				case PACKED_ICE:
+				case QUARTZ_BLOCK:
 				case REDSTONE_ORE:
-				case SNOW:
 				case STONE:
 					// Return the current elevation
 					return y;
