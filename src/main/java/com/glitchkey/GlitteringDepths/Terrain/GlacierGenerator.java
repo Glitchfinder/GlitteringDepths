@@ -360,16 +360,19 @@ public class GlacierGenerator extends ChunkGenerator
 			double n1 = lerp(1D, getNoise(w, x, y, z, 4, 0.15D, 120D), perc);
 			double n2 = lerp(getNoise(w, x, y, z, 4, 0.3D, 120D), 1D, perc);
 			noise = Math.min(n1, n2) + 1D;
-			//System.out.println("N: " + noise + ", N1: " + n1);
 		}
 
-		double distortion;
-		distortion = (getNoise(w, x, y, z, 2, 0.06D, 10D) / 9D) + 0.5D;
+		double distortion, d;
+		d = getNoise(w, x, y, z, 2, 0.06D, 10D);
+		distortion = (d / 9D) + 0.5D;
 		distortion += distMod;
 		noise = (noise + (noise * distortion)) / 2D;
 
-		if ((noise <= height) && (noise > baseHeight - mod) && y < ice)
+		if ((noise <= height) && (noise > baseHeight - (mod * (d + 1D))) && y < ice)
 			return 79;
+	
+	
+	
 		if (noise <= height) {
 			return 0;
 		}
