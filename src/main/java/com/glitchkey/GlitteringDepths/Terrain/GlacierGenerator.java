@@ -227,11 +227,15 @@ public class GlacierGenerator extends ChunkGenerator
 			hm = lerp(6D, 1D, perc);
 		}
 
-		double mod = 0D;
+		Column col = new Column(0, 0, -1D, 0);
 
 		for(Column c : columns) {
-			mod = generateColumn(mod, xPos, zPos, c);
+			col = generateColumn(col, xPos, zPos, c);
 		}
+
+		double mod = col.modifier;
+		double p = col.percent;
+		
 
 		double column;
 		column = (double) getNoise(w, xPos, zPos, 1D, 1D, 2, 32D, 0.06);
@@ -247,7 +251,7 @@ public class GlacierGenerator extends ChunkGenerator
 
 			short id;
 			id = this.getId(w, bRock, stone, ice, xPos, y, zPos,
-				result, column, mod, type, sh, d, hm, dm, i, perc);
+				result, column, mod, p, type, sh, d, hm, dm, i, perc);
 
 			result[y] = id;
 		}
@@ -257,8 +261,8 @@ public class GlacierGenerator extends ChunkGenerator
 
 	public short getId(World world, int bedrock, int stone, int ice, int x,
 		int y, int z, short[] result, double column, double modifier,
-		int type, double sh, double d, double hm, double dm, int iceMod,
-		double perc)
+		double p, int type, double sh, double d, double hm, double dm,
+		int iceMod, double perc)
 	{
 		short id = 0;
 
@@ -283,7 +287,7 @@ public class GlacierGenerator extends ChunkGenerator
 		if (id == 79 && (y > (stone + iceMod) || y < stone + 15))
 			id = checkFissures(world, id, x, y, z);
 
-		id = checkColumn(world, id, x, y, z, column, modifier, ice,
+		id = checkColumn(world, id, x, y, z, column, modifier, p, ice,
 			type, sh, d, hm, dm, perc);
 
 		if(id == 0 && y <= 50)
@@ -331,7 +335,7 @@ public class GlacierGenerator extends ChunkGenerator
 	}
 
 	public short checkColumn(World w, short id, int x, int y, int z,
-		double column, double mod, int ice, int type,
+		double column, double mod, double p, int ice, int type,
 		double startHeight, double depth, double heightMod,
 		double distMod, double perc)
 	{
@@ -367,12 +371,10 @@ public class GlacierGenerator extends ChunkGenerator
 		distortion = (d / 9D) + 0.5D;
 		distortion += distMod;
 		noise = (noise + (noise * distortion)) / 2D;
+		double m = lerp((d * 2D) + 1D, 1D, p);
 
-		if ((noise <= height) && (noise > baseHeight - (mod * (d + 1D))) && y < ice)
+		if ((noise <= height) && (noise > baseHeight - (mod * m)) && y < ice)
 			return 79;
-	
-	
-	
 		if (noise <= height) {
 			return 0;
 		}
@@ -413,21 +415,39 @@ public class GlacierGenerator extends ChunkGenerator
 		tempModifier = ((tempModifier + 1D) / 150D) + 1D;
 		int cx = (x + random.nextInt(25));
 		int cz = (z + random.nextInt(25));
+		double perc = random.nextDouble();
 
-		list.add(new Column(cx, cz, tempModifier));
+		list.add(new Column(cx, cz, tempModifier, perc));
 	}
 
-	private double generateColumn(double modifier, int xPos, int zPos,
+	private Column generateColumn(Column values, int xPos, int zPos,
 		Column c)
 	{
 		double xSq = Math.pow((xPos - c.x), 2);
 		double zSq = Math.pow((zPos - c.z), 2);
 		double distance = Math.sqrt(xSq + zSq);
+		double result = 0D;
 
 		if (distance <= 0D)
-			return Math.max(modifier, c.modifier);
+		{
+			result = Math.max(values.modifier, c.modifier);
+			if (result == values.modifier)
+				return values;
+
+			values.modifier = result;
+			values.percent = c.percent;
+			return values;
+		}
 		else
-			return Math.max(modifier, (c.modifier / distance));
+		{
+			result = Math.max(values.modifier, (c.modifier / distance));
+			if (result == values.modifier)
+				return values;
+
+			values.modifier = result;
+			values.percent = c.percent;
+			return values;
+		}
 	}
 
 	public Location getFixedSpawnLocation(World world, Random rand) {

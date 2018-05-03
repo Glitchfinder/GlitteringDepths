@@ -33,11 +33,12 @@ package com.glitchkey.glitteringdepths.datatypes;
 
 public final class Column {
 	public int x, z;
-	public double modifier;
+	public double modifier, percent;
 
-	public Column(int cx, int cz, double mod) {
+	public Column(int cx, int cz, double mod, double perc) {
 		x = cx;
 		z = cz;
 		modifier = mod;
+		percent = perc;
 	}
 }
